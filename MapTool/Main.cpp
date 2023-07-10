@@ -3,10 +3,14 @@
 
 Main::Main()
 {
-	map = new ObIso();
-	map->file = "map2.txt";
+	map = new ObTileMap();
+	map->file = "map3.txt";
 	//map->Load();
 	map->color = Color(0.5f, 0.5f, 0.5f, 0.5f);
+	//isoMap = new ObIso();
+	//isoMap->file = "map2.txt";
+	////map->Load();
+	//isoMap->color = Color(0.5f, 0.5f, 0.5f, 0.5f);
 	tileSize = Int2(20, 20);
 
 	LineX = new ObRect();
@@ -33,6 +37,10 @@ Main::Main()
 
 Main::~Main()
 {
+	delete map;
+	delete LineX;
+	delete LineY;
+
 }
 
 void Main::Init()
@@ -228,6 +236,14 @@ void Main::Update()
 		}
 
 	}
+	if (ImGui::Button("Auto")) {
+		for (int i = 0; i < map->GetTileSize().x; i++) {
+			for (int j = 0; j < map->GetTileSize().y; j++) {
+			
+			}
+		}
+	}
+	
 
 	map->Update();
 	LineX->Update();

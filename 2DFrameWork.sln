@@ -10,11 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game1", "Game1\Game1.vcxpro
 		{C2138BC9-A195-455F-91A6-5FF469EB5E61} = {C2138BC9-A195-455F-91A6-5FF469EB5E61}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game2", "Game2\Game2.vcxproj", "{E4AABC26-46D5-436A-BE00-FF12933156D1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C2138BC9-A195-455F-91A6-5FF469EB5E61} = {C2138BC9-A195-455F-91A6-5FF469EB5E61}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{E3F02C0D-0DAD-4181-A968-85F48C12D251}"
 	ProjectSection(SolutionItems) = preProject
 		Shaders\1.Basic.hlsl = Shaders\1.Basic.hlsl
@@ -36,10 +31,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E
 		Contents\Images\bono.bmp = Contents\Images\bono.bmp
 		Contents\Images\bono.jpg = Contents\Images\bono.jpg
 		Contents\Images\bono.png = Contents\Images\bono.png
-		..\..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png = ..\..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png
+		..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png = ..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png
 		Contents\Images\Oven1.png = Contents\Images\Oven1.png
 		Contents\Images\Oven2.png = Contents\Images\Oven2.png
-		..\..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png = ..\..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png
+		..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png = ..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png
 		Contents\Images\run.bmp = Contents\Images\run.bmp
 		Contents\Images\spin.bmp = Contents\Images\spin.bmp
 	EndProjectSection
@@ -79,14 +74,6 @@ Global
 		{62755BC4-7433-469B-8413-314F6EC62971}.Release|x64.Build.0 = Release|x64
 		{62755BC4-7433-469B-8413-314F6EC62971}.Release|x86.ActiveCfg = Release|Win32
 		{62755BC4-7433-469B-8413-314F6EC62971}.Release|x86.Build.0 = Release|Win32
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Debug|x64.ActiveCfg = Debug|x64
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Debug|x64.Build.0 = Debug|x64
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Debug|x86.ActiveCfg = Debug|Win32
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Debug|x86.Build.0 = Debug|Win32
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x64.ActiveCfg = Release|x64
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x64.Build.0 = Release|x64
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x86.ActiveCfg = Release|Win32
-		{E4AABC26-46D5-436A-BE00-FF12933156D1}.Release|x86.Build.0 = Release|Win32
 		{AA547DFB-B6A2-48EE-B8B0-7B4791B28C6D}.Debug|x64.ActiveCfg = Debug|x64
 		{AA547DFB-B6A2-48EE-B8B0-7B4791B28C6D}.Debug|x64.Build.0 = Debug|x64
 		{AA547DFB-B6A2-48EE-B8B0-7B4791B28C6D}.Debug|x86.ActiveCfg = Debug|Win32

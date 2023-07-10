@@ -1,4 +1,4 @@
-0 Iso.png 8 7
+0 Tile.png 8 7
 1 N
 2 N
 3 N

@@ -4,8 +4,8 @@ class Main : public Scene
 {
 private:
 
-	//ObTileMap*	map;
-	ObIso*	map;
+	ObTileMap*	map;
+	//ObIso*		isoMap;
 	Int2		tileSize;
 	ObRect*		LineX, *LineY;
 
