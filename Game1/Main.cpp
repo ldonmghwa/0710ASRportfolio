@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Main.h"
-#include "Scene1.h"
-#include "Scene2.h"
+#include "ASRMap.h"
 #include "Player.h"
 
 Main::Main()
 {
+	asrMap = new ASRMap();
 	
 
 }
@@ -13,10 +13,12 @@ Main::Main()
 Main::~Main()
 {
 
+	delete asrMap;
 }
 
 void Main::Init()
 {
+	asrMap->Init();
 }
 
 void Main::Release()
@@ -26,6 +28,23 @@ void Main::Release()
 
 void Main::Update()
 {
+	if (INPUT->KeyPress('W'))
+	{
+		CAM->position += UP * 300.0f * DELTA;
+	}
+	if (INPUT->KeyPress('S'))
+	{
+		CAM->position += DOWN * 300.0f * DELTA;
+	}
+	if (INPUT->KeyPress('A'))
+	{
+		CAM->position += LEFT * 300.0f * DELTA;
+	}
+	if (INPUT->KeyPress('D'))
+	{
+		CAM->position += RIGHT * 300.0f * DELTA;
+	}
+	asrMap->Update();
 }
 
 void Main::LateUpdate()
@@ -34,6 +53,7 @@ void Main::LateUpdate()
 
 void Main::Render()
 {
+	asrMap->Render();
 }
 
 void Main::ResizeScreen()

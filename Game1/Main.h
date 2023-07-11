@@ -4,6 +4,7 @@ class Main : public Scene
 {
 private:
 
+	class ASRMap* asrMap;
 
 public:
 	Main();

@@ -74,7 +74,7 @@ void Main::Update()
 	}
 
 	//TileSize
-	if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 100))
+	if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 1000))
 	{
 		map->ResizeTile(tileSize);
 	}
@@ -237,9 +237,10 @@ void Main::Update()
 
 	}
 	if (ImGui::Button("Auto")) {
-		for (int i = 0; i < map->GetTileSize().x; i++) {
-			for (int j = 0; j < map->GetTileSize().y; j++) {
-			
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < 1000; j++) {
+				
+
 			}
 		}
 	}
