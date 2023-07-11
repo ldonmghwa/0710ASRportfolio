@@ -64,7 +64,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
 {
     app.SetAppName(L"Game1");
     app.SetInstance(instance);
-	app.InitWidthHeight(800.0f,600.0f);
+	app.InitWidthHeight(1600.0f,1000.0f);
     app.background = Color(0.0, 0.0, 0.0);
 	WIN->Create();
 	Main* main = new Main();

@@ -25,6 +25,8 @@ ObTileMap::ObTileMap()
 
 ObTileMap::~ObTileMap()
 {
+    TEXTURE->DeleteTexture(L"Tile.png");
+    TEXTURE->DeleteTexture(L"Tile2.png");
     SafeRelease(vertexBuffer);
     SafeDeleteArray(vertices);
     for (int i = 0; i < 4; i++)
