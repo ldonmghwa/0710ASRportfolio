@@ -24,15 +24,18 @@ struct RECTRange {
 };
 typedef struct BSPTree {
 	int key;
+	int parentKey;
+	string leftOrRight;
 	RECTRange value;
-	struct BSPTree* front;
 	struct BSPTree* left;
 	struct BSPTree* right;
 	BSPTree(Int2 maxVertex, Int2 minVertex, int _key) {
+		leftOrRight = "root";
+		parentKey = 0;
 		key = _key;
-		front = { NULL };
 		left = { NULL };
 		right = { NULL };
+
 		value.rrVertex[0].x = minVertex.x;
 		value.rrVertex[0].y = minVertex.y;
 
@@ -49,7 +52,10 @@ typedef struct BSPTree {
 		value.rrHeight = maxVertex.y - minVertex.y + 1;
 	}
 }BSPT;
-
+typedef struct BSPTPointer {
+	struct BSPTree* prev;
+	struct BSPTree* next;
+}BSPTP;
 class ASRMap
 {
 private:
@@ -61,7 +67,7 @@ private:
 
 	ObTileMap* asrMap;
 	BSPT* bspTree;
-	BSPT* top;
+	BSPTP* finder;
 	vector<BSPT*> bspTreeVector;
 
 	int depth;
@@ -70,6 +76,7 @@ private:
 	bool isWH;
 private:
 	void DivideTree(Int2 maxPoint, Int2 minPoint, int Depth);
+	void DeleteTree();
 
 public:
 	ASRMap();
@@ -82,7 +89,10 @@ public:
 	void AutoRenderMap();
 	void BSPTreeVectorShow() {
 		for (auto it = bspTreeVector.begin(); it != bspTreeVector.end(); it++) {
-			cout << "key: " << (*it)->key << endl;
+			cout << (*it)->leftOrRight
+				<< " | key: " << (*it)->key << " | parent key: " << (*it)->parentKey
+				<< " | maxPoint: " << (*it)->value.rrVertex[3].x << ", " << (*it)->value.rrVertex[3].y
+				<< " | minPoint: " << (*it)->value.rrVertex[0].x << ", " << (*it)->value.rrVertex[0].y << endl;
 		}
 	}
 };

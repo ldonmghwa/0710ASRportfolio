@@ -29,9 +29,11 @@ ASRMap::~ASRMap()
 {
 	//
 	//delete asrMap->tileImages[0];
+	DeleteTree();
 	delete crossX;
 	delete crossY;
 	delete asrMap;
+	delete bspTree;
 }
 
 void ASRMap::Init()
@@ -44,8 +46,6 @@ void ASRMap::Init()
 	asrMap->ResizeTile(maxMapTilePos);
 	asrMap->SetWorldPos(Vector2(-maxMapTilePos.x * asrMap->scale.x * 0.5f, -maxMapTilePos.y * asrMap->scale.y * 0.5f));
 	bspTree = new BSPT(maxMapTilePos, minMapTilePos, keyCount);
-	top = bspTree;
-
 }
 
 void ASRMap::Update()
@@ -85,6 +85,7 @@ void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int Depth)
 {
 	Depth--;
 	if (Depth <= 0) return;
+	BSPT* parent = bspTree;
 	keyCount++;
 	float divideRate = RANDOM->Int(4, 5) / 10.0f;
 	Int2 temp;
@@ -100,33 +101,35 @@ void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int Depth)
 	}
 	bspTree->left = new BSPT(temp, minPoint, keyCount);
 	bspTreeVector.push_back(bspTree->left);
-	bspTree->front = bspTree;
-	cout << "left - depth: " << Depth << " | current key: " << keyCount << " | front key: " << bspTree->front->key
-		<< " | maxPoint: " << temp.x << ", " << temp.y
-		<< " | minPoint: " << minPoint.x << ", " << minPoint.y << endl;
+	bspTree->left->parentKey = parent->key;
+	bspTree->left->leftOrRight = "left";
 	bspTree = bspTree->left;
 	DivideTree(temp, minPoint, Depth);
-	bspTree = bspTree->front;
-
-	keyCount++;
-	Int2 temp2;
-	//divideRate = RANDOM->Int(4, 6) / 10.0f;
-	if (RANDOM->Int(0, 99) < 50) {
-		temp2.x = (maxPoint.x - minPoint.x) * divideRate + minPoint.x;
-		temp2.y = minPoint.y;
+	bspTree = parent;
+	if (Depth >= 1) {
+		keyCount++;
+		Int2 temp2;
+		//divideRate = RANDOM->Int(4, 6) / 10.0f;
+		if (RANDOM->Int(0, 99) < 50) {
+			temp2.x = (maxPoint.x - minPoint.x) * divideRate + minPoint.x;
+			temp2.y = minPoint.y;
+		}
+		else {
+			temp2.x = minPoint.x;
+			temp2.y = (maxPoint.y - minPoint.y) * divideRate + minPoint.y;
+		}
+		bspTree->right = new BSPT(maxPoint, temp2, keyCount);
+		bspTreeVector.push_back(bspTree->right);
+		bspTree->right->parentKey = bspTree->key;
+		bspTree->right->leftOrRight = "right";
+		bspTree = bspTree->right;
+		DivideTree(maxPoint, temp2, Depth);
 	}
-	else {
-		temp2.x = minPoint.x;
-		temp2.y = (maxPoint.y - minPoint.y) * divideRate + minPoint.y;
-	}
-	bspTree->right = new BSPT(maxPoint, temp2, keyCount);
-	bspTreeVector.push_back(bspTree->right);
-	cout << "right - depth: " << Depth << " | current key: " << keyCount << " | front key: " << bspTree->front->key
-		<< " | maxPoint: " << maxPoint.x << ", " << maxPoint.y
-		<< " | minPoint: " << temp2.x << ", " << temp2.y << endl;
-	bspTree = bspTree->right;
-	DivideTree(maxPoint, temp2, Depth);
+}
 
+void ASRMap::DeleteTree()
+{
+	for (auto it = bspTreeVector.begin(); it != bspTreeVector.end(); it++) delete (*it);
 }
 
 
