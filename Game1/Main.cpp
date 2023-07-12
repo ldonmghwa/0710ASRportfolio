@@ -44,6 +44,9 @@ void Main::Update()
 	{
 		CAM->position += RIGHT * 300.0f * DELTA;
 	}
+	if (ImGui::Button("map auto")) {
+		asrMap->AutoRenderMap();
+	}
 	asrMap->Update();
 }
 
