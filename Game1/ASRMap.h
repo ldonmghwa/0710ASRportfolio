@@ -24,12 +24,14 @@ struct RECTRange {
 };
 typedef struct BSPTree {
 	int key;
+	int depth;
 	int parentKey;
 	string leftOrRight;
 	RECTRange value;
 	struct BSPTree* left;
 	struct BSPTree* right;
-	BSPTree(Int2 maxVertex, Int2 minVertex, int _key) {
+	BSPTree(Int2 maxVertex, Int2 minVertex, int _key, int _depth) {
+		depth = _depth;
 		leftOrRight = "root";
 		parentKey = 0;
 		key = _key;
@@ -67,8 +69,9 @@ private:
 
 	ObTileMap* asrMap;
 	BSPT* bspTree;
-	BSPTP* finder;
+	BSPT* rootTree;
 	vector<BSPT*> bspTreeVector;
+	vector<BSPT*> realMapVector;
 
 	int depth;
 	int keyCount;
@@ -87,13 +90,7 @@ public:
 	void Render();
 
 	void AutoRenderMap();
-	void BSPTreeVectorShow() {
-		for (auto it = bspTreeVector.begin(); it != bspTreeVector.end(); it++) {
-			cout << (*it)->leftOrRight
-				<< " | key: " << (*it)->key << " | parent key: " << (*it)->parentKey
-				<< " | maxPoint: " << (*it)->value.rrVertex[3].x << ", " << (*it)->value.rrVertex[3].y
-				<< " | minPoint: " << (*it)->value.rrVertex[0].x << ", " << (*it)->value.rrVertex[0].y << endl;
-		}
-	}
+	void VectorShow();
+	void MappingBspTree();
 };
 

@@ -15,7 +15,7 @@ ASRMap::ASRMap()
 	crossY->scale.y = 20000.0f;
 	crossY->color = Vector4(0.1f, 0.8f, 0.5f, 0.5f);
 
-	maxMapTilePos = Int2(200, 200);
+	maxMapTilePos = Int2(200, 100);
 	minMapTilePos = Int2(0, 0);
 	asrMap->tileImages[0] = new ObImage(L"Tile.png");
 	asrMap->tileImages[0]->maxFrame = Int2(8, 6);
@@ -33,19 +33,20 @@ ASRMap::~ASRMap()
 	delete crossX;
 	delete crossY;
 	delete asrMap;
-	delete bspTree;
+	//delete bspTree;
 }
 
 void ASRMap::Init()
 {
 	keyCount = 0;
 	isWH = true;
-	depth = 3;
+	depth = 5;
 	asrMap->scale.x = 5.0f;
 	asrMap->scale.y = 5.0f;
-	asrMap->ResizeTile(maxMapTilePos);
+	asrMap->ResizeTile(Int2(maxMapTilePos.x + 1, maxMapTilePos.y + 1));
 	asrMap->SetWorldPos(Vector2(-maxMapTilePos.x * asrMap->scale.x * 0.5f, -maxMapTilePos.y * asrMap->scale.y * 0.5f));
-	bspTree = new BSPT(maxMapTilePos, minMapTilePos, keyCount);
+	bspTree = new BSPT(maxMapTilePos, minMapTilePos, keyCount, depth);
+	rootTree = bspTree;
 }
 
 void ASRMap::Update()
@@ -72,25 +73,102 @@ void ASRMap::Render()
 
 void ASRMap::AutoRenderMap()
 {
+	bspTree = rootTree;
 	bspTreeVector.clear();
-	bspTreeVector.reserve(15);
+	bspTreeVector.reserve(pow(2, depth));
+	realMapVector.clear();
+	realMapVector.reserve(pow(2, depth - 1));
 	bspTreeVector.push_back(bspTree);
-	DivideTree(maxMapTilePos, minMapTilePos, 4);
-	BSPTreeVectorShow();
+	DivideTree(maxMapTilePos, minMapTilePos, bspTree->depth);
+	VectorShow();
+	MappingBspTree();
 }
 
-
-
-void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int Depth)
+void ASRMap::VectorShow()
 {
-	Depth--;
-	if (Depth <= 0) return;
+	cout << "-BSPTreeVeCtor-" << endl;
+	for (auto it = bspTreeVector.begin(); it != bspTreeVector.end(); it++) {
+		cout << (*it)->leftOrRight
+			<< " | key: " << (*it)->key << " | depth: " << (*it)->depth
+			<< " | parent key: " << (*it)->parentKey
+			<< " | maxPoint: " << (*it)->value.rrVertex[3].x << ", " << (*it)->value.rrVertex[3].y
+			<< " | minPoint: " << (*it)->value.rrVertex[0].x << ", " << (*it)->value.rrVertex[0].y << endl;
+	}
+	cout << "-RealMapVeCtor-" << endl;
+	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+		cout << (*it)->leftOrRight
+			<< " | key: " << (*it)->key << " | depth: " << (*it)->depth
+			<< " | parent key: " << (*it)->parentKey
+			<< " | maxPoint: " << (*it)->value.rrVertex[3].x << ", " << (*it)->value.rrVertex[3].y
+			<< " | minPoint: " << (*it)->value.rrVertex[0].x << ", " << (*it)->value.rrVertex[0].y << endl;
+	}
+}
+
+void ASRMap::MappingBspTree()
+{
+	auto bspit = bspTreeVector.begin();
+	for (int i = (*bspit)->value.rrVertex[0].y; i < (*bspit)->value.rrVertex[3].y; i++) {
+		for (int j = (*bspit)->value.rrVertex[0].x; j < (*bspit)->value.rrVertex[3].x + 1; j++) {
+			/*if (i == (*bspit)->value.rrVertex[0].y) {
+				asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			}
+			else if (j == (*bspit)->value.rrVertex[0].x) {
+				asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			}
+			else if (i == (*bspit)->value.rrVertex[3].y - 1) {
+				asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			}
+			else if (j == (*bspit)->value.rrVertex[3].x) {
+				asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			}
+			else {*/
+			asrMap->SetTile(Int2(j, i), Int2(1, 1), 0, TILE_NONE, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			//}
+		}
+	}
+
+
+	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+		//세로 y값
+		for (int i = (*it)->value.rrVertex[0].y; i < (*it)->value.rrVertex[3].y + 1; i++) {
+			//가로 x값
+			for (int j = (*it)->value.rrVertex[0].x; j < (*it)->value.rrVertex[3].x + 1; j++) {
+				if ((i >= (*it)->value.rrVertex[0].y + 2 and i <= (*it)->value.rrVertex[3].y - 2)
+					and (j >= (*it)->value.rrVertex[0].x + 2 and j <= (*it)->value.rrVertex[3].x - 2)) {
+					if (i == (*it)->value.rrVertex[0].y + 2
+						or j == (*it)->value.rrVertex[0].x + 2
+						or i == (*it)->value.rrVertex[3].y - 2
+						or j == (*it)->value.rrVertex[3].x - 2) {
+						asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+						/*}
+						else if (j == (*it)->value.rrVertex[0].x + 2) {
+							asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+						}
+						else if (i == (*it)->value.rrVertex[3].y - 1 - 2) {
+							asrMap->SetTile(Int2(j, i), Int2(7, 5), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+						}
+						else if (j == (*it)->value.rrVertex[3].x - 2) {*/
+					}
+					else {
+						asrMap->SetTile(Int2(j, i), Int2(5, 3), 0, TILE_NONE, Color(0.5f, 0.5f, 0.5f, 0.5f));
+					}
+				}
+			}
+		}
+	}
+}
+
+void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int _depth)
+{
+	_depth--;
+	if (_depth <= 0) return;
 	BSPT* parent = bspTree;
 	keyCount++;
-	float divideRate = RANDOM->Int(4, 5) / 10.0f;
+	float divideRate = RANDOM->Int(4, 6) / 10.0f;
 	Int2 temp;
+	bool isLeftOrRight = RANDOM->Int(0, 99) < 50 ? true : false;
 	//세로
-	if (RANDOM->Int(0, 99) < 50) {
+	if (isLeftOrRight) {
 		temp.x = (maxPoint.x - minPoint.x) * divideRate + minPoint.x;
 		temp.y = maxPoint.y;
 	}
@@ -99,18 +177,21 @@ void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int Depth)
 		temp.x = maxPoint.x;
 		temp.y = (maxPoint.y - minPoint.y) * divideRate + minPoint.y;
 	}
-	bspTree->left = new BSPT(temp, minPoint, keyCount);
+	bspTree->left = new BSPT(temp, minPoint, keyCount, _depth);
 	bspTreeVector.push_back(bspTree->left);
+	if (_depth == 1) realMapVector.push_back(bspTree->left);
 	bspTree->left->parentKey = parent->key;
 	bspTree->left->leftOrRight = "left";
 	bspTree = bspTree->left;
-	DivideTree(temp, minPoint, Depth);
+	DivideTree(temp, minPoint, _depth);
 	bspTree = parent;
-	if (Depth >= 1) {
+
+
+	if (_depth >= 1) {
 		keyCount++;
 		Int2 temp2;
 		//divideRate = RANDOM->Int(4, 6) / 10.0f;
-		if (RANDOM->Int(0, 99) < 50) {
+		if (isLeftOrRight) {
 			temp2.x = (maxPoint.x - minPoint.x) * divideRate + minPoint.x;
 			temp2.y = minPoint.y;
 		}
@@ -118,15 +199,15 @@ void ASRMap::DivideTree(Int2 maxPoint, Int2 minPoint, int Depth)
 			temp2.x = minPoint.x;
 			temp2.y = (maxPoint.y - minPoint.y) * divideRate + minPoint.y;
 		}
-		bspTree->right = new BSPT(maxPoint, temp2, keyCount);
+		bspTree->right = new BSPT(maxPoint, temp2, keyCount, _depth);
 		bspTreeVector.push_back(bspTree->right);
+		if (_depth == 1) realMapVector.push_back(bspTree->right);
 		bspTree->right->parentKey = bspTree->key;
 		bspTree->right->leftOrRight = "right";
 		bspTree = bspTree->right;
-		DivideTree(maxPoint, temp2, Depth);
+		DivideTree(maxPoint, temp2, _depth);
 	}
 }
-
 void ASRMap::DeleteTree()
 {
 	for (auto it = bspTreeVector.begin(); it != bspTreeVector.end(); it++) delete (*it);
