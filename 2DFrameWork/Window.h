@@ -1,4 +1,5 @@
 #pragma once
+static float zoomsize = 1.0f;
 class Window :public Singleton<Window>
 {
 	//static

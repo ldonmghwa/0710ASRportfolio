@@ -4,7 +4,7 @@ class Tile
 {
 public:
     int         F, G, H;//타일 비용
-    Tile*       P;      //나를 갱신시킨 타일
+    Tile* P;      //나를 갱신시킨 타일
     bool        isFind; //검사한적이 있는가?
 
 
@@ -35,11 +35,14 @@ enum TileState
     TILE_DOOR,
     TILE_TRAP,
     TILE_WATER,
-    //TILE_SAND,
+    TILE_SAND,
     TILE_SIZE
 };
 
-
+struct MinMaxUV {
+    Vector2 minuv;
+    Vector2 maxuv;
+};
 
 class ObTileMap : public GameObject
 {
@@ -47,13 +50,10 @@ protected:
     VertexTile* vertices;
     ID3D11Buffer* vertexBuffer;
     Int2                    tileSize;   //10x10 , 4x4
-
-
     vector<vector<Tile>>    Tiles;
 public:
     ObImage* tileImages[4];
     string                  file;
-
 public:
     ObTileMap();
     virtual ~ObTileMap();
@@ -61,13 +61,17 @@ public:
     virtual bool        WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx);
     virtual void        ResizeTile(Int2 TileSize);
 
-    Vector2     GetTilePosition(Int2 TileIdx);
-    void    Render() override;
-    void    SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
+    Vector2           GetTilePosition(Int2 TileIdx);
+    Vector2         TilePosToWorldMiddlePos(Int2 TilePos);
+    void            Render() override;
+    void            SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
         int TileState = TILE_NONE, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f));
-    void    Save();
+    void            SetTile(int type, Int2 TileIdx, Int2 FrameIdx, int ImgIdx = 0,
+        int TileState = TILE_NONE, Color color = Color(0.5f, 0.5f, 0.5f, 0.5f));
+    void            UpdateSetTile();
+    void            Save();
     virtual void    Load();
-    Int2    GetTileSize() { return tileSize; };
+    Int2            GetTileSize() { return tileSize; };
     virtual void    CreateTileCost();
 
 
@@ -75,5 +79,7 @@ public:
     int     GetTileState(Vector2 WorldPos);
     bool    PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way);
     bool    PathFinding(Vector2 sour, Vector2 dest, OUT vector<Tile*>& way);
+
+    MinMaxUV GetTileUV(Int2& TileIdx);
 };
 

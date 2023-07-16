@@ -89,6 +89,40 @@ void ObTileMap::SetTile(Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, 
     (vertexBuffer, 0, NULL, vertices, 0, 0);
 }
 
+void ObTileMap::SetTile(int type, Int2 TileIdx, Int2 FrameIdx, int ImgIdx, int TileState, Color color)
+{
+    int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
+    vertices[tileIdx * 6 + 0].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[tileIdx * 6 + 1].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[tileIdx * 6 + 5].uv.x = FrameIdx.x / (float)tileImages[ImgIdx]->maxFrame.x;
+
+
+    vertices[tileIdx * 6 + 2].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[tileIdx * 6 + 3].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
+    vertices[tileIdx * 6 + 4].uv.x = (FrameIdx.x + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.x;
+
+    vertices[tileIdx * 6 + 3].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[tileIdx * 6 + 1].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[tileIdx * 6 + 5].uv.y = FrameIdx.y / (float)tileImages[ImgIdx]->maxFrame.y;
+
+    vertices[tileIdx * 6 + 2].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[tileIdx * 6 + 0].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
+    vertices[tileIdx * 6 + 4].uv.y = (FrameIdx.y + 1.0f) / (float)tileImages[ImgIdx]->maxFrame.y;
+
+    for (int i = 0; i < 6; i++)
+    {
+        vertices[tileIdx * 6 + i].tileMapIdx = ImgIdx;
+        vertices[tileIdx * 6 + i].color = color;
+        vertices[tileIdx * 6 + i].tileState = TileState;
+    }
+}
+
+void ObTileMap::UpdateSetTile()
+{
+    D3D->GetDC()->UpdateSubresource
+    (vertexBuffer, 0, NULL, vertices, 0, 0);
+}
+
 int ObTileMap::GetTileState(Int2 TileIdx)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
@@ -110,6 +144,14 @@ Vector2 ObTileMap::GetTilePosition(Int2 TileIdx)
 {
     int tileIdx = tileSize.x * TileIdx.y + TileIdx.x;
     return Vector2(vertices[tileIdx * 6].position.x, vertices[tileIdx * 6].position.y);
+}
+
+Vector2 ObTileMap::TilePosToWorldMiddlePos(Int2 TilePos)
+{
+    Vector2 middlePos;
+    middlePos.x = (TilePos.x + TilePos.x + 1) * scale.x * 0.5f;
+    middlePos.y = (TilePos.y + TilePos.y + 1) * scale.y * 0.5f;
+    return middlePos;
 }
 
 
@@ -394,7 +436,7 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
         }
     }
     //우선순위 큐
-    
+
     //F값을 가지고 정렬해주는 리스트
     priority_queue<PTile, vector<PTile>, compare> List;
     //priority_queue<Tile*> List;
@@ -509,12 +551,21 @@ bool ObTileMap::PathFinding(Int2 sour, Int2 dest, OUT vector<Tile*>& way)
 
 bool ObTileMap::PathFinding(Vector2 sour, Vector2 dest, OUT vector<Tile*>& way)
 {
-    Int2 sourIdx , destIdx;
-    if (WorldPosToTileIdx(sour, sourIdx)and
+    Int2 sourIdx, destIdx;
+    if (WorldPosToTileIdx(sour, sourIdx) and
         WorldPosToTileIdx(dest, destIdx))
     {
         return PathFinding(sourIdx, destIdx, way);
     }
 
     return false;
+}
+
+MinMaxUV ObTileMap::GetTileUV(Int2& TilePos)
+{
+    int tileIdx = tileSize.x * TilePos.y + TilePos.x;
+    MinMaxUV mmuv;
+    mmuv.minuv = vertices[tileIdx * 6 + 1].uv;
+    mmuv.maxuv = vertices[tileIdx * 6 + 2].uv;
+    return mmuv;
 }
