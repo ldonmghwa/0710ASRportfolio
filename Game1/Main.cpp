@@ -1,24 +1,27 @@
 #include "stdafx.h"
 #include "Main.h"
-#include "ASRMap.h"
+#include "IntroScene.h"
+#include "MainGameScene.h"
 #include "Player.h"
 
 Main::Main()
 {
-	asrMap = new ASRMap();
-	
 
 }
 
 Main::~Main()
 {
-
-	delete asrMap;
 }
 
 void Main::Init()
 {
-	asrMap->Init();
+	introSc = new IntroScene();
+	SCENE->AddScene("INTROSCENE", introSc);
+
+	mainGSc = new MainGameScene();
+	SCENE->AddScene("MAINGAMESCENE", mainGSc);
+
+	SCENE->ChangeScene("INTROSCENE");
 }
 
 void Main::Release()
@@ -28,39 +31,22 @@ void Main::Release()
 
 void Main::Update()
 {
-	if (INPUT->KeyPress('W'))
-	{
-		CAM->position += UP * 300.0f * DELTA;
-	}
-	if (INPUT->KeyPress('S'))
-	{
-		CAM->position += DOWN * 300.0f * DELTA;
-	}
-	if (INPUT->KeyPress('A'))
-	{
-		CAM->position += LEFT * 300.0f * DELTA;
-	}
-	if (INPUT->KeyPress('D'))
-	{
-		CAM->position += RIGHT * 300.0f * DELTA;
-	}
-	if (ImGui::Button("map auto")) {
-		asrMap->AutoRenderMap();
-	}
-	asrMap->Update();
+	SCENE->Update();
 }
 
 void Main::LateUpdate()
 {
+	SCENE->LateUpdate();
 }
 
 void Main::Render()
 {
-	asrMap->Render();
+	SCENE->Render();
 }
 
 void Main::ResizeScreen()
 {
+	SCENE->ResizeScreen();
 }
 
 int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, int command)

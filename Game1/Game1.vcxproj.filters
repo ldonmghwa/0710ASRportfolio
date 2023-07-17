@@ -10,7 +10,12 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Mutal.h" />
-    <ClInclude Include="ASRMap.h" />
+    <ClInclude Include="MainGameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -21,11 +26,19 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Mutal.cpp" />
-    <ClCompile Include="ASRMap.cpp" />
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObject">
       <UniqueIdentifier>{355ff697-d03c-4bdd-bdae-32eee4c60bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{5fe7cd7a-5e60-473c-9362-398110999fca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

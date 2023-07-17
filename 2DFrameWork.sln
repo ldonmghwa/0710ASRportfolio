@@ -28,15 +28,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Txt", "Txt", "{BC1DD457-26F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E1A-8E5E-46EE-82F6-D613BF3CD580}"
 	ProjectSection(SolutionItems) = preProject
-		Contents\Images\bono.bmp = Contents\Images\bono.bmp
-		Contents\Images\bono.jpg = Contents\Images\bono.jpg
-		Contents\Images\bono.png = Contents\Images\bono.png
+		Contents\Images\intro.png = Contents\Images\intro.png
+		Contents\Images\iso.png = Contents\Images\iso.png
 		..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png = ..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png
-		Contents\Images\Oven1.png = Contents\Images\Oven1.png
-		Contents\Images\Oven2.png = Contents\Images\Oven2.png
+		Contents\Images\mutalisk.png = Contents\Images\mutalisk.png
 		..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png = ..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\player_roll.png
-		Contents\Images\run.bmp = Contents\Images\run.bmp
-		Contents\Images\spin.bmp = Contents\Images\spin.bmp
+		Contents\Images\player_roll.png = Contents\Images\player_roll.png
+		Contents\Images\player_walk.png = Contents\Images\player_walk.png
+		Contents\Images\Roll.png = Contents\Images\Roll.png
+		Contents\Images\Tile.png = Contents\Images\Tile.png
+		Contents\Images\Tile2.png = Contents\Images\Tile2.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TileMap", "TileMap", "{756C6D6D-2355-4D5E-8B98-383D1E157D8C}"

@@ -3,17 +3,15 @@
 class Main : public Scene
 {
 private:
-
-	ObTileMap*	map;
-	//ObIso*		isoMap;
-	Int2		tileSize;
-	ObRect*		LineX, *LineY;
-
-	int			brushImgIdx;
-	Int2		brushFrame;
-	int			brushState;
-	Color		brushColor;
-
+	//ObTileMap*	map;
+	////ObIso*		isoMap;
+	//Int2		tileSize;
+	//ObRect*		LineX, *LineY;
+	//int			brushImgIdx;
+	//Int2		brushFrame;
+	//int			brushState;
+	//Color		brushColor;
+	class ASRMap* asrMap;
 
 public:
 	Main();

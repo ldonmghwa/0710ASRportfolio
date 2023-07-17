@@ -3,9 +3,8 @@
 class Main : public Scene
 {
 private:
-
-	class ASRMap* asrMap;
-
+	class IntroScene* introSc;
+	class MainGameScene* mainGSc;
 public:
 	Main();
 	~Main();

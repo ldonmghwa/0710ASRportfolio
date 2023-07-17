@@ -19,17 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ASRMap.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="IntroScene.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="Mutal.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ASRMap.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="Mutal.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
