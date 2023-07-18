@@ -28,6 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Txt", "Txt", "{BC1DD457-26F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E1A-8E5E-46EE-82F6-D613BF3CD580}"
 	ProjectSection(SolutionItems) = preProject
+		Contents\Images\HeartBarFull.png = Contents\Images\HeartBarFull.png
+		Contents\Images\HeartBarHalf.png = Contents\Images\HeartBarHalf.png
+		Contents\Images\HeartBarZero.png = Contents\Images\HeartBarZero.png
 		Contents\Images\intro.png = Contents\Images\intro.png
 		Contents\Images\iso.png = Contents\Images\iso.png
 		..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png = ..\..\Downloads\광진\2.5D WASD ROLL\Contents\Images\mutalisk.png
