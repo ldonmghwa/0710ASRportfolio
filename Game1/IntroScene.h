@@ -3,6 +3,12 @@ class IntroScene : public Scene
 {
 private:
 	ObImage* titleImage;
+	ObRect* playButton;
+	ObRect* endButton;
+	float playButtonScale;
+	float endButtonScale;
+	bool isPlayButtonOn;
+	bool isEndButtonOn;
 
 public:
 	IntroScene();
