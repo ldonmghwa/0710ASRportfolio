@@ -182,7 +182,9 @@ void Player::Control()
 
 void Player::Update()
 {
-
+    ImGui::Text("controlDir: %f, %f", controlDir.x, controlDir.y);
+    ImGui::Text("player x, y: %f, %f", this->GetWorldPos().x, this->GetWorldPos().y);
+    ImGui::Text("dash point x, y: %f, %f", (beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir).x, (beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir).y);
     lastPos = GetWorldPos();
     /*  if (ImGui::SliderAngle("rotX", &roll_shadow->rotation.x))
       {
@@ -226,6 +228,7 @@ void Player::Update()
         //walk->roll
         if (INPUT->KeyDown(VK_RBUTTON))
         {
+            beforeDashPoint = this->GetWorldPos();
             state = PLState::PLROLL;
             charImg[PLState::PLROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
@@ -241,7 +244,7 @@ void Player::Update()
         //MoveWorldPos(controlDir * DELTA * speed);
         //if (rollTime < 2.0f) {
         this->SetWorldPos(Vector2::Lerp(this->GetWorldPos()
-            , controlDir, 0.01f));
+            , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
         // }
         LookTarget(GetWorldPos() + controlDir);
         //roll->idle

@@ -20,9 +20,10 @@ class Player : public ObRect
 	int state;
 	int dirFrame[8];
 
-	float		speed;
 	Vector2		controlDir;
 	Vector2		dir2;
+	Vector2		beforeDashPoint;
+	float		speed;
 	float rollTime;
 	Vector2 lastPos;
 	//시계프레임
