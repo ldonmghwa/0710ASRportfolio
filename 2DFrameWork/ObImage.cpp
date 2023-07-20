@@ -231,7 +231,46 @@ void ObImage::Render()
     /*static int count = 0;
     if (count == 0)
     {
-       
+
+        count++;
+    }*/
+    D3D->GetDC()->PSSetShaderResources(0, 1, &SRV);
+    D3D->GetDC()->PSSetSamplers(0, 1, &sampler);
+    D3D->GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+    D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    D3D->GetDC()->Draw(4, 0);
+}
+
+void ObImage::Render(Camera* uicam)
+{
+    if (!isVisible)return;
+    GameObject::Render(uicam);
+    imageShader->Set();
+    PlayAnim();
+
+    if (reverseLR)
+    {
+        Vector4 reUv = Vector4(uv.z, uv.y, uv.x, uv.w);
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        D3D->GetDC()->Map(uvBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        memcpy_s(mappedResource.pData, sizeof(Vector4), &reUv, sizeof(Vector4));
+        D3D->GetDC()->Unmap(uvBuffer, 0);
+    }
+    else
+    {
+        D3D11_MAPPED_SUBRESOURCE mappedResource;
+        D3D->GetDC()->Map(uvBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        memcpy_s(mappedResource.pData, sizeof(Vector4), &uv, sizeof(Vector4));
+        D3D->GetDC()->Unmap(uvBuffer, 0);
+    }
+
+    UINT stride = sizeof(VertexPT);
+    UINT offset = 0;
+
+    /*static int count = 0;
+    if (count == 0)
+    {
+
         count++;
     }*/
     D3D->GetDC()->PSSetShaderResources(0, 1, &SRV);

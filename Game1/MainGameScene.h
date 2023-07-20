@@ -4,6 +4,7 @@ class MainGameScene : public Scene
 private:
 	ObTileMap* map;
 	class GameGUI* gui;
+	class Player* plConvict;
 	float fadeout = 0.0f;
 
 public:

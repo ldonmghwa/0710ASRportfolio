@@ -12,6 +12,9 @@ private:
 	ObImage* reloadCountImg;
 	vector<class CLBar*> clBar;
 
+	Camera* uiCam;
+	RECT boxKeyRc;
+
 	int basicBulletNum;
 	int guideBulletNum;
 	int curMaxHPBar;

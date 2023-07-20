@@ -17,14 +17,14 @@ class GameObject
 
 	//static member
 private:
-	static ObLine*			axisObject;
-	static ID3D11Buffer*	WVPBuffer;
-	static ID3D11Buffer*	colorBuffer;
+	static ObLine* axisObject;
+	static ID3D11Buffer* WVPBuffer;
+	static ID3D11Buffer* colorBuffer;
 
 protected:
-	static Shader*			basicShader;
-	static Shader*			imageShader;
-	static Shader*			tileMapShader;
+	static Shader* basicShader;
+	static Shader* imageShader;
+	static Shader* tileMapShader;
 
 	//static member function
 public:
@@ -34,7 +34,7 @@ public:
 	//member
 private:
 	Matrix		S, R, T, R2, RT, Pi, WVP;
-	Matrix*		P;
+	Matrix* P;
 	Vector2		position;
 
 protected:
@@ -60,6 +60,7 @@ public:
 
 	virtual void Update();
 	virtual void Render();
+	virtual void Render(Camera* uicam);
 
 	bool Intersect(Vector2 coord);
 	bool Intersect(GameObject* ob);
@@ -68,24 +69,24 @@ public:
 	//getter setter
 public:
 	//위치 받아오기
-	Vector2 GetLocalPos()	{ return position;}
-	Vector2 GetWorldPos()	{ return Vector2(RT._41, RT._42); }
+	Vector2 GetLocalPos() { return position; }
+	Vector2 GetWorldPos() { return Vector2(RT._41, RT._42); }
 	Vector2 GetWorldPivot() { return Vector2(W._41, W._42); }
 	//위치를 고정할때 =
-	void	SetLocalPos(Vector2 location)	{ position = location; }
-	void	SetLocalPosX(float lcationX)	{ position.x = lcationX; }
-	void	SetLocalPosY(float lcationY)	{ position.y = lcationY; }
+	void	SetLocalPos(Vector2 location) { position = location; }
+	void	SetLocalPosX(float lcationX) { position.x = lcationX; }
+	void	SetLocalPosY(float lcationY) { position.y = lcationY; }
 	void	SetWorldPos(Vector2 worldPos);
 	void	SetWorldPosX(float worldPosX);
 	void	SetWorldPosY(float worldPosY);
 	//이동시킬때 +=
-	void	MoveLocalPos(Vector2 Velocity)	{ position += Velocity; }
+	void	MoveLocalPos(Vector2 Velocity) { position += Velocity; }
 	void	MoveWorldPos(Vector2 Velocity);
 	//월드기준 방향
-	Vector2 GetRight()	{ return Vector2(RT._11, RT._12); }
-	Vector2 GetUp()		{ return Vector2(RT._21, RT._22); }
+	Vector2 GetRight() { return Vector2(RT._11, RT._12); }
+	Vector2 GetUp() { return Vector2(RT._21, RT._22); }
 	//부모행렬 만들기
-	void	SetParentRT(GameObject& src)	{ P = &src.RT; }
-	void	SetParentT(GameObject& src)	{ P = &src.T; }
+	void	SetParentRT(GameObject& src) { P = &src.RT; }
+	void	SetParentT(GameObject& src) { P = &src.T; }
 };
 

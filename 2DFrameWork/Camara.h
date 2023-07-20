@@ -2,8 +2,8 @@
 class Camera : public Singleton<Camera>
 {
 private:
-    Viewport            viewport;  
-    Matrix              V, P, VP;     
+    Viewport            viewport;
+    Matrix              V, P, VP;
 
 public:
     //카메라위치
@@ -11,6 +11,7 @@ public:
 
 public:
     Camera();
+    void          Set();
     void          Set(float zoom);
     void          ResizeScreen();
     const Matrix& GetP() { return P; };

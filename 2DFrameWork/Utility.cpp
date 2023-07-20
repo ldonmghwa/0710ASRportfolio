@@ -181,6 +181,15 @@ Vector2 Utility::WorldToScreen(Vector2 wol)
     return wol;
 }
 
+Vector2 Utility::WorldToScreen(Vector2 wol, Camera* uicam)
+{
+    wol -= uicam->position;
+    wol.x += app.GetHalfWidth();
+    wol.y = app.GetHalfHeight() - wol.y;
+
+    return wol;
+}
+
 void Utility::Replace(string* str, string comp, string rep)
 {
     string temp = *str;

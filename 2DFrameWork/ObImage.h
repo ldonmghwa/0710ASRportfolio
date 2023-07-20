@@ -13,16 +13,16 @@ class ObImage : public GameObject
     friend class ObTileMap;
 
 private:
-    static ID3D11Buffer*        vertexBuffer;
-    static ID3D11Buffer*        uvBuffer;
+    static ID3D11Buffer* vertexBuffer;
+    static ID3D11Buffer* uvBuffer;
 
 public:
     static void CreateStaticMember();
     static void DeleteStaticMember();
 
 private:
-    ID3D11ShaderResourceView*   SRV;
-    ID3D11SamplerState*         sampler;
+    ID3D11ShaderResourceView* SRV;
+    ID3D11SamplerState* sampler;
     D3D11_SAMPLER_DESC	        samplerDesc;
 
     ANIMSTATE                   animState;
@@ -48,6 +48,7 @@ public:
     ~ObImage();
 
     void Render()override;
+    void Render(Camera* uicam)override;
     void ChangeAnim(ANIMSTATE anim, float interval, bool xAxis = true); //set함수 기능
     void ChangeSampler(D3D11_FILTER filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
         D3D11_TEXTURE_ADDRESS_MODE addressU = D3D11_TEXTURE_ADDRESS_WRAP,

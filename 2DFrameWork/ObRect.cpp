@@ -25,7 +25,7 @@ void ObRect::CreateStaticMember()
     //우 상단
     Vertex[3].position.x = 0.5f;
     Vertex[3].position.y = 0.5f;
-    Vertex[3].color = Color(1 , 1, 1, 1.0f);
+    Vertex[3].color = Color(1, 1, 1, 1.0f);
 
     //CreateVertexBuffer
     { //익명스코프
@@ -110,7 +110,39 @@ void ObRect::Render()
 
     UINT stride = sizeof(VertexPC);
     UINT offset = 0;
- 
+
+    if (isFilled)
+    {
+        D3D->GetDC()->IASetVertexBuffers(0,
+            1,
+            &fillVertexBuffer,
+            &stride,
+            &offset);
+        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+        D3D->GetDC()->Draw(4, 0);
+    }
+    else
+    {
+        D3D->GetDC()->IASetVertexBuffers(0, //입력슬롯(16~32개까지 설정가능)
+            1,//입력슬롯에 붙이고자 하는 버퍼의 갯수
+            &vertexBuffer,
+            &stride,//정점버퍼의 한 원소의 바이트단위 크기
+            &offset);
+        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+        D3D->GetDC()->Draw(5, 0);
+    }
+}
+
+void ObRect::Render(Camera* uicam)
+{
+    if (!isVisible)return;
+    GameObject::Render(uicam);
+
+    basicShader->Set();
+
+    UINT stride = sizeof(VertexPC);
+    UINT offset = 0;
+
     if (isFilled)
     {
         D3D->GetDC()->IASetVertexBuffers(0,

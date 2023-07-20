@@ -28,6 +28,8 @@ GameGUI::GameGUI()
 	reloadCountImg->scale.x = reloadCountImg->imageSize.x * 4.0f;
 	reloadCountImg->scale.y = reloadCountImg->imageSize.y * 4.0f;
 
+	uiCam = new Camera();
+
 }
 
 GameGUI::~GameGUI()
@@ -38,7 +40,7 @@ GameGUI::~GameGUI()
 	for (auto it = clBar.begin(); it != clBar.end(); it++) delete (*it);
 	delete boxKeyImg;
 	delete reloadCountImg;
-
+	delete uiCam;
 	TEXTURE->DeleteTexture(L"HeartBarFull.png");
 	TEXTURE->DeleteTexture(L"HeartBarHalf.png");
 	TEXTURE->DeleteTexture(L"HeartBarZero.png");
@@ -69,44 +71,45 @@ void GameGUI::Init()
 
 void GameGUI::Update()
 {
+	uiCam->Set();
 	for (int i = 0; i < curMaxHPBar; i++) {
-		hpBar[i]->heartBar[0]->SetWorldPosX(CAM->position.x - 760.0f + i * 70.0f);
-		hpBar[i]->heartBar[0]->SetWorldPosY(CAM->position.y + 450.0f);
-		hpBar[i]->heartBar[1]->SetWorldPosX(CAM->position.x - 760.0f + i * 70.0f);
-		hpBar[i]->heartBar[1]->SetWorldPosY(CAM->position.y + 450.0f);
-		hpBar[i]->heartBar[2]->SetWorldPosX(CAM->position.x - 760.0f + i * 70.0f);
-		hpBar[i]->heartBar[2]->SetWorldPosY(CAM->position.y + 450.0f);
+		hpBar[i]->heartBar[0]->SetWorldPosX(uiCam->position.x - 760.0f + i * 70.0f);
+		hpBar[i]->heartBar[0]->SetWorldPosY(uiCam->position.y + 450.0f);
+		hpBar[i]->heartBar[1]->SetWorldPosX(uiCam->position.x - 760.0f + i * 70.0f);
+		hpBar[i]->heartBar[1]->SetWorldPosY(uiCam->position.y + 450.0f);
+		hpBar[i]->heartBar[2]->SetWorldPosX(uiCam->position.x - 760.0f + i * 70.0f);
+		hpBar[i]->heartBar[2]->SetWorldPosY(uiCam->position.y + 450.0f);
 		hpBar[i]->heartBar[0]->Update();
 		hpBar[i]->heartBar[1]->Update();
 		hpBar[i]->heartBar[2]->Update();
 	}
 	for (int i = 0; i < curMaxBBBar; i++) {
-		bbBar[i]->blankBulletBar[0]->SetWorldPosX(CAM->position.x - 760.0f + i * 70.0f);
-		bbBar[i]->blankBulletBar[0]->SetWorldPosY(CAM->position.y + 390.0f);
-		bbBar[i]->blankBulletBar[1]->SetWorldPosX(CAM->position.x - 760.0f + i * 70.0f);
-		bbBar[i]->blankBulletBar[1]->SetWorldPosY(CAM->position.y + 390.0f);
+		bbBar[i]->blankBulletBar[0]->SetWorldPosX(uiCam->position.x - 760.0f + i * 70.0f);
+		bbBar[i]->blankBulletBar[0]->SetWorldPosY(uiCam->position.y + 390.0f);
+		bbBar[i]->blankBulletBar[1]->SetWorldPosX(uiCam->position.x - 760.0f + i * 70.0f);
+		bbBar[i]->blankBulletBar[1]->SetWorldPosY(uiCam->position.y + 390.0f);
 		bbBar[i]->blankBulletBar[0]->Update();
 		bbBar[i]->blankBulletBar[1]->Update();
 	}
 	for (int i = 0; i < clBar.size(); i++) {
-		clBar[i]->cylinderBar[0]->SetWorldPosX(CAM->position.x + 785.0f);
-		clBar[i]->cylinderBar[0]->SetWorldPosY(CAM->position.y - 475.0f + i * 15.0f);
-		clBar[i]->cylinderBar[1]->SetWorldPosX(CAM->position.x + 785.0f);
-		clBar[i]->cylinderBar[1]->SetWorldPosY(CAM->position.y - 475.0f + i * 15.0f);
+		clBar[i]->cylinderBar[0]->SetWorldPosX(uiCam->position.x + 785.0f);
+		clBar[i]->cylinderBar[0]->SetWorldPosY(uiCam->position.y - 475.0f + i * 15.0f);
+		clBar[i]->cylinderBar[1]->SetWorldPosX(uiCam->position.x + 785.0f);
+		clBar[i]->cylinderBar[1]->SetWorldPosY(uiCam->position.y - 475.0f + i * 15.0f);
 		clBar[i]->cylinderBar[0]->Update();
 		clBar[i]->cylinderBar[1]->Update();
 	}
-	cylinderBarTP[0]->SetWorldPosX(CAM->position.x + 785.0f);
-	cylinderBarTP[0]->SetWorldPosY(CAM->position.y - 475.0f + clBar.size() * 15.0f);
-	cylinderBarTP[1]->SetWorldPosX(CAM->position.x + 785.0f);
-	cylinderBarTP[1]->SetWorldPosY(CAM->position.y - 490.0f);
+	cylinderBarTP[0]->SetWorldPosX(uiCam->position.x + 785.0f);
+	cylinderBarTP[0]->SetWorldPosY(uiCam->position.y - 475.0f + clBar.size() * 15.0f);
+	cylinderBarTP[1]->SetWorldPosX(uiCam->position.x + 785.0f);
+	cylinderBarTP[1]->SetWorldPosY(uiCam->position.y - 490.0f);
 	cylinderBarTP[0]->Update();
 	cylinderBarTP[1]->Update();
 
-	boxKeyImg->SetWorldPosX(CAM->position.x - 760.0f);
-	boxKeyImg->SetWorldPosY(CAM->position.y + 330.0f); 
-	reloadCountImg->SetWorldPosX(CAM->position.x - 590.0f);
-	reloadCountImg->SetWorldPosY(CAM->position.y + 330.0f);
+	boxKeyImg->SetWorldPosX(uiCam->position.x - 760.0f);
+	boxKeyImg->SetWorldPosY(uiCam->position.y + 330.0f);
+	reloadCountImg->SetWorldPosX(uiCam->position.x - 590.0f);
+	reloadCountImg->SetWorldPosY(uiCam->position.y + 330.0f);
 	boxKeyImg->Update();
 	reloadCountImg->Update();
 
@@ -138,39 +141,40 @@ void GameGUI::Update()
 void GameGUI::Render()
 {
 	for (int i = 0; i < curMaxHPBar; i++) {
-		if (hpBar[i]->hpBarState == HPBarState::FULL) hpBar[i]->heartBar[0]->Render();
-		else if (hpBar[i]->hpBarState == HPBarState::HALF) hpBar[i]->heartBar[1]->Render();
-		else if (hpBar[i]->hpBarState == HPBarState::ZERO) hpBar[i]->heartBar[2]->Render();
+		if (hpBar[i]->hpBarState == HPBarState::FULL) hpBar[i]->heartBar[0]->Render(uiCam);
+		else if (hpBar[i]->hpBarState == HPBarState::HALF) hpBar[i]->heartBar[1]->Render(uiCam);
+		else if (hpBar[i]->hpBarState == HPBarState::ZERO) hpBar[i]->heartBar[2]->Render(uiCam);
 	}
 
 	for (int i = 0; i < curMaxBBBar; i++) {
-		if (bbBar[i]->bBarState == 1) bbBar[i]->blankBulletBar[0]->Render();
-		else if (bbBar[i]->bBarState == 0) bbBar[i]->blankBulletBar[1]->Render();
+		if (bbBar[i]->bBarState == 1) bbBar[i]->blankBulletBar[0]->Render(uiCam);
+		else if (bbBar[i]->bBarState == 0) bbBar[i]->blankBulletBar[1]->Render(uiCam);
 	}
 
 	for (auto it = clBar.begin(); it != clBar.end(); it++) {
-		if ((*it)->cBarState == 1) (*it)->cylinderBar[0]->Render();
-		else if ((*it)->cBarState == 0) (*it)->cylinderBar[1]->Render();
+		if ((*it)->cBarState == 1) (*it)->cylinderBar[0]->Render(uiCam);
+		else if ((*it)->cBarState == 0) (*it)->cylinderBar[1]->Render(uiCam);
 	}
-	cylinderBarTP[0]->Render();
-	cylinderBarTP[1]->Render();
+	cylinderBarTP[0]->Render(uiCam);
+	cylinderBarTP[1]->Render(uiCam);
+	boxKeyImg->Render(uiCam);
+	reloadCountImg->Render(uiCam);
 
-	RECT boxKeyRc;
-	boxKeyRc.left = Utility::WorldToScreen(boxKeyImg->GetWorldPos()).x + 35.0f;
-	boxKeyRc.top = Utility::WorldToScreen(boxKeyImg->GetWorldPos()).y - 25.0f;
+	boxKeyRc;
+	boxKeyRc.left = Utility::WorldToScreen(boxKeyImg->GetWorldPos(), uiCam).x + 35.0f;
+	boxKeyRc.top = Utility::WorldToScreen(boxKeyImg->GetWorldPos(), uiCam).y - 25.0f;
 	boxKeyRc.right = boxKeyRc.left + 100.0f;
 	boxKeyRc.bottom = boxKeyRc.top + 50.0f;
+
 	DWRITE->RenderText(L"¡¿" + to_wstring(boxKeyNum), boxKeyRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 
 	RECT reloadCountRc;
-	reloadCountRc.left = Utility::WorldToScreen(reloadCountImg->GetWorldPos()).x + 30.0f;
-	reloadCountRc.top = Utility::WorldToScreen(reloadCountImg->GetWorldPos()).y - 25.0f;
+	reloadCountRc.left = Utility::WorldToScreen(reloadCountImg->GetWorldPos(), uiCam).x + 30.0f;
+	reloadCountRc.top = Utility::WorldToScreen(reloadCountImg->GetWorldPos(), uiCam).y - 25.0f;
 	reloadCountRc.right = reloadCountRc.left + 100.0f;
 	reloadCountRc.bottom = reloadCountRc.top + 50.0f;
 	DWRITE->RenderText(L"¡¿" + to_wstring(reloadCount), reloadCountRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 
-	boxKeyImg->Render();
-	reloadCountImg->Render();
 }

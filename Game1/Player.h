@@ -1,32 +1,34 @@
 #pragma once
-
-
-enum class PlayerState
-{
-	IDLE,
-	WALK,
-	ROLL,
-	//DAMAGE
+enum PLType {
+	PLCONVICT,
+	PLBULLET
 };
-
+enum PLState {
+	PLIDLE,
+	PLIDLEWP,
+	PLWALK,
+	PLWALKWP,
+	PLROLL,
+	PLDEATH,
+	//PLDEATH2,
+	PLSIZE
+};
 
 class Player : public ObRect
 {
-	class Bullet* bullet[30];
-	ObImage* walk;
-	ObImage* roll;
-	ObImage* walk_shadow;
-	ObImage* roll_shadow;
-	PlayerState  state;
+	ObImage* charImg[PLState::PLSIZE];
+	int state;
+	int dirFrame[8];
+
 	float		speed;
-	Vector2		dir;
+	Vector2		controlDir;
 	Vector2		dir2;
-	int Frame[8];
 	float rollTime;
 	Vector2 lastPos;
 	//시계프레임
 public:
 	Player();
+	Player(PLType type);
 	virtual ~Player();
 	void Init(Vector2 spawn);
 	void Control();

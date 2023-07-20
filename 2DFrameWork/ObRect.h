@@ -1,5 +1,5 @@
 #pragma once
-class ObRect: public GameObject
+class ObRect : public GameObject
 {
 private:
     static ID3D11Buffer* fillVertexBuffer;
@@ -12,5 +12,6 @@ public:
 public:
     ObRect();
     void Render()override;
+    void Render(Camera* uicam)override;
 };
 

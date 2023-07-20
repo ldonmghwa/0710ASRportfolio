@@ -102,13 +102,13 @@ GameObject::GameObject()
 void GameObject::Update()
 {
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
-	S = Matrix::CreateScale(scale.x, scale.y,1.0f);
-	T = Matrix::CreateTranslation(position.x, position.y,0.0f);
+	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
+	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R = Matrix::CreateFromYawPitchRoll(rotation.y, rotation.x, rotation.z);
 	R2 = Matrix::CreateFromYawPitchRoll(rotation2.y, rotation2.x, rotation2.z);
-	
-	RT =  R * T * R2;
-	
+
+	RT = R * T * R2;
+
 	//P의 주소가 있으면
 	if (P)
 	{
@@ -129,7 +129,7 @@ void GameObject::Render()
 		axisObject->Update();
 		axisObject->Render();
 		//up
-		axisObject->rotation.z= Utility::DirToRadian(GetUp());
+		axisObject->rotation.z = Utility::DirToRadian(GetUp());
 		axisObject->scale.x = scale.y * 2.0f;
 		axisObject->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 		axisObject->Update();
@@ -143,6 +143,52 @@ void GameObject::Render()
 		break;
 	case SPACE::SCREEN:
 		WVP = W * CAM->GetP();
+		break;
+	}
+
+	WVP = WVP.Transpose();
+	//wvp 바인딩
+	{
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		D3D->GetDC()->Map(WVPBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		memcpy_s(mappedResource.pData, sizeof(Matrix), &WVP, sizeof(Matrix));
+		D3D->GetDC()->Unmap(WVPBuffer, 0);
+	}
+	//color 바인딩
+	{
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		D3D->GetDC()->Map(colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		memcpy_s(mappedResource.pData, sizeof(Color), &color, sizeof(Color));
+		D3D->GetDC()->Unmap(colorBuffer, 0);
+	}
+}
+
+void GameObject::Render(Camera* uicam)
+{
+	if (hasAxis)
+	{
+		//right
+		axisObject->SetWorldPos(GetWorldPos());
+		axisObject->rotation.z = Utility::DirToRadian(GetRight());
+		axisObject->scale.x = scale.x * 2.0f;
+		axisObject->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+		axisObject->Update();
+		axisObject->Render();
+		//up
+		axisObject->rotation.z = Utility::DirToRadian(GetUp());
+		axisObject->scale.x = scale.y * 2.0f;
+		axisObject->color = Color(0.0f, 1.0f, 0.0f, 1.0f);
+		axisObject->Update();
+		axisObject->Render();
+	}
+
+	switch (space)
+	{
+	case SPACE::WORLD:
+		WVP = W * uicam->GetVP();
+		break;
+	case SPACE::SCREEN:
+		WVP = W * uicam->GetP();
 		break;
 	}
 
@@ -210,7 +256,7 @@ bool GameObject::Intersect(GameObject* ob)
 			{
 				return Utility::IntersectRectRect(this, ob);
 			}
-			
+
 		}
 		else if (ob->collider == COLLIDER::CIRCLE)
 		{
@@ -232,7 +278,7 @@ bool GameObject::Intersect(GameObject* ob)
 
 				return IntersectRectCircle(rc, cc);
 			}
-			
+
 		}
 	}
 	else if (collider == COLLIDER::CIRCLE)

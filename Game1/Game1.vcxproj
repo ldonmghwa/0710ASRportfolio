@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ASRPlayer.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
@@ -31,7 +30,6 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ASRPlayer.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="IntroScene.cpp" />

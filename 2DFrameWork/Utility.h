@@ -33,6 +33,7 @@ namespace Utility
     float DirToRadian(Vector2 Dir);
 
     Vector2 WorldToScreen(Vector2 wol);
+    Vector2 WorldToScreen(Vector2 wol, Camera* uicam);
 
     //템플릿 함수는 선언,정의 분리 불가
     template<typename T>
