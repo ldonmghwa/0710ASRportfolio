@@ -18,6 +18,8 @@
     </ClInclude>
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
+    <ClInclude Include="ASRBullet.h" />
+    <ClInclude Include="ASRGun.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -35,6 +37,8 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameGUI.cpp" />
+    <ClCompile Include="ASRBullet.cpp" />
+    <ClCompile Include="ASRGun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObject">

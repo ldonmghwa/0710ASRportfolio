@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include "ASRGun.h"
 #include "Bullet.h"
+#include "GUIStruct.h"
 #include "Player.h"
 
 Player::Player()
@@ -66,10 +68,11 @@ Player::Player()
     dirFrame[7] = 3;
 }
 
-Player::Player(PLType type)
+Player::Player(PLType _type)
 {//hasAxis = true;
-    if (type == PLType::PLCONVICT)
+    if (_type == PLType::PLCONVICT)
     {
+        type = _type;
         charImg[PLState::PLIDLE] = new ObImage(L"Char_Convict_Idle.png");
         charImg[PLState::PLIDLE]->maxFrame.x = 4;
         charImg[PLState::PLIDLE]->maxFrame.y = 4;
@@ -110,6 +113,9 @@ Player::Player(PLType type)
         charImg[PLState::PLDEATH]->scale.x = charImg[PLState::PLDEATH]->imageSize.x / 11.0f * 3.0f;
         charImg[PLState::PLDEATH]->scale.y = charImg[PLState::PLDEATH]->imageSize.y * 3.0f;
         charImg[PLState::PLDEATH]->pivot = OFFSET_B;
+
+        gunVector.push_back(new ASRGun(L"Convict_Gun1.png", this));
+
     }
     else if (type == PLType::PLBULLET) {
 
@@ -135,6 +141,7 @@ Player::Player(PLType type)
 Player::~Player()
 {
     for (int i = 0; i < PLState::PLSIZE; i++) delete charImg[i];
+    for (auto it = gunVector.begin(); it != gunVector.end(); it++) delete (*it);
 
     TEXTURE->DeleteTexture(L"Char_Convict_Idle.png");
     TEXTURE->DeleteTexture(L"Char_Convict_IdleWithWeapon.png");
@@ -151,6 +158,8 @@ void Player::Init(Vector2 spawn)
     SetWorldPosY(spawn.y);
     state = PLState::PLIDLE;
     speed = 300.0f;
+    gunNum = 1;
+    isCarryWP = false;
 }
 
 void Player::Control()
@@ -182,22 +191,8 @@ void Player::Control()
 
 void Player::Update()
 {
-    ImGui::Text("controlDir: %f, %f", controlDir.x, controlDir.y);
-    ImGui::Text("player x, y: %f, %f", this->GetWorldPos().x, this->GetWorldPos().y);
-    ImGui::Text("dash point x, y: %f, %f", (beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir).x, (beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir).y);
     lastPos = GetWorldPos();
-    /*  if (ImGui::SliderAngle("rotX", &roll_shadow->rotation.x))
-      {
-          walk_shadow->rotation = roll_shadow->rotation;
-      }
-      if (ImGui::SliderAngle("rotY", &roll_shadow->rotation.y))
-      {
-          walk_shadow->rotation = roll_shadow->rotation;
-      }
-      if (ImGui::SliderAngle("rotZ", &roll_shadow->rotation.z))
-      {
-          walk_shadow->rotation = roll_shadow->rotation;
-      }*/
+    CAM->position = this->GetWorldPos();
 
     ObRect::Update();
 
@@ -211,6 +206,21 @@ void Player::Update()
         {
             state = PLState::PLWALK;
             charImg[PLState::PLWALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+        }
+        if (INPUT->KeyDown('1')) {
+            isCarryWP = true;
+            state = PLState::PLIDLEWP;
+            charImg[PLState::PLIDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+        }
+    }
+    else if (state == PLState::PLIDLEWP) {
+        LookTarget(INPUT->GetWorldMousePos());
+        Control();
+        if (INPUT->KeyPress('W') or INPUT->KeyPress('A')
+            or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
+        {
+            state = PLState::PLWALKWP;
+            charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
     }
     else if (state == PLState::PLWALK)
@@ -234,10 +244,28 @@ void Player::Update()
             rollTime = 0.0f;
         }
     }
+    else if (state == PLState::PLWALKWP) {
+        LookTarget(INPUT->GetWorldMousePos());
+        Control();
+        if (not(INPUT->KeyPress('W') or INPUT->KeyPress('A')
+            or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
+        {
+            state = PLState::PLIDLE;
+            charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            charImg[PLState::PLWALKWP]->frame.x = 0;
+        }
+        //walk->roll
+        if (INPUT->KeyDown(VK_RBUTTON))
+        {
+            beforeDashPoint = this->GetWorldPos();
+            state = PLState::PLROLL;
+            charImg[PLState::PLROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            rollTime = 0.0f;
+        }
+    }
     else if (state == PLState::PLROLL)
     {
         rollTime += DELTA;
-
         //0 ~ 1 * 180
         //speed = (200.0f * rollTime / 0.6f * PI + 100.0f);
 
@@ -250,20 +278,39 @@ void Player::Update()
         //roll->idle
         if (charImg[PLState::PLROLL]->isAniStop())
         {
-            speed = 200.0f;
-            state = PLState::PLIDLE;
-            charImg[PLState::PLWALK]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            speed = 300.0f;
+            if (isCarryWP) {
+                state = PLState::PLIDLEWP;
+                charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+
+            }
+            else {
+                state = PLState::PLIDLE;
+                charImg[PLState::PLWALK]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            }
         }
     }
     charImg[PLState::PLIDLE]->Update();
+    charImg[PLState::PLIDLEWP]->Update();
     charImg[PLState::PLWALK]->Update();
+    charImg[PLState::PLWALKWP]->Update();
     charImg[PLState::PLROLL]->Update();
+    if (isCarryWP) {
+        for (int i = 0; i < gunNum; i++) {
+            gunVector[i]->Update();
+        }
+    }
 }
 
 void Player::Render()
 {
     ObRect::Render();
     charImg[state]->Render();
+    if (isCarryWP) {
+        for (int i = 0; i < gunNum; i++) {
+            gunVector[i]->Render();
+        }
+    }
 }
 
 void Player::LookTarget(Vector2 target)
@@ -279,6 +326,13 @@ void Player::LookTarget(Vector2 target)
     else charImg[state]->rotation.y = 0.0f;
 }
 
+void Player::GetFromChest(GunType _type)
+{
+    if (_type == GunType::GUIDE) {
+        
+    }
+}
+
 Vector2 Player::GetFoot()
 {
     //29 38
@@ -291,6 +345,10 @@ Vector2 Player::GetFoot()
 
 void Player::GoBack()
 {
+    if (INPUT->KeyDown(VK_RBUTTON)) {
+        this->SetWorldPos(Vector2::Lerp(this->GetWorldPos()
+            , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
+    }
     SetWorldPos(lastPos);
     Update();
 }

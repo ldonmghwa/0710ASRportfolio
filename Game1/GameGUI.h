@@ -9,7 +9,7 @@ private:
 
 	ObImage* cylinderBarTP[2];
 	ObImage* boxKeyImg;
-	ObImage* reloadCountImg;
+	ObImage* moneyImg;
 	vector<class CLBar*> clBar;
 
 	Camera* uiCam;
@@ -23,7 +23,7 @@ private:
 	int curBBIdx;
 	int curCLIdx;
 	int boxKeyNum;
-	int reloadCount;
+	int moneyNum;
 
 public:
 	GameGUI();

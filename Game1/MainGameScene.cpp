@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "GUIStruct.h"
 #include "GameGUI.h"
 #include "Player.h"
 #include "MainGameScene.h"
@@ -26,7 +27,7 @@ MainGameScene::~MainGameScene()
 void MainGameScene::Init()
 {
 	gui->Init();
-	plConvict->Init(Vector2(0, 0));
+	plConvict->Init(Vector2(0, 50));
 	map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
 }
 
@@ -40,6 +41,12 @@ void MainGameScene::Update()
 	if (INPUT->KeyPress(VK_DOWN)) CAM->position += DOWN * 300.0f * DELTA;
 	if (INPUT->KeyPress(VK_LEFT)) CAM->position += LEFT * 300.0f * DELTA;
 	if (INPUT->KeyPress(VK_RIGHT)) CAM->position += RIGHT * 300.0f * DELTA;
+	Int2 plIdx;
+	if (map->WorldPosToTileIdx(plConvict->GetFoot(), plIdx)) {
+		if (map->GetTileState(plIdx) == TILE_WALL) {
+			plConvict->GoBack();
+		}
+	}
 
 	map->Update();
 	gui->Update();

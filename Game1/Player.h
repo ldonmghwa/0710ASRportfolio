@@ -1,8 +1,4 @@
 #pragma once
-enum PLType {
-	PLCONVICT,
-	PLBULLET
-};
 enum PLState {
 	PLIDLE,
 	PLIDLEWP,
@@ -13,31 +9,40 @@ enum PLState {
 	//PLDEATH2,
 	PLSIZE
 };
-
 class Player : public ObRect
 {
-	ObImage* charImg[PLState::PLSIZE];
-	int state;
-	int dirFrame[8];
+	ObImage*		charImg[PLState::PLSIZE];
+	vector<class ASRGun*> gunVector;
+	enum class PLType			type;
 
-	Vector2		controlDir;
-	Vector2		dir2;
-	Vector2		beforeDashPoint;
-	float		speed;
-	float rollTime;
-	Vector2 lastPos;
-	//시계프레임
+	Vector2			controlDir;
+	Vector2			dir2;
+	Vector2			beforeDashPoint;
+	Vector2			lastPos;
+
+	bool			isCarryWP;
+
+	int				state;
+	int				dirFrame[8];
+	int				gunNum;
+
+	float			speed;
+	float			rollTime;
 public:
 	Player();
-	Player(PLType type);
+	Player(PLType _type);
 	virtual ~Player();
+
 	void Init(Vector2 spawn);
 	void Control();
 	void Update() override;
 	void Render() override;
-	void LookTarget(Vector2 target);
-	Vector2 GetFoot();
+
 	void GoBack();
+	void LookTarget(Vector2 target);
+	void GetFromChest(enum class GunType _type);
+
+	Vector2 GetFoot();
 };
 
 //class Sloider : public Player

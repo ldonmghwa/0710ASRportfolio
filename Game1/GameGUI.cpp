@@ -18,15 +18,15 @@ GameGUI::GameGUI()
 	clBar.clear();
 	clBar.reserve(basicBulletNum);
 	for (int i = 0; i < basicBulletNum; i++) {
-		clBar.push_back(new CLBar(BulletType::BASIC));
+		clBar.push_back(new CLBar(GunType::BASIC));
 	}
 	boxKeyImg = new ObImage(L"TreasureBoxKey.png");
 	boxKeyImg->scale.x = boxKeyImg->imageSize.x * 4.0f;
 	boxKeyImg->scale.y = boxKeyImg->imageSize.y * 4.0f;
 
-	reloadCountImg = new ObImage(L"ReloadCount.png");
-	reloadCountImg->scale.x = reloadCountImg->imageSize.x * 4.0f;
-	reloadCountImg->scale.y = reloadCountImg->imageSize.y * 4.0f;
+	moneyImg = new ObImage(L"Money.png");
+	moneyImg->scale.x = moneyImg->imageSize.x * 4.0f;
+	moneyImg->scale.y = moneyImg->imageSize.y * 4.0f;
 
 	uiCam = new Camera();
 
@@ -39,7 +39,7 @@ GameGUI::~GameGUI()
 	for (int i = 0; i < 2; i++)delete cylinderBarTP[i];
 	for (auto it = clBar.begin(); it != clBar.end(); it++) delete (*it);
 	delete boxKeyImg;
-	delete reloadCountImg;
+	delete moneyImg;
 	delete uiCam;
 	TEXTURE->DeleteTexture(L"HeartBarFull.png");
 	TEXTURE->DeleteTexture(L"HeartBarHalf.png");
@@ -55,7 +55,7 @@ GameGUI::~GameGUI()
 	TEXTURE->DeleteTexture(L"CylinderDown.png");
 
 	TEXTURE->DeleteTexture(L"TreasureBoxKey.png");
-	TEXTURE->DeleteTexture(L"ReloadCount.png");
+	TEXTURE->DeleteTexture(L"Money.png");
 }
 
 void GameGUI::Init()
@@ -66,7 +66,7 @@ void GameGUI::Init()
 	curBBIdx = curMaxBBBar - 1;
 	curCLIdx = basicBulletNum - 1;
 	boxKeyNum = 0;
-	reloadCount = 0;
+	moneyNum = 0;
 }
 
 void GameGUI::Update()
@@ -108,10 +108,10 @@ void GameGUI::Update()
 
 	boxKeyImg->SetWorldPosX(uiCam->position.x - 760.0f);
 	boxKeyImg->SetWorldPosY(uiCam->position.y + 330.0f);
-	reloadCountImg->SetWorldPosX(uiCam->position.x - 590.0f);
-	reloadCountImg->SetWorldPosY(uiCam->position.y + 330.0f);
+	moneyImg->SetWorldPosX(uiCam->position.x - 590.0f);
+	moneyImg->SetWorldPosY(uiCam->position.y + 330.0f);
 	boxKeyImg->Update();
-	reloadCountImg->Update();
+	moneyImg->Update();
 
 
 	//Utility::Saturate(curHPIdx, 0, curMaxHPBar - 1);
@@ -158,7 +158,7 @@ void GameGUI::Render()
 	cylinderBarTP[0]->Render(uiCam);
 	cylinderBarTP[1]->Render(uiCam);
 	boxKeyImg->Render(uiCam);
-	reloadCountImg->Render(uiCam);
+	moneyImg->Render(uiCam);
 
 	boxKeyRc;
 	boxKeyRc.left = Utility::WorldToScreen(boxKeyImg->GetWorldPos(), uiCam).x + 35.0f;
@@ -169,12 +169,12 @@ void GameGUI::Render()
 	DWRITE->RenderText(L"¡¿" + to_wstring(boxKeyNum), boxKeyRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 
-	RECT reloadCountRc;
-	reloadCountRc.left = Utility::WorldToScreen(reloadCountImg->GetWorldPos(), uiCam).x + 30.0f;
-	reloadCountRc.top = Utility::WorldToScreen(reloadCountImg->GetWorldPos(), uiCam).y - 25.0f;
-	reloadCountRc.right = reloadCountRc.left + 100.0f;
-	reloadCountRc.bottom = reloadCountRc.top + 50.0f;
-	DWRITE->RenderText(L"¡¿" + to_wstring(reloadCount), reloadCountRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
+	RECT moneyNumRc;
+	moneyNumRc.left = Utility::WorldToScreen(moneyImg->GetWorldPos(), uiCam).x + 30.0f;
+	moneyNumRc.top = Utility::WorldToScreen(moneyImg->GetWorldPos(), uiCam).y - 25.0f;
+	moneyNumRc.right = moneyNumRc.left + 100.0f;
+	moneyNumRc.bottom = moneyNumRc.top + 50.0f;
+	DWRITE->RenderText(L"¡¿" + to_wstring(moneyNum), moneyNumRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 
 }

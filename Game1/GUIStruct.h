@@ -5,10 +5,16 @@ enum HPBarState {
 	FULL
 };
 
-enum class BulletType {
+enum class GunType {
 	BASIC,
 	GUIDE
 };
+
+enum class PLType {
+	PLCONVICT,
+	PLBULLET
+};
+
 struct HPBar {
 	ObImage* heartBar[3];
 	int hpBarState;
@@ -47,9 +53,9 @@ struct BBBar {
 struct CLBar {
 	ObImage* cylinderBar[2];
 	int cBarState;
-	CLBar(BulletType bulletType) {
+	CLBar(GunType bulletType) {
 		cBarState = 1;
-		if (bulletType == BulletType::BASIC) {
+		if (bulletType == GunType::BASIC) {
 			cylinderBar[0] = new ObImage(L"BasicBulletFull.png");
 			cylinderBar[1] = new ObImage(L"BasicBulletZero.png");
 			for (int i = 0; i < 2; i++) {
@@ -57,7 +63,7 @@ struct CLBar {
 				cylinderBar[i]->scale.y = cylinderBar[i]->imageSize.y * 0.8f;
 			}
 		}
-		else if (bulletType == BulletType::GUIDE) {
+		else if (bulletType == GunType::GUIDE) {
 
 		}
 	}
