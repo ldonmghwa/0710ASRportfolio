@@ -3,9 +3,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Bullet.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -16,16 +13,21 @@
     <ClInclude Include="IntroScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameGUI.h" />
-    <ClInclude Include="GUIStruct.h" />
-    <ClInclude Include="ASRBullet.h" />
-    <ClInclude Include="ASRGun.h" />
+    <ClInclude Include="ASRBullet.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ASRGun.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGUI.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIStruct.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Bullet.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -36,9 +38,15 @@
     <ClCompile Include="MainGameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameGUI.cpp" />
-    <ClCompile Include="ASRBullet.cpp" />
-    <ClCompile Include="ASRGun.cpp" />
+    <ClCompile Include="ASRBullet.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRGun.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObject">

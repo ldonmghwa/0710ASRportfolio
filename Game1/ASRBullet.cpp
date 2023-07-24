@@ -6,9 +6,9 @@
 ASRBullet::ASRBullet(wstring _wstr, ASRGun* _gun) : ObImage(_wstr)
 {
     bulletName = _wstr;
-	this->scale.x = this->imageSize.x * 0.5f;
-	this->scale.y = this->imageSize.y * 0.5f;
-	this->SetParentRT(*_gun);
+    this->scale.x = this->imageSize.x * 2.0f;
+    this->scale.y = this->imageSize.y * 2.0f;
+    //this->SetParentT(*_gun);
 }
 
 ASRBullet::~ASRBullet()
@@ -18,8 +18,6 @@ ASRBullet::~ASRBullet()
 void ASRBullet::Fire(GameObject* shooter, float pressPower)
 {
     lifeTime = 3.0f;
-    scale.x = pressPower * 0.1f;
-    scale.y = scale.x * 0.2f;
     isFire = true;
     SetWorldPos(shooter->GetWorldPos());
 

@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="ASRBullet.h" />
     <ClInclude Include="ASRGun.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
     <ClInclude Include="IntroScene.h" />
@@ -34,7 +33,6 @@
   <ItemGroup>
     <ClCompile Include="ASRBullet.cpp" />
     <ClCompile Include="ASRGun.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Main.cpp" />

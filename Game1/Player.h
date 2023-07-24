@@ -11,7 +11,7 @@ enum PLState {
 };
 class Player : public ObRect
 {
-	ObImage*		charImg[PLState::PLSIZE];
+	ObImage* charImg[PLState::PLSIZE];
 	vector<class ASRGun*> gunVector;
 	enum class PLType			type;
 
@@ -25,6 +25,7 @@ class Player : public ObRect
 	int				state;
 	int				dirFrame[8];
 	int				gunNum;
+	int				selectWPNum;
 
 	float			speed;
 	float			rollTime;

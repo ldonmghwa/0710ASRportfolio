@@ -15,6 +15,12 @@ MainGameScene::MainGameScene()
 
 	gui = new GameGUI();
 	plConvict = new Player(PLType::PLCONVICT);
+
+	chest = new ObImage(L"Chest_Open.png");
+	chest->scale.x = chest->imageSize.x / 6.0f * 1.5f;
+	chest->scale.y = chest->imageSize.y * 1.5f;
+	chest->maxFrame.x = 6;
+	chest->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 }
 
 MainGameScene::~MainGameScene()
@@ -45,6 +51,11 @@ void MainGameScene::Update()
 	if (map->WorldPosToTileIdx(plConvict->GetFoot(), plIdx)) {
 		if (map->GetTileState(plIdx) == TILE_WALL) {
 			plConvict->GoBack();
+		}
+	}
+	if (map->WorldPosToTileIdx(plConvict->GetFoot(), plIdx)) {
+		if (map->GetTileState(plIdx) == TILE_TRAP) {
+
 		}
 	}
 

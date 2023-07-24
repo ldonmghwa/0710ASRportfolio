@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ASRGun.h"
-#include "Bullet.h"
 #include "GUIStruct.h"
 #include "Player.h"
 
@@ -114,7 +113,11 @@ Player::Player(PLType _type)
         charImg[PLState::PLDEATH]->scale.y = charImg[PLState::PLDEATH]->imageSize.y * 3.0f;
         charImg[PLState::PLDEATH]->pivot = OFFSET_B;
 
+        this->scale.x = charImg[PLState::PLIDLE]->scale.x;
+        this->scale.y = charImg[PLState::PLIDLE]->scale.y;
+
         gunVector.push_back(new ASRGun(L"Convict_Gun1.png", this));
+
 
     }
     else if (type == PLType::PLBULLET) {
@@ -122,8 +125,6 @@ Player::Player(PLType _type)
     }
 
     this->pivot = OFFSET_B;
-    this->scale.x = charImg[PLState::PLIDLE]->scale.x;
-    this->scale.y = charImg[PLState::PLIDLE]->scale.y;
     this->isFilled = false;
 
     for (int i = 0; i < PLState::PLSIZE; i++) charImg[i]->SetParentRT(*this);
@@ -149,6 +150,11 @@ Player::~Player()
     TEXTURE->DeleteTexture(L"Char_Convict_WalkingWithWeapon.png");
     TEXTURE->DeleteTexture(L"Char_Convict_DodgeRoll.png");
     TEXTURE->DeleteTexture(L"Char_Convict_Death1.png");
+    TEXTURE->DeleteTexture(L"Convict_Gun1.png");
+    TEXTURE->DeleteTexture(L"Convict_Gun1_Bullet.png");
+    //TEXTURE->DeleteTexture(L"Convict_Gun1_Bullet_Death.png");
+    TEXTURE->DeleteTexture(L"Convict_Gun2.png");
+    TEXTURE->DeleteTexture(L"Convict_Gun2_Bullet.png");
 
 }
 
@@ -160,6 +166,8 @@ void Player::Init(Vector2 spawn)
     speed = 300.0f;
     gunNum = 1;
     isCarryWP = false;
+    selectWPNum = 0;
+    gunVector[selectWPNum]->isVisible = false;
 }
 
 void Player::Control()
@@ -208,19 +216,32 @@ void Player::Update()
             charImg[PLState::PLWALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown('1')) {
+            selectWPNum = '1' - '0' - 1;
             isCarryWP = true;
+            gunVector[selectWPNum]->isVisible = true;
             state = PLState::PLIDLEWP;
             charImg[PLState::PLIDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
     }
     else if (state == PLState::PLIDLEWP) {
         LookTarget(INPUT->GetWorldMousePos());
-        Control();
+
         if (INPUT->KeyPress('W') or INPUT->KeyPress('A')
             or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
         {
             state = PLState::PLWALKWP;
             charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+        }
+        if (INPUT->KeyDown(VK_LBUTTON)) {
+            gunVector[selectWPNum]->FireBullet();
+        }
+        if (isCarryWP) {
+            if (INPUT->KeyDown('1')) {
+                gunVector[selectWPNum]->isVisible = false;
+                state = PLState::PLIDLE;
+                charImg[PLState::PLIDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                isCarryWP = false;
+            }
         }
     }
     else if (state == PLState::PLWALK)
@@ -243,6 +264,13 @@ void Player::Update()
             charImg[PLState::PLROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
         }
+        if (INPUT->KeyDown('1')) {
+            selectWPNum = '1' - '0' - 1;
+            gunVector[selectWPNum]->isVisible = true;
+            isCarryWP = true;
+            state = PLState::PLWALKWP;
+            charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+        }
     }
     else if (state == PLState::PLWALKWP) {
         LookTarget(INPUT->GetWorldMousePos());
@@ -250,7 +278,8 @@ void Player::Update()
         if (not(INPUT->KeyPress('W') or INPUT->KeyPress('A')
             or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
         {
-            state = PLState::PLIDLE;
+            if (isCarryWP) state = PLState::PLIDLEWP;
+            else state = PLState::PLIDLE;
             charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             charImg[PLState::PLWALKWP]->frame.x = 0;
         }
@@ -258,28 +287,34 @@ void Player::Update()
         if (INPUT->KeyDown(VK_RBUTTON))
         {
             beforeDashPoint = this->GetWorldPos();
+            gunVector[selectWPNum]->isVisible = false;
             state = PLState::PLROLL;
             charImg[PLState::PLROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
+        }
+        if (INPUT->KeyDown(VK_LBUTTON)) {
+            gunVector[selectWPNum]->FireBullet();
+        }
+        if (isCarryWP) {
+            if (INPUT->KeyDown('1')) {
+                gunVector[selectWPNum]->isVisible = false;
+                state = PLState::PLWALK;
+                charImg[PLState::PLWALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                isCarryWP = false;
+            }
         }
     }
     else if (state == PLState::PLROLL)
     {
         rollTime += DELTA;
-        //0 ~ 1 * 180
-        //speed = (200.0f * rollTime / 0.6f * PI + 100.0f);
-
-        //MoveWorldPos(controlDir * DELTA * speed);
-        //if (rollTime < 2.0f) {
         this->SetWorldPos(Vector2::Lerp(this->GetWorldPos()
             , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
-        // }
         LookTarget(GetWorldPos() + controlDir);
-        //roll->idle
         if (charImg[PLState::PLROLL]->isAniStop())
         {
             speed = 300.0f;
             if (isCarryWP) {
+                gunVector[selectWPNum]->isVisible = true;
                 state = PLState::PLIDLEWP;
                 charImg[PLState::PLWALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 
@@ -290,27 +325,15 @@ void Player::Update()
             }
         }
     }
-    charImg[PLState::PLIDLE]->Update();
-    charImg[PLState::PLIDLEWP]->Update();
-    charImg[PLState::PLWALK]->Update();
-    charImg[PLState::PLWALKWP]->Update();
-    charImg[PLState::PLROLL]->Update();
-    if (isCarryWP) {
-        for (int i = 0; i < gunNum; i++) {
-            gunVector[i]->Update();
-        }
-    }
+    gunVector[selectWPNum]->Update();
+    charImg[state]->Update();
 }
 
 void Player::Render()
 {
+    gunVector[selectWPNum]->Render();
     ObRect::Render();
     charImg[state]->Render();
-    if (isCarryWP) {
-        for (int i = 0; i < gunNum; i++) {
-            gunVector[i]->Render();
-        }
-    }
 }
 
 void Player::LookTarget(Vector2 target)
@@ -319,17 +342,30 @@ void Player::LookTarget(Vector2 target)
     int index =
         round((Utility::DirToRadian(target - GetWorldPos()) + PI) / (45.0f * ToRadian));
     if (index == 8) index = 0;
-    charImg[PLState::PLIDLE]->frame.y = dirFrame[index];
-    charImg[PLState::PLWALK]->frame.y = dirFrame[index];
-    charImg[PLState::PLROLL]->frame.y = dirFrame[index];
-    if (index == 0 or index == 1 or index == 7) charImg[state]->rotation.y = PI;
-    else charImg[state]->rotation.y = 0.0f;
+    charImg[state]->frame.y = dirFrame[index];
+
+    if (index == 0 or index == 1 or index == 7) {
+        gunVector[selectWPNum]->rotation.z = -atan2f((target - GetWorldPos()).y, (target - GetWorldPos()).x);
+        gunVector[selectWPNum]->SetLocalPosX(-this->scale.x * 0.3f);
+        gunVector[selectWPNum]->SetLocalPosY(this->scale.y * 0.25f);
+        //gunVector[selectWPNum]->rotation.y = PI;
+        gunVector[selectWPNum]->rotation.x = PI;
+        charImg[state]->rotation.y = PI;
+    }
+    else {
+        gunVector[selectWPNum]->rotation.z = atan2f((target - GetWorldPos()).y, (target - GetWorldPos()).x);
+        gunVector[selectWPNum]->SetLocalPosX(this->scale.x * 0.3f);
+        gunVector[selectWPNum]->SetLocalPosY(this->scale.y * 0.25f);
+        gunVector[selectWPNum]->rotation.y = 0.0f;
+        gunVector[selectWPNum]->rotation.x = 0.0f;
+        charImg[state]->rotation.y = 0.0f;
+    }
 }
 
 void Player::GetFromChest(GunType _type)
 {
     if (_type == GunType::GUIDE) {
-        
+
     }
 }
 

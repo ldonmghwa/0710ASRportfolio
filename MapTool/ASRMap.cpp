@@ -109,25 +109,28 @@ void ASRMap::VectorShow()
 void ASRMap::MappingBspTree()
 {
 	auto bspit = bspTreeVector.begin();
+	//전체 배경 타일 매핑
 	for (int i = (*bspit)->value.rrVertex[0].y; i < (*bspit)->value.rrVertex[3].y + 1; i++) {
 		for (int j = (*bspit)->value.rrVertex[0].x; j < (*bspit)->value.rrVertex[3].x + 1; j++) {
 			asrMap->SetTile(0, Int2(j, i), Int2(1, 1), 0, TILE_NONE, Color(0.5f, 0.5f, 0.5f, 0.5f));
 		}
 	}
-	for (int i = 0; i + 1 < realMapVector.size();i++) {
+	//방 사이의 길 매핑
+	for (int i = 0; i + 1 < realMapVector.size(); i++) {
 		Int2 startPos = realMapVector[i]->value.room.middlePoint;
 		Int2 destPos = realMapVector[i + 1]->value.room.middlePoint;
 		asrMap->PathFinding(startPos, destPos, way);
 		cout << "- " << i << "~" << i + 1 << " way: ";
-		for (int j = 0; j + 1< way.size(); j++) {
+		for (int j = 0; j + 1 < way.size(); j++) {
 			Int2 tempTilePos;
-			cout << "[" << way[j]->Pos.x << ", " << way[j]->Pos.y << "] "; 
+			cout << "[" << way[j]->Pos.x << ", " << way[j]->Pos.y << "] ";
 			asrMap->WorldPosToTileIdx(way[j]->Pos, tempTilePos);
 			asrMap->SetTile(0, tempTilePos, Int2(5, 3), 0, TILE_SAND, Color(0.5f, 0.5f, 0.5f, 0.5f));
 			SearchAroundWay(tempTilePos);
 		}
 		cout << endl << endl;
 	}
+	//방 타일 매핑
 	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
 		//세로 y값
 		for (int i = (*it)->value.room.vertex[0].y; i < (*it)->value.room.vertex[1].y; i++) {
@@ -136,7 +139,15 @@ void ASRMap::MappingBspTree()
 				asrMap->SetTile(0, Int2(j, i), Int2(5, 3), 0, TILE_SAND, Color(0.5f, 0.5f, 0.5f, 0.5f));
 			}
 		}
+		if (RANDOM->Int(0, 99) < 20)
+			asrMap->SetTile(0,
+				Int2((*it)->value.room.middlePoint.x, (*it)->value.room.middlePoint.y),
+				Int2(5, 3),
+				0,
+				TILE_TRAP,
+				Color(0.5f, 0.5f, 0.5f, 0.5f));
 	}
+	//방안의 장애물 매핑
 	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
 		for (int k = 0; k < 3; k++) {
 			for (int i = (*it)->value.room.wallPoint[k][0].y; i < (*it)->value.room.wallPoint[k][1].y; i++) {
@@ -146,7 +157,7 @@ void ASRMap::MappingBspTree()
 			}
 		}
 	}
-	
+	//길 주변 벽 매핑
 	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
 		//세로 y값
 		for (int i = (*it)->value.room.vertex[0].y - 1; i < (*it)->value.room.vertex[1].y + 1; i++) {
@@ -224,25 +235,25 @@ void ASRMap::DeleteTree()
 
 void ASRMap::SearchAroundWay(Int2 tempTilePos)
 {
-	if (asrMap->GetTileState(Int2(tempTilePos.x + 1, tempTilePos.y)) == TILE_NONE) 
+	if (asrMap->GetTileState(Int2(tempTilePos.x + 1, tempTilePos.y)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x + 1, tempTilePos.y), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
-	if (asrMap->GetTileState(Int2(tempTilePos.x + 1, tempTilePos.y + 1)) == TILE_NONE )
+	if (asrMap->GetTileState(Int2(tempTilePos.x + 1, tempTilePos.y + 1)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x + 1, tempTilePos.y + 1), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
 	if (asrMap->GetTileState(Int2(tempTilePos.x, tempTilePos.y + 1)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x, tempTilePos.y + 1), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
-	if(asrMap->GetTileState(Int2(tempTilePos.x - 1, tempTilePos.y + 1)) == TILE_NONE )
+	if (asrMap->GetTileState(Int2(tempTilePos.x - 1, tempTilePos.y + 1)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x - 1, tempTilePos.y + 1), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
 	if (asrMap->GetTileState(Int2(tempTilePos.x - 1, tempTilePos.y)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x - 1, tempTilePos.y), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
-	if (asrMap->GetTileState(Int2(tempTilePos.x - 1, tempTilePos.y - 1)) == TILE_NONE )
+	if (asrMap->GetTileState(Int2(tempTilePos.x - 1, tempTilePos.y - 1)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x - 1, tempTilePos.y - 1), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
-	if (asrMap->GetTileState(Int2(tempTilePos.x, tempTilePos.y - 1)) == TILE_NONE )
+	if (asrMap->GetTileState(Int2(tempTilePos.x, tempTilePos.y - 1)) == TILE_NONE)
 		asrMap->SetTile(0, Int2(tempTilePos.x, tempTilePos.y - 1), Int2(1, 4), 0, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
 
 	if (asrMap->GetTileState(Int2(tempTilePos.x + 1, tempTilePos.y - 1)) == TILE_NONE)
