@@ -96,7 +96,11 @@ void MainGameScene::LateUpdate()
 		if ((*it)->Intersect(plConvict)) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
-				
+				chestVector.erase(
+					std::remove_if(chestVector.begin(), chestVector.end(), !((*it)->GetIsExist())),
+					chestVector.end()
+				);
+				chestVector.shrink_to_fit();
 				break;
 			}
 		}

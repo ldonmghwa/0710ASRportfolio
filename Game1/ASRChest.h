@@ -16,7 +16,8 @@ public:
 
 	void Update() override;
 	void Render() override;
-
 	void OpenTheChest();
+
+	bool GetIsExist() { return isExist;}
 };
 
