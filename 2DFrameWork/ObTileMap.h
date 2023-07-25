@@ -36,6 +36,7 @@ enum TileState
     TILE_TRAP,
     TILE_WATER,
     TILE_SAND,
+    TILE_SPAWN,
     TILE_SIZE
 };
 

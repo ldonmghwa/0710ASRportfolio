@@ -8,6 +8,7 @@ ASRBullet::ASRBullet(wstring _wstr, ASRGun* _gun) : ObImage(_wstr)
     bulletName = _wstr;
     this->scale.x = this->imageSize.x * 2.0f;
     this->scale.y = this->imageSize.y * 2.0f;
+    distance = 500.0f;
     //this->SetParentT(*_gun);
 }
 
@@ -17,23 +18,19 @@ ASRBullet::~ASRBullet()
 
 void ASRBullet::Fire(GameObject* shooter, float pressPower)
 {
-    lifeTime = 3.0f;
-    isFire = true;
-    SetWorldPos(shooter->GetWorldPos());
-
     this->pressPower = pressPower;
+    isFire = true;
+    sourcePos = shooter->GetWorldPos();
+    SetWorldPos(shooter->GetWorldPos());
     fireDir = shooter->GetRight();
 }
 
-void ASRBullet::Fire(Vector2 pos, Vector2 dir, float pressPower)
+void ASRBullet::Fire(Vector2 sourPos, Vector2 dir, float pressPower)
 {
-    lifeTime = 3.0f;
-    scale.x = 20;
-    scale.y = 5;
     this->pressPower = pressPower;
     isFire = true;
-    SetWorldPos(pos);
-    //fireDir = shooter->GetRight();
+    sourcePos = sourPos;
+    SetWorldPos(sourPos);
     rotation.z = atan2f(dir.y, dir.x);
 }
 
@@ -46,12 +43,8 @@ void ASRBullet::Update()
     rotation.z = atan2f(velocity.y, velocity.x);
 
     ObImage::Update();
+    if ((this->GetWorldPos() - sourcePos).Length() > distance) isFire = false;
 
-    lifeTime -= DELTA;
-    if (lifeTime <= 0.0f)
-    {
-        isFire = false;
-    }
 }
 
 void ASRBullet::Render()

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASRBullet.h" />
+    <ClInclude Include="ASRChest.h" />
     <ClInclude Include="ASRGun.h" />
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ASRBullet.cpp" />
+    <ClCompile Include="ASRChest.cpp" />
     <ClCompile Include="ASRGun.cpp" />
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="IntroScene.cpp" />

@@ -25,6 +25,9 @@
     <ClInclude Include="GUIStruct.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ASRChest.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -45,6 +48,9 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="GameGUI.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRChest.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>

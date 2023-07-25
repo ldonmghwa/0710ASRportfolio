@@ -139,7 +139,7 @@ void ASRMap::MappingBspTree()
 				asrMap->SetTile(0, Int2(j, i), Int2(5, 3), 0, TILE_SAND, Color(0.5f, 0.5f, 0.5f, 0.5f));
 			}
 		}
-		if (RANDOM->Int(0, 99) < 20)
+		if (RANDOM->Int(0, 99) < 30)
 			asrMap->SetTile(0,
 				Int2((*it)->value.room.middlePoint.x, (*it)->value.room.middlePoint.y),
 				Int2(5, 3),
@@ -174,6 +174,15 @@ void ASRMap::MappingBspTree()
 			}
 		}
 	}
+	asrMap->SetTile(
+		0,
+		Int2(realMapVector[0]->value.room.middlePoint.x - 1,
+			realMapVector[0]->value.room.middlePoint.y - 1),
+		Int2(5, 3),
+		0,
+		TILE_SPAWN,
+		Color(1.0f, 0.0f, 0.0f, 0.5f)
+	);
 	asrMap->UpdateSetTile();
 }
 

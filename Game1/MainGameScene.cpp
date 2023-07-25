@@ -2,6 +2,7 @@
 #include "GUIStruct.h"
 #include "GameGUI.h"
 #include "Player.h"
+#include "ASRChest.h"
 #include "MainGameScene.h"
 
 MainGameScene::MainGameScene()
@@ -16,25 +17,54 @@ MainGameScene::MainGameScene()
 	gui = new GameGUI();
 	plConvict = new Player(PLType::PLCONVICT);
 
-	chest = new ObImage(L"Chest_Open.png");
-	chest->scale.x = chest->imageSize.x / 6.0f * 1.5f;
-	chest->scale.y = chest->imageSize.y * 1.5f;
-	chest->maxFrame.x = 6;
-	chest->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+	Int2 tileIdx;
+	Int2 tileIdx2;
+	cout << map->GetTileSize().x << ", " << map->GetTileSize().y << endl;
+	int chestIdx = 0;
+	for (int i = 0; i < 101; i++) {
+		for (int j = 0; j < 101; j++) {
+			tileIdx.x = j;
+			tileIdx.y = i;
+			if (map->GetTileState(tileIdx) == TILE_TRAP) {
+				chestVector.push_back(new ASRChest());
+				chestVector[chestIdx]->SetWorldPos(
+					Vector2(
+						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
+						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+					)
+				);
+				chestIdx++;
+			}
+			tileIdx2.x = j;
+			tileIdx2.y = i;
+			if (map->GetTileState(tileIdx2) == TILE_SPAWN) {
+				plConvict->Init(
+					Vector2(
+						map->TilePosToWorldMiddlePos(tileIdx2).x - 1250.0f * 2,
+						map->TilePosToWorldMiddlePos(tileIdx2).y - 1250.0f * 2
+					)
+				);
+			}
+
+		}
+	}
 }
 
 MainGameScene::~MainGameScene()
 {
+	for (auto it = chestVector.begin(); it != chestVector.end(); it++) delete (*it);
 	delete map;
 	delete gui;
 	delete plConvict;
+
+	TEXTURE->DeleteTexture(L"Chest_Open.png");
 }
 
 void MainGameScene::Init()
 {
 	gui->Init();
-	plConvict->Init(Vector2(0, 50));
 	map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
+
 }
 
 void MainGameScene::Release()
@@ -53,25 +83,31 @@ void MainGameScene::Update()
 			plConvict->GoBack();
 		}
 	}
-	if (map->WorldPosToTileIdx(plConvict->GetFoot(), plIdx)) {
-		if (map->GetTileState(plIdx) == TILE_TRAP) {
-
-		}
-	}
 
 	map->Update();
 	gui->Update();
+	for (auto it = chestVector.begin(); it != chestVector.end(); it++) (*it)->Update();
 	plConvict->Update();
 }
 
 void MainGameScene::LateUpdate()
 {
+	for (auto it = chestVector.begin(); it != chestVector.end(); it++) {
+		if ((*it)->Intersect(plConvict)) {
+			if (INPUT->KeyDown('E')) {
+				(*it)->OpenTheChest();
+				
+				break;
+			}
+		}
+	}
 }
 
 void MainGameScene::Render()
 {
 	map->Render();
 	gui->Render();
+	for (auto it = chestVector.begin(); it != chestVector.end(); it++) (*it)->Render();
 	plConvict->Render();
 
 }
