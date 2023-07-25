@@ -19,5 +19,6 @@ public:
 	void OpenTheChest();
 
 	bool GetIsExist() { return isExist;}
+	enum class GunType GetItemType() { return gun; }
 };
 
