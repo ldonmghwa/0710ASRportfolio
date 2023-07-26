@@ -16,8 +16,8 @@ Player::Player(PLType _type)
         idleWithWeapon = new ObImage(L"Char_Convict_IdleWithWeapon.png");
         idleWithWeapon->maxFrame.x = 4;
         idleWithWeapon->maxFrame.y = 4;
-        idleWithWeapon->scale.x = idleWithWeapon[CRState::IDLEWP]->imageSize.x / 4.0f * 3.0f;
-        idleWithWeapon->scale.y = idleWithWeapon[CRState::IDLEWP]->imageSize.y / 4.0f * 3.0f;
+        idleWithWeapon->scale.x = idleWithWeapon->imageSize.x / 4.0f * 3.0f;
+        idleWithWeapon->scale.y = idleWithWeapon->imageSize.y / 4.0f * 3.0f;
         idleWithWeapon->pivot = OFFSET_B;
         idleWithWeapon->SetParentRT(*col);
 
@@ -401,15 +401,6 @@ void Player::GetFromChest(GunType _type)
     gunVector.push_back(new ASRGun(L"Convict_Gun2.png", col, _type));
 }
 
-Vector2 Player::GetFoot()
-{
-    //29 38
-    /*Utility::RECT r(GetWorldPos()+ Vector2(0, 10), Vector2(15, 10));
-    Utility::IntersectRectRect()*/
-
-    //                              중앙에서나갈위치    발중앙위치 보정
-    return col->GetWorldPos() + dir2 * Vector2(15, 10) + Vector2(0, 10);
-}
 
 void Player::GoBack()
 {
@@ -417,6 +408,5 @@ void Player::GoBack()
         col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
             , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
     }
-    col->SetWorldPos(lastPos);
-    Update();
+    Character::GoBack();
 }

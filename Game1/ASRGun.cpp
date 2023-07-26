@@ -4,6 +4,7 @@ ASRGun::ASRGun(wstring _wstr, ObRect* _player,
 	GunType _type)
 {
 	gunType = _type;
+	gunFileName = _wstr;
 	type = ItemType::WEAPON;
 	img = new ObImage(_wstr);
 	img->scale.x = img->imageSize.x * 2.0f;
@@ -24,27 +25,22 @@ ASRGun::ASRGun(wstring _wstr, ObRect* _player,
 
 ASRGun::~ASRGun()
 {
-	for (auto it = bulletCyliner.begin(); it != bulletCyliner.end(); it++) delete (*it);
+	for (auto it = bulletCylider.begin(); it != bulletCylider.end(); it++) delete (*it);
 }
 
 void ASRGun::Update()
 {
-	for (int i = 0; i < bulletNum; i++) bulletCyliner[i]->Update();
+	for (int i = 0; i < bulletNum; i++) bulletCylider[i]->Update();
 	img->Update();
 }
 
 void ASRGun::Render()
 {
-	for (int i = 0; i < bulletNum; i++) bulletCyliner[i]->Render();
+	for (int i = 0; i < bulletNum; i++) bulletCylider[i]->Render();
 	img->Render();
 }
 
 void ASRGun::FireBullet()
 {
-	for (int i = 0; i < bulletNum; i++) {
-		if (not bulletCyliner[i]->GetIsFire()) {
-			bulletCyliner[i]->Fire(img, bulletPower);
-			break;
-		}
-	}
+	bulletCylider.push_back(new ASRBullet())
 }

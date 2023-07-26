@@ -1,4 +1,6 @@
 #include "common.h"
+#include "MainGameScene.h"
+
 
 MainGameScene::MainGameScene()
 {
@@ -88,7 +90,7 @@ void MainGameScene::Update()
 void MainGameScene::LateUpdate()
 {
 	for (auto it = chestVector.begin(); it != chestVector.end(); it++) {
-		if ((*it)->Intersect(plConvict)) {
+		if ((*it)->Intersect(plConvict->GetCol())) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
 				plConvict->GetFromChest((*it)->GetItemType());

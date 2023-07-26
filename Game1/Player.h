@@ -8,8 +8,6 @@ class Player : public Character
 	vector<class ASRGun*> gunVector;
 	enum class PLType			playerType;
 
-	Vector2			controlDir;
-	Vector2			dir2;
 	Vector2			beforeDashPoint;
 
 	bool			isCarryWP;
@@ -29,7 +27,6 @@ public:
 	void GoBack();
 	void LookTarget(Vector2 target);
 	void GetFromChest(enum class GunType _type);
-	Vector2 GetFoot();
 
 
 };

@@ -6,7 +6,6 @@ ASRBullet::ASRBullet(wstring _wstr)
     img = new ObImage(_wstr);
     img->scale.x = img->imageSize.x * 1.5f;
     img->scale.y = img->imageSize.y * 1.5f;
-    col = new ObRect();
     col->scale = img->scale;
     col->isFilled = false;
     img->SetParentRT(*col);

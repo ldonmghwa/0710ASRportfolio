@@ -3,7 +3,8 @@ class ASRGun : public Item
 {
 private:
 	enum class GunType gunType;
-	static vector<class ASRBullet*> bulletCyliner;
+	wstring gunFileName;
+	static vector<class ASRBullet*> bulletCylider;
 	int bulletNum;
 	float bulletPower;
 public:
@@ -14,9 +15,9 @@ public:
 	void Update() override;
 	void Render() override;
 
-	void FireBullet();
+	virtual void FireBullet();
 	static vector<class ASRBullet*> GetVector() {
-		return bulletCyliner;
+		return bulletCylider;
 	}
 };
 

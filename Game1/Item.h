@@ -6,6 +6,8 @@ protected:
 	ObRect* col;
 	enum class ItemType type;
 public:
+	Item();
+	~Item();
 	virtual void Update();
 	virtual void Render();
 
