@@ -1,15 +1,17 @@
-#include "stdafx.h"
-#include "GUIStruct.h"
-#include "ASRGun.h"
-#include "ASRBullet.h"
+#include "common.h"
 
-ASRBullet::ASRBullet(wstring _wstr, ASRGun* _gun) : ObImage(_wstr)
+ASRBullet::ASRBullet(wstring _wstr)
 {
-    bulletName = _wstr;
-    this->scale.x = this->imageSize.x * 2.0f;
-    this->scale.y = this->imageSize.y * 2.0f;
+    type = ItemType::CONSUM;
+    img = new ObImage(_wstr);
+    img->scale.x = img->imageSize.x * 1.5f;
+    img->scale.y = img->imageSize.y * 1.5f;
+    col = new ObRect();
+    col->scale = img->scale;
+    col->isFilled = false;
+    img->SetParentRT(*col);
     distance = 500.0f;
-    //this->SetParentT(*_gun);
+
 }
 
 ASRBullet::~ASRBullet()
@@ -21,7 +23,7 @@ void ASRBullet::Fire(GameObject* shooter, float pressPower)
     this->pressPower = pressPower;
     isFire = true;
     sourcePos = shooter->GetWorldPos();
-    SetWorldPos(shooter->GetWorldPos());
+    col->SetWorldPos(shooter->GetWorldPos());
     fireDir = shooter->GetRight();
 }
 
@@ -30,8 +32,8 @@ void ASRBullet::Fire(Vector2 sourPos, Vector2 dir, float pressPower)
     this->pressPower = pressPower;
     isFire = true;
     sourcePos = sourPos;
-    SetWorldPos(sourPos);
-    rotation.z = atan2f(dir.y, dir.x);
+    col->SetWorldPos(sourPos);
+    col->rotation.z = atan2f(dir.y, dir.x);
 }
 
 void ASRBullet::Update()
@@ -39,16 +41,18 @@ void ASRBullet::Update()
     if (not isFire) return;
 
     Vector2 velocity = (fireDir * pressPower);
-    MoveWorldPos(velocity * DELTA);
-    rotation.z = atan2f(velocity.y, velocity.x);
+    col->MoveWorldPos(velocity * DELTA);
+    col->rotation.z = atan2f(velocity.y, velocity.x);
 
-    ObImage::Update();
-    if ((this->GetWorldPos() - sourcePos).Length() > distance) isFire = false;
+    col->Update();
+    img->Update();
+    if ((col->GetWorldPos() - sourcePos).Length() > distance) isFire = false;
 
 }
 
 void ASRBullet::Render()
 {
     if (not isFire) return;
-    ObImage::Render();
+    col->Render();
+    img->Render();
 }

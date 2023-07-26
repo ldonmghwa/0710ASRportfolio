@@ -1,38 +1,24 @@
-#include "stdafx.h"
-#include "GUIStruct.h"
-#include "Player.h"
-#include "ASRBullet.h"
-#include "ASRGun.h"
+#include "common.h"
 
-ASRGun::ASRGun(wstring _wstr, Player* _player) : ObImage(_wstr)
+ASRGun::ASRGun(wstring _wstr, ObRect* _player,
+	GunType _type)
 {
-	if (_wstr == L"Convict_Gun1.png") {
-		type = GunType::BASIC;
-		this->scale.x = this->imageSize.x * 2.0f;
-		this->scale.y = this->imageSize.y * 2.0f;
-		this->SetParentT(*_player);
-		this->SetLocalPosX(-_player->scale.x * 0.4f);
-		this->SetLocalPosY(_player->scale.y * 0.5f);
-		this->pivot = OFFSET_LB;
+	gunType = _type;
+	type = ItemType::WEAPON;
+	img = new ObImage(_wstr);
+	img->scale.x = img->imageSize.x * 2.0f;
+	img->scale.y = img->imageSize.y * 2.0f;
+	img->SetParentT(*_player);
+	img->SetLocalPosX(-_player->scale.x * 0.4f);
+	img->SetLocalPosY(_player->scale.y * 0.5f);
+	img->pivot = OFFSET_LB;
+	if (gunType == GunType::BASIC) {
 		bulletNum = 10;
 		bulletPower = 400.0f;
-		for (int i = 0; i < bulletNum; i++) {
-			bulletCyliner.push_back(new ASRBullet(L"Convict_Gun1_Bullet.png", this));
-		}
 	}
-	else if (_wstr == L"Convict_Gun2.png") {
-		type = GunType::GUIDE;
-		this->scale.x = this->imageSize.x * 1.5f;
-		this->scale.y = this->imageSize.y * 1.5f;
-		this->SetParentT(*_player);
-		this->SetLocalPosX(-_player->scale.x * 0.4f);
-		this->SetLocalPosY(_player->scale.y * 0.5f);
-		this->pivot = OFFSET_LB;
+	else if (gunType == GunType::GUIDE) {
 		bulletNum = 3;
 		bulletPower = 400.0f;
-		for (int i = 0; i < bulletNum; i++) {
-			bulletCyliner.push_back(new ASRBullet(L"Convict_Gun2_Bullet.png", this));
-		}
 	}
 }
 
@@ -44,20 +30,20 @@ ASRGun::~ASRGun()
 void ASRGun::Update()
 {
 	for (int i = 0; i < bulletNum; i++) bulletCyliner[i]->Update();
-	ObImage::Update();
+	img->Update();
 }
 
 void ASRGun::Render()
 {
 	for (int i = 0; i < bulletNum; i++) bulletCyliner[i]->Render();
-	ObImage::Render();
+	img->Render();
 }
 
 void ASRGun::FireBullet()
 {
 	for (int i = 0; i < bulletNum; i++) {
 		if (not bulletCyliner[i]->GetIsFire()) {
-			bulletCyliner[i]->Fire(this, bulletPower);
+			bulletCyliner[i]->Fire(img, bulletPower);
 			break;
 		}
 	}

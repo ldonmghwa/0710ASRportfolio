@@ -1,9 +1,4 @@
-#include "stdafx.h"
-#include "GUIStruct.h"
-#include "GameGUI.h"
-#include "Player.h"
-#include "ASRChest.h"
-#include "MainGameScene.h"
+#include "common.h"
 
 MainGameScene::MainGameScene()
 {
@@ -96,11 +91,7 @@ void MainGameScene::LateUpdate()
 		if ((*it)->Intersect(plConvict)) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
-				chestVector.erase(
-					std::remove_if(chestVector.begin(), chestVector.end(), !((*it)->GetIsExist())),
-					chestVector.end()
-				);
-				chestVector.shrink_to_fit();
+				plConvict->GetFromChest((*it)->GetItemType());
 				break;
 			}
 		}

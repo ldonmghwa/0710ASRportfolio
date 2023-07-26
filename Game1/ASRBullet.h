@@ -1,17 +1,16 @@
 #pragma once
 
-class ASRBullet : public ObImage
+class ASRBullet : public Item
 {
 protected:
 	Vector2		fireDir;
 	Vector2		sourcePos;
-	wstring		bulletName;
-	// ฝ๎ดย ศ๛
+
 	float		pressPower;
 	float		distance;
 	bool		isFire;
 public:
-	ASRBullet(wstring _wstr, class ASRGun* _gun);
+	ASRBullet(wstring _wstr);
 	~ASRBullet();
 
 	void Fire(GameObject* shooter, float pressPower);

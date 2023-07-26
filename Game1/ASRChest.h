@@ -3,7 +3,7 @@ class ASRChest : public ObRect
 {
 private:
 	ObImage*	open;
-	enum class	GunType gun;
+	enum class	GunType gunType;
 
 	bool		isExist;
 	bool		isOpen;
@@ -19,6 +19,6 @@ public:
 	void OpenTheChest();
 
 	bool GetIsExist() { return isExist;}
-	enum class GunType GetItemType() { return gun; }
+	enum class GunType GetItemType() { return gunType; }
 };
 

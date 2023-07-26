@@ -28,6 +28,16 @@
     <ClInclude Include="ASRChest.h">
       <Filter>GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="ASRGuided.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h" />
+    <ClInclude Include="Character.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -51,6 +61,15 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ASRChest.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRGuided.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>

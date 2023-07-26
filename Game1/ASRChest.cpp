@@ -1,6 +1,4 @@
-#include "stdafx.h"
-#include "GUIStruct.h"
-#include "ASRChest.h"
+#include "common.h"
 
 ASRChest::ASRChest()
 {
@@ -10,7 +8,7 @@ ASRChest::ASRChest()
 	open->maxFrame.x = 6;
 	open->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 
-	gun = GunType::GUIDE;
+	gunType = GunType::GUIDE;
 	isOpen = false;
 	isExist = true;
 	this->scale = open->scale * 1.5f;

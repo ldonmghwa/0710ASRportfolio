@@ -21,10 +21,14 @@
   <ItemGroup>
     <ClInclude Include="ASRBullet.h" />
     <ClInclude Include="ASRChest.h" />
+    <ClInclude Include="ASRGuided.h" />
     <ClInclude Include="ASRGun.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="common.h" />
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
     <ClInclude Include="IntroScene.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="Mutal.h" />
@@ -34,9 +38,12 @@
   <ItemGroup>
     <ClCompile Include="ASRBullet.cpp" />
     <ClCompile Include="ASRChest.cpp" />
+    <ClCompile Include="ASRGuided.cpp" />
     <ClCompile Include="ASRGun.cpp" />
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="IntroScene.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="Mutal.cpp" />

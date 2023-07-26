@@ -1,49 +1,37 @@
 #pragma once
-enum PLState {
-	PLIDLE,
-	PLIDLEWP,
-	PLWALK,
-	PLWALKWP,
-	PLROLL,
-	PLDEATH,
-	//PLDEATH2,
-	PLSIZE
-};
-class Player : public ObRect
+
+class Player : public Character
 {
-	ObImage* charImg[PLState::PLSIZE];
+	ObImage* idleWithWeapon;
+	ObImage* walkWithWeapon;
+	ObImage* dodgeRoll;
 	vector<class ASRGun*> gunVector;
-	enum class PLType			type;
+	enum class PLType			playerType;
 
 	Vector2			controlDir;
 	Vector2			dir2;
 	Vector2			beforeDashPoint;
-	Vector2			lastPos;
 
 	bool			isCarryWP;
-
-	int				state;
-	int				dirFrame[8];
 	int				gunNum;
 	int				selectWPNum;
 
-	float			speed;
 	float			rollTime;
 public:
-	Player();
 	Player(PLType _type);
-	virtual ~Player();
+	~Player();
 
 	void Init(Vector2 spawn);
-	void Control();
+	void Control() override;
 	void Update() override;
 	void Render() override;
 
 	void GoBack();
 	void LookTarget(Vector2 target);
 	void GetFromChest(enum class GunType _type);
-
 	Vector2 GetFoot();
+
+
 };
 
 //class Sloider : public Player

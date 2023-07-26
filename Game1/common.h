@@ -1,0 +1,11 @@
+#pragma once
+#include "stdafx.h"
+#include "Item.h"
+#include "ASRBullet.h"
+#include "ASRChest.h"
+#include "ASRGuided.h"
+#include "ASRGun.h"
+#include "GameGUI.h"
+#include "GUIStruct.h"
+#include "Character.h"
+#include "Player.h"

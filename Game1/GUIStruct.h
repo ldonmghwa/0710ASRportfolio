@@ -4,6 +4,22 @@ enum HPBarState {
 	HALF,
 	FULL
 };
+enum class CRState {
+	IDLE,
+	IDLEWP,
+	WALK,
+	WALKWP,
+	ROLL,
+	DEATH,
+	//PLDEATH2,
+	SIZE
+};
+
+enum class ItemType {
+	WEAPON,
+	CONSUM,
+	STUFF
+};
 
 enum class GunType {
 	BASIC,
