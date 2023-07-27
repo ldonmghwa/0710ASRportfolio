@@ -1,6 +1,77 @@
 #include "common.h"
 
-Player::Player(PLType _type)
+Player::Player()
+    : Character()
+{
+        playerType = PLType::PLCONVICT;
+        idle = new ObImage(L"Char_Convict_Idle.png");
+        idle->maxFrame.x = 4;
+        idle->maxFrame.y = 4;
+        idle->scale.x = idle->imageSize.x / 4.0f * 3.0f;
+        idle->scale.y = idle->imageSize.y / 4.0f * 3.0f;
+        idle->pivot = OFFSET_B;
+        idle->SetParentRT(*col);
+
+        idleWithWeapon = new ObImage(L"Char_Convict_IdleWithWeapon.png");
+        idleWithWeapon->maxFrame.x = 4;
+        idleWithWeapon->maxFrame.y = 4;
+        idleWithWeapon->scale.x = idleWithWeapon->imageSize.x / 4.0f * 3.0f;
+        idleWithWeapon->scale.y = idleWithWeapon->imageSize.y / 4.0f * 3.0f;
+        idleWithWeapon->pivot = OFFSET_B;
+        idleWithWeapon->SetParentRT(*col);
+
+        walk = new ObImage(L"Char_Convict_Walking.png");
+        walk->maxFrame.x = 6;
+        walk->maxFrame.y = 4;
+        walk->scale.x = walk->imageSize.x / 6.0f * 3.0f;
+        walk->scale.y = walk->imageSize.y / 4.0f * 3.0f;
+        walk->pivot = OFFSET_B;
+        walk->SetParentRT(*col);
+
+        walkWithWeapon = new ObImage(L"Char_Convict_WalkingWithWeapon.png");
+        walkWithWeapon->maxFrame.x = 6;
+        walkWithWeapon->maxFrame.y = 4;
+        walkWithWeapon->scale.x = walkWithWeapon->imageSize.x / 6.0f * 3.0f;
+        walkWithWeapon->scale.y = walkWithWeapon->imageSize.y / 4.0f * 3.0f;
+        walkWithWeapon->pivot = OFFSET_B;
+        walkWithWeapon->SetParentRT(*col);
+
+        dodgeRoll = new ObImage(L"Char_Convict_DodgeRoll.png");
+        dodgeRoll->maxFrame.x = 9;
+        dodgeRoll->maxFrame.y = 4;
+        dodgeRoll->scale.x = dodgeRoll->imageSize.x / 9.0f * 3.0f;
+        dodgeRoll->scale.y = dodgeRoll->imageSize.y / 4.0f * 3.0f;
+        dodgeRoll->pivot = OFFSET_B;
+        dodgeRoll->SetParentRT(*col);
+
+        death = new ObImage(L"Char_Convict_Death1.png");
+        death->maxFrame.x = 11;
+        death->scale.x = death->imageSize.x / 11.0f * 3.0f;
+        death->scale.y = death->imageSize.y * 3.0f;
+        death->pivot = OFFSET_B;
+        death->SetParentRT(*col);
+
+        col->scale.x = idle->scale.x;
+        col->scale.y = idle->scale.y;
+
+        gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, GunType::BASIC));
+        gunVector[0]->VisibleOff();
+    col->pivot = OFFSET_B;
+    col->isFilled = false;
+
+
+    dirFrame[0] = 1;
+    dirFrame[1] = 1;
+    dirFrame[2] = 0;
+    dirFrame[3] = 1;
+    dirFrame[4] = 1;
+    dirFrame[5] = 3;
+    dirFrame[6] = 2;
+    dirFrame[7] = 3;
+}
+
+Player::Player(PLType _type) 
+    : Character()
 {
     if (_type == PLType::PLCONVICT)
     {
@@ -55,8 +126,8 @@ Player::Player(PLType _type)
         col->scale.x = idle->scale.x;
         col->scale.y = idle->scale.y;
 
-        gunVector.push_back(new ASRGun(L"Convict_Gun1.png", col, GunType::BASIC));
-
+        gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, GunType::BASIC));
+        gunVector[0]->VisibleOff();
 
     }
     else if (playerType == PLType::PLBULLET) {

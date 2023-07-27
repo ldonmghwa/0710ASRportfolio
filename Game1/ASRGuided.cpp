@@ -1,15 +1,16 @@
 #include "common.h"
 
-ASRGuided::ASRGuided(wstring _wstr) : ASRBullet(_wstr)
+ASRGuided::ASRGuided(wstring _wstr, Vector2 _destPos) : ASRBullet(_wstr)
 {
     distance = 600.0f;
+    destPos = _destPos;
 }
 
 ASRGuided::~ASRGuided()
 {
 }
 
-void ASRGuided::Update(Vector2 destPos)
+void ASRGuided::Update()
 {
     if (not isFire) return;
 
@@ -24,6 +25,7 @@ void ASRGuided::Update(Vector2 destPos)
 
 void ASRGuided::Render()
 {
+    if (not isFire) return;
     col->Render();
     img->Render();
 }

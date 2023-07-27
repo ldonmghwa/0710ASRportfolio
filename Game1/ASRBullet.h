@@ -4,12 +4,12 @@ class ASRBullet : public Item
 {
 protected:
 	Vector2		fireDir;
-	Vector2		sourcePos;
 
 	float		pressPower;
 	float		distance;
 	bool		isFire;
 public:
+	Vector2		sourcePos;
 	ASRBullet(wstring _wstr);
 	~ASRBullet();
 

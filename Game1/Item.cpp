@@ -10,8 +10,10 @@ Item::~Item()
 }
 void Item::Update()
 {
+	col->Update();
 }
 
 void Item::Render()
 {
+	col->Render();
 }

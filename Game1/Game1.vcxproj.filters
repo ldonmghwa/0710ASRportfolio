@@ -20,16 +20,7 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="common.h" />
-    <ClInclude Include="ASRGun.h">
-      <Filter>GameItem</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>GameItem</Filter>
-    </ClInclude>
-    <ClInclude Include="ASRBullet.h">
-      <Filter>GameItem</Filter>
-    </ClInclude>
-    <ClInclude Include="ASRGuided.h">
       <Filter>GameItem</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
@@ -38,8 +29,21 @@
     <ClInclude Include="Player.h">
       <Filter>GameCharacter</Filter>
     </ClInclude>
-    <ClInclude Include="GunBasic.h" />
-    <ClInclude Include="GunGuided.h" />
+    <ClInclude Include="ASRBullet.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
+    <ClInclude Include="ASRGuided.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
+    <ClInclude Include="ASRGun.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
+    <ClInclude Include="GunBasic.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
+    <ClInclude Include="GunGuided.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -56,16 +60,7 @@
     <ClCompile Include="ASRChest.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="ASRGun.cpp">
-      <Filter>GameItem</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>GameItem</Filter>
-    </ClCompile>
-    <ClCompile Include="ASRBullet.cpp">
-      <Filter>GameItem</Filter>
-    </ClCompile>
-    <ClCompile Include="ASRGuided.cpp">
       <Filter>GameItem</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
@@ -74,8 +69,21 @@
     <ClCompile Include="Player.cpp">
       <Filter>GameCharacter</Filter>
     </ClCompile>
-    <ClCompile Include="GunBasic.cpp" />
-    <ClCompile Include="GunGuided.cpp" />
+    <ClCompile Include="ASRBullet.cpp">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRGuided.cpp">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRGun.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="GunBasic.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="GunGuided.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameObject">
@@ -89,6 +97,15 @@
     </Filter>
     <Filter Include="GameCharacter">
       <UniqueIdentifier>{09392bc6-9cde-436f-bd6d-bd6939253ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameItem\CONSUM">
+      <UniqueIdentifier>{7c7a5a94-78d2-48d8-85e0-4ae7fd7a6e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameItem\WEAPON">
+      <UniqueIdentifier>{39244f04-505d-485c-82e3-b870f60f2bfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameItem\STUFF">
+      <UniqueIdentifier>{205e3d4a-e44a-4cbf-9d97-417c1ce1d643}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

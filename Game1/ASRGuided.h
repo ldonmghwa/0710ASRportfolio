@@ -1,11 +1,13 @@
 #pragma once
 class ASRGuided : public ASRBullet
 {
+private:
+	Vector2 destPos;
 public:
-	ASRGuided(wstring _wstr);
+	ASRGuided(wstring _wstr, Vector2 _destPos);
 	~ASRGuided();
 
-	void Update(Vector2 destPos);
+	void Update();
 	void Render() override;
 };
 

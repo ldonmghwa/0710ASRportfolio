@@ -12,7 +12,7 @@ MainGameScene::MainGameScene()
 	map->scale.y = 50.0f;
 
 	gui = new GameGUI();
-	plConvict = new Player(PLType::PLCONVICT);
+	plConvict = new Player();
 
 	Int2 tileIdx;
 	Int2 tileIdx2;
@@ -93,7 +93,7 @@ void MainGameScene::LateUpdate()
 		if ((*it)->Intersect(plConvict->GetCol())) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
-				plConvict->GetFromChest((*it)->GetItemType());
+				//plConvict->GetFromChest((*it)->GetItemType());
 				break;
 			}
 		}

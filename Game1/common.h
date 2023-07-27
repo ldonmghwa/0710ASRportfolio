@@ -5,6 +5,8 @@
 #include "ASRChest.h"
 #include "ASRGuided.h"
 #include "ASRGun.h"
+#include "GunBasic.h"
+#include "GunGuided.h"
 #include "GameGUI.h"
 #include "GUIStruct.h"
 #include "Character.h"

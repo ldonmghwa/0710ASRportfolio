@@ -2,8 +2,8 @@
 class MainGameScene : public Scene
 {
 private:
-	vector<class ASRChest*> chestVector;
 	ObTileMap* map;
+	vector<class ASRChest*> chestVector;
 	class GameGUI* gui;
 	class Player* plConvict;
 	float fadeout = 0.0f;

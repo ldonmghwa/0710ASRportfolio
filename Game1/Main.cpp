@@ -1,8 +1,7 @@
-#include "stdafx.h"
+#include "common.h"
 #include "Main.h"
 #include "IntroScene.h"
 #include "MainGameScene.h"
-#include "Player.h"
 
 Main::Main()
 {

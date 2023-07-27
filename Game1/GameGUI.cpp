@@ -1,6 +1,4 @@
-#include "stdafx.h"
-#include "GUIStruct.h"
-#include "GameGUI.h"
+#include "common.h"
 
 GameGUI::GameGUI()
 {

@@ -11,6 +11,6 @@ public:
 	void Update() override;
 	void Render() override;
 
-	void FireBullet();
+	void FireBullet(Vector2 _destPos);
 };
 

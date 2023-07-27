@@ -4,19 +4,24 @@ class ASRGun : public Item
 protected:
 	enum class GunType gunType;
 	wstring gunFileName;
-	static vector<class ASRBullet*> bulletCylinder;
+	vector<class ASRBullet*> bulletCylinder;
+	
+	bool isReloading;
 	int bulletNum;
+	int beforeBulletNum;
 	float bulletPower;
+	float reloadTime;
+	float beforeReloadTime;
 public:
 	ASRGun(wstring _wstr, ObRect* _player, 
 		GunType _type);
 	~ASRGun();
 
-	void Update() override;
-	void Render() override;
+	virtual void Update() override;
+	virtual void Render() override;
 
 	virtual void FireBullet();
-	static vector<class ASRBullet*> GetVector() {
+	vector<class ASRBullet*> GetVector() {
 		return bulletCylinder;
 	}
 };
