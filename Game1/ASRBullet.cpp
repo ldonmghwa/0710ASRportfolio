@@ -45,8 +45,7 @@ void ASRBullet::Update()
 
     col->Update();
     img->Update();
-    if ((col->GetWorldPos() - sourcePos).Length() > distance) isFire = false;
-
+    
 }
 
 void ASRBullet::Render()
@@ -54,4 +53,9 @@ void ASRBullet::Render()
     if (not isFire) return;
     col->Render();
     img->Render();
+}
+
+bool ASRBullet::IsBulletReach()
+{
+    if ((col->GetWorldPos() - sourcePos).Length() > distance) isFire = false;
 }

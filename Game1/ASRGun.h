@@ -1,10 +1,10 @@
 #pragma once
 class ASRGun : public Item
 {
-private:
+protected:
 	enum class GunType gunType;
 	wstring gunFileName;
-	static vector<class ASRBullet*> bulletCylider;
+	static vector<class ASRBullet*> bulletCylinder;
 	int bulletNum;
 	float bulletPower;
 public:
@@ -17,7 +17,7 @@ public:
 
 	virtual void FireBullet();
 	static vector<class ASRBullet*> GetVector() {
-		return bulletCylider;
+		return bulletCylinder;
 	}
 };
 

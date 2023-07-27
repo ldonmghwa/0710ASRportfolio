@@ -18,6 +18,7 @@ public:
 	void Update();
 	void Render();
 	bool GetIsFire() { return isFire; }
+	bool IsBulletReach();
 	void Release() { isFire = false; }
 };
 

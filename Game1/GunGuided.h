@@ -4,7 +4,8 @@ class GunGuided : public ASRGun
 private:
 	Vector2 destPos;
 public:
-	GunGuided();
+	GunGuided(wstring _wstr, ObRect* _player,
+		GunType _type);
 	~GunGuided();
 
 	void Update() override;
