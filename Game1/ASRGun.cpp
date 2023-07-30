@@ -1,14 +1,16 @@
 #include "common.h"
 
 ASRGun::ASRGun(wstring _wstr, ObRect* _player,
-	GunType _type) : Item()
+	vector<GameObject*> _target, GunType _type) : Item()
 {
 	gunType = _type;
 	gunFileName = _wstr;
+	target = _target;
 	type = ItemType::WEAPON;
+	resizeValue = 2.0f;
 	img = new ObImage(_wstr);
-	img->scale.x = img->imageSize.x * 2.0f;
-	img->scale.y = img->imageSize.y * 2.0f;
+	img->scale.x = img->imageSize.x * resizeValue;
+	img->scale.y = img->imageSize.y * resizeValue;
 	col->scale = img->scale;
 	col->isFilled = false;
 	img->SetParentRT(*col);
@@ -17,7 +19,8 @@ ASRGun::ASRGun(wstring _wstr, ObRect* _player,
 	col->SetLocalPosY(_player->scale.y * 0.5f);
 	img->pivot = OFFSET_LB;
 	col->pivot = OFFSET_LB;
-	isReloading = false;
+	isReloading = false; 
+	isCylinderEmpty = false;
 }
 
 ASRGun::~ASRGun()
@@ -27,21 +30,24 @@ ASRGun::~ASRGun()
 
 void ASRGun::Update()
 {
-	if (isReloading) {
-		reloadTime -= DELTA;
-		if (reloadTime < 0.0f) {
-			reloadTime = beforeReloadTime;
-			bulletNum = beforeBulletNum;
-			isReloading = false;
+	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
+		if (!(*it)->GetIsFire()) {
+			bulletCylinder.erase(it);
+			break;
 		}
 	}
-	ImGui::Text("%f, %f", col->GetWorldPos().x, col->GetWorldPos().y);
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
-		if (!(*it)->IsBulletReach())
-			(*it)->Release();
-		else 
+		if ((*it)->IsBulletReach(target)) {
 			(*it)->Update();
+		}
 	}
+	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
+		if ((*it)->IsBulletReach()) {
+			(*it)->Update();
+		}
+		
+	}
+	
 	Item::Update();
 	img->Update();
 }
@@ -55,9 +61,17 @@ void ASRGun::Render()
 
 void ASRGun::FireBullet()
 {
-	if (!isReloading) {
-		bulletCylinder[bulletCylinder.size()-1]->Fire(this->col, bulletPower);
-		bulletNum--;
-		if (bulletNum < 0) isReloading = true;
+	curBulletNum--;
+	if (curBulletNum <= 0) isCylinderEmpty = true;
+}
+
+void ASRGun::GunReLoading()
+{
+	reloadTime -= DELTA;
+	if (reloadTime < 0.0f) {
+		reloadTime = backUpReloadTime;
+		curBulletNum = bulletNum;
+		isCylinderEmpty = false;
+		isReloading = false;
 	}
 }

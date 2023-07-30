@@ -2,13 +2,15 @@
 
 GunBasic::GunBasic(wstring _wstr
 	, ObRect* _player
-	, GunType _type) 
-	: ASRGun(_wstr, _player, _type)
+	, vector<GameObject*> _target
+	, GunType _type)
+	: ASRGun(_wstr, _player, _target, _type)
 {
 	bulletNum = 10;
-	beforeBulletNum = 10;
+	curBulletNum = bulletNum;
 	bulletPower = 400.0f;
-	beforeReloadTime = 2.0f;
+	backUpReloadTime = 2.0f;
+	reloadTime = 2.0f;
 }
 
 GunBasic::~GunBasic()
@@ -27,8 +29,7 @@ void GunBasic::Render()
 
 void GunBasic::FireBullet()
 {
-	if (!isReloading) {
-		bulletCylinder.push_back(new ASRBullet(L"Convict_Gun1_Bullet.png"));
-	}
+	if (isCylinderEmpty) return;
+	bulletCylinder.push_back(new ASRBullet(L"Convict_Gun1_Bullet.png", this->col, bulletPower));
 	ASRGun::FireBullet();
 }

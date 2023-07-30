@@ -3,60 +3,59 @@
 Player::Player()
     : Character()
 {
-        playerType = PLType::PLCONVICT;
-        idle = new ObImage(L"Char_Convict_Idle.png");
-        idle->maxFrame.x = 4;
-        idle->maxFrame.y = 4;
-        idle->scale.x = idle->imageSize.x / 4.0f * 3.0f;
-        idle->scale.y = idle->imageSize.y / 4.0f * 3.0f;
-        idle->pivot = OFFSET_B;
-        idle->SetParentRT(*col);
+    resizeValue = 3.0f;
+    playerType = PLType::PLCONVICT;
+    charImg[(int)CRState::IDLE] = new ObImage(L"Char_Convict_idle.png");
+    charImg[(int)CRState::IDLE]->maxFrame.x = 4;
+    charImg[(int)CRState::IDLE]->maxFrame.y = 4;
+    charImg[(int)CRState::IDLE]->scale.x = charImg[(int)CRState::IDLE]->imageSize.x / 4.0f * resizeValue;
+    charImg[(int)CRState::IDLE]->scale.y = charImg[(int)CRState::IDLE]->imageSize.y / 4.0f * resizeValue;
+    charImg[(int)CRState::IDLE]->pivot = OFFSET_B;
+    charImg[(int)CRState::IDLE]->SetParentRT(*col);
 
-        idleWithWeapon = new ObImage(L"Char_Convict_IdleWithWeapon.png");
-        idleWithWeapon->maxFrame.x = 4;
-        idleWithWeapon->maxFrame.y = 4;
-        idleWithWeapon->scale.x = idleWithWeapon->imageSize.x / 4.0f * 3.0f;
-        idleWithWeapon->scale.y = idleWithWeapon->imageSize.y / 4.0f * 3.0f;
-        idleWithWeapon->pivot = OFFSET_B;
-        idleWithWeapon->SetParentRT(*col);
+    charImg[(int)CRState::IDLEWP] = new ObImage(L"Char_Convict_IdleWithWeapon.png");
+    charImg[(int)CRState::IDLEWP]->maxFrame.x = 4;
+    charImg[(int)CRState::IDLEWP]->maxFrame.y = 4;
+    charImg[(int)CRState::IDLEWP]->scale.x =  charImg[(int)CRState::IDLEWP]->imageSize.x / 4.0f * resizeValue;
+    charImg[(int)CRState::IDLEWP]->scale.y =  charImg[(int)CRState::IDLEWP]->imageSize.y / 4.0f * resizeValue;
+    charImg[(int)CRState::IDLEWP]->pivot = OFFSET_B;
+    charImg[(int)CRState::IDLEWP]->SetParentRT(*col);
 
-        walk = new ObImage(L"Char_Convict_Walking.png");
-        walk->maxFrame.x = 6;
-        walk->maxFrame.y = 4;
-        walk->scale.x = walk->imageSize.x / 6.0f * 3.0f;
-        walk->scale.y = walk->imageSize.y / 4.0f * 3.0f;
-        walk->pivot = OFFSET_B;
-        walk->SetParentRT(*col);
+    charImg[(int)CRState::WALK] = new ObImage(L"Char_Convict_Walking.png");
+    charImg[(int)CRState::WALK]->maxFrame.x = 6;
+    charImg[(int)CRState::WALK]->maxFrame.y = 4;
+    charImg[(int)CRState::WALK]->scale.x = charImg[(int)CRState::WALK]->imageSize.x / 6.0f * resizeValue;
+    charImg[(int)CRState::WALK]->scale.y = charImg[(int)CRState::WALK]->imageSize.y / 4.0f * resizeValue;
+    charImg[(int)CRState::WALK]->pivot = OFFSET_B;
+    charImg[(int)CRState::WALK]->SetParentRT(*col);
 
-        walkWithWeapon = new ObImage(L"Char_Convict_WalkingWithWeapon.png");
-        walkWithWeapon->maxFrame.x = 6;
-        walkWithWeapon->maxFrame.y = 4;
-        walkWithWeapon->scale.x = walkWithWeapon->imageSize.x / 6.0f * 3.0f;
-        walkWithWeapon->scale.y = walkWithWeapon->imageSize.y / 4.0f * 3.0f;
-        walkWithWeapon->pivot = OFFSET_B;
-        walkWithWeapon->SetParentRT(*col);
+    charImg[(int)CRState::WALKWP] = new ObImage(L"Char_Convict_WalkingWithWeapon.png");
+    charImg[(int)CRState::WALKWP]->maxFrame.x = 6;
+    charImg[(int)CRState::WALKWP]->maxFrame.y = 4;
+    charImg[(int)CRState::WALKWP]->scale.x = charImg[(int)CRState::WALKWP]->imageSize.x / 6.0f * resizeValue;
+    charImg[(int)CRState::WALKWP]->scale.y = charImg[(int)CRState::WALKWP]->imageSize.y / 4.0f * resizeValue;
+    charImg[(int)CRState::WALKWP]->pivot = OFFSET_B;
+    charImg[(int)CRState::WALKWP]->SetParentRT(*col);
 
-        dodgeRoll = new ObImage(L"Char_Convict_DodgeRoll.png");
-        dodgeRoll->maxFrame.x = 9;
-        dodgeRoll->maxFrame.y = 4;
-        dodgeRoll->scale.x = dodgeRoll->imageSize.x / 9.0f * 3.0f;
-        dodgeRoll->scale.y = dodgeRoll->imageSize.y / 4.0f * 3.0f;
-        dodgeRoll->pivot = OFFSET_B;
-        dodgeRoll->SetParentRT(*col);
+    charImg[(int)CRState::ROLL] = new ObImage(L"Char_Convict_DodgeRoll.png");
+    charImg[(int)CRState::ROLL]->maxFrame.x = 9;
+    charImg[(int)CRState::ROLL]->maxFrame.y = 4;
+    charImg[(int)CRState::ROLL]->scale.x = charImg[(int)CRState::ROLL]->imageSize.x / 9.0f * resizeValue;
+    charImg[(int)CRState::ROLL]->scale.y = charImg[(int)CRState::ROLL]->imageSize.y / 4.0f * resizeValue;
+    charImg[(int)CRState::ROLL]->pivot = OFFSET_B;
+    charImg[(int)CRState::ROLL]->SetParentRT(*col);
 
-        death = new ObImage(L"Char_Convict_Death1.png");
-        death->maxFrame.x = 11;
-        death->scale.x = death->imageSize.x / 11.0f * 3.0f;
-        death->scale.y = death->imageSize.y * 3.0f;
-        death->pivot = OFFSET_B;
-        death->SetParentRT(*col);
+    charImg[(int)CRState::DEATH] = new ObImage(L"Char_Convict_Death1.png");
+    charImg[(int)CRState::DEATH]->maxFrame.x = 11;
+    charImg[(int)CRState::DEATH]->scale.x = charImg[(int)CRState::DEATH]->imageSize.x / 11.0f * resizeValue;
+    charImg[(int)CRState::DEATH]->scale.y = charImg[(int)CRState::DEATH]->imageSize.y * resizeValue;
+    charImg[(int)CRState::DEATH]->pivot = OFFSET_B;
+    charImg[(int)CRState::DEATH]->SetParentRT(*col);
 
-        col->scale.x = idle->scale.x;
-        col->scale.y = idle->scale.y;
+    col->scale.x = charImg[(int)CRState::IDLE]->scale.x;
+    col->scale.y = charImg[(int)CRState::IDLE]->scale.y;
 
-        gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, GunType::BASIC));
-        gunVector[0]->VisibleOff();
-    col->pivot = OFFSET_B;
+     col->pivot = OFFSET_B;
     col->isFilled = false;
 
 
@@ -73,61 +72,61 @@ Player::Player()
 Player::Player(PLType _type) 
     : Character()
 {
+    resizeValue = 3.0f;
     if (_type == PLType::PLCONVICT)
     {
         playerType = _type;
-        idle = new ObImage(L"Char_Convict_Idle.png");
-        idle->maxFrame.x = 4;
-        idle->maxFrame.y = 4;
-        idle->scale.x = idle->imageSize.x / 4.0f * 3.0f;
-        idle->scale.y = idle->imageSize.y / 4.0f * 3.0f;
-        idle->pivot = OFFSET_B;
-        idle->SetParentRT(*col);
+        charImg[(int)CRState::IDLE] = new ObImage(L"Char_Convict_Idle.png");
+        charImg[(int)CRState::IDLE]->maxFrame.x = 4;
+        charImg[(int)CRState::IDLE]->maxFrame.y = 4;
+        charImg[(int)CRState::IDLE]->scale.x = charImg[(int)CRState::IDLE]->imageSize.x / 4.0f * resizeValue;
+        charImg[(int)CRState::IDLE]->scale.y = charImg[(int)CRState::IDLE]->imageSize.y / 4.0f * resizeValue;
+        charImg[(int)CRState::IDLE]->pivot = OFFSET_B;
+        charImg[(int)CRState::IDLE]->SetParentRT(*col);
 
-        idleWithWeapon = new ObImage(L"Char_Convict_IdleWithWeapon.png");
-        idleWithWeapon->maxFrame.x = 4;
-        idleWithWeapon->maxFrame.y = 4;
-        idleWithWeapon->scale.x = idleWithWeapon->imageSize.x / 4.0f * 3.0f;
-        idleWithWeapon->scale.y = idleWithWeapon->imageSize.y / 4.0f * 3.0f;
-        idleWithWeapon->pivot = OFFSET_B;
-        idleWithWeapon->SetParentRT(*col);
+        charImg[(int)CRState::IDLEWP] = new ObImage(L"Char_Convict_IdleWithWeapon.png");
+        charImg[(int)CRState::IDLEWP]->maxFrame.x = 4;
+        charImg[(int)CRState::IDLEWP]->maxFrame.y = 4;
+        charImg[(int)CRState::IDLEWP]->scale.x = charImg[(int)CRState::IDLEWP]->imageSize.x / 4.0f * resizeValue;
+        charImg[(int)CRState::IDLEWP]->scale.y = charImg[(int)CRState::IDLEWP]->imageSize.y / 4.0f * resizeValue;
+        charImg[(int)CRState::IDLEWP]->pivot = OFFSET_B;
+        charImg[(int)CRState::IDLEWP]->SetParentRT(*col);
 
-        walk = new ObImage(L"Char_Convict_Walking.png");
-        walk->maxFrame.x = 6;
-        walk->maxFrame.y = 4;
-        walk->scale.x = walk->imageSize.x / 6.0f * 3.0f;
-        walk->scale.y = walk->imageSize.y / 4.0f * 3.0f;
-        walk->pivot = OFFSET_B;
-        walk->SetParentRT(*col);
+        charImg[(int)CRState::WALK] = new ObImage(L"Char_Convict_Walking.png");
+        charImg[(int)CRState::WALK]->maxFrame.x = 6;
+        charImg[(int)CRState::WALK]->maxFrame.y = 4;
+        charImg[(int)CRState::WALK]->scale.x = charImg[(int)CRState::WALK]->imageSize.x / 6.0f * resizeValue;
+        charImg[(int)CRState::WALK]->scale.y = charImg[(int)CRState::WALK]->imageSize.y / 4.0f * resizeValue;
+        charImg[(int)CRState::WALK]->pivot = OFFSET_B;
+        charImg[(int)CRState::WALK]->SetParentRT(*col);
 
-        walkWithWeapon = new ObImage(L"Char_Convict_WalkingWithWeapon.png");
-        walkWithWeapon->maxFrame.x = 6;
-        walkWithWeapon->maxFrame.y = 4;
-        walkWithWeapon->scale.x = walkWithWeapon->imageSize.x / 6.0f * 3.0f;
-        walkWithWeapon->scale.y = walkWithWeapon->imageSize.y / 4.0f * 3.0f;
-        walkWithWeapon->pivot = OFFSET_B;
-        walkWithWeapon->SetParentRT(*col);
+        charImg[(int)CRState::WALKWP] = new ObImage(L"Char_Convict_WalkingWithWeapon.png");
+        charImg[(int)CRState::WALKWP]->maxFrame.x = 6;
+        charImg[(int)CRState::WALKWP]->maxFrame.y = 4;
+        charImg[(int)CRState::WALKWP]->scale.x = charImg[(int)CRState::WALKWP]->imageSize.x / 6.0f * resizeValue;
+        charImg[(int)CRState::WALKWP]->scale.y = charImg[(int)CRState::WALKWP]->imageSize.y / 4.0f * resizeValue;
+        charImg[(int)CRState::WALKWP]->pivot = OFFSET_B;
+        charImg[(int)CRState::WALKWP]->SetParentRT(*col);
 
-        dodgeRoll = new ObImage(L"Char_Convict_DodgeRoll.png");
-        dodgeRoll->maxFrame.x = 9;
-        dodgeRoll->maxFrame.y = 4;
-        dodgeRoll->scale.x = dodgeRoll->imageSize.x / 9.0f * 3.0f;
-        dodgeRoll->scale.y = dodgeRoll->imageSize.y / 4.0f * 3.0f;
-        dodgeRoll->pivot = OFFSET_B;
-        dodgeRoll->SetParentRT(*col);
+        charImg[(int)CRState::ROLL] = new ObImage(L"Char_Convict_DodgeRoll.png");
+        charImg[(int)CRState::ROLL]->maxFrame.x = 9;
+        charImg[(int)CRState::ROLL]->maxFrame.y = 4;
+        charImg[(int)CRState::ROLL]->scale.x = charImg[(int)CRState::ROLL]->imageSize.x / 9.0f * resizeValue;
+        charImg[(int)CRState::ROLL]->scale.y = charImg[(int)CRState::ROLL]->imageSize.y / 4.0f * resizeValue;
+        charImg[(int)CRState::ROLL]->pivot = OFFSET_B;
+        charImg[(int)CRState::ROLL]->SetParentRT(*col);
 
-        death = new ObImage(L"Char_Convict_Death1.png");
-        death->maxFrame.x = 11;
-        death->scale.x = death->imageSize.x / 11.0f * 3.0f;
-        death->scale.y = death->imageSize.y * 3.0f;
-        death->pivot = OFFSET_B;
-        death->SetParentRT(*col);
+        charImg[(int)CRState::DEATH] = new ObImage(L"Char_Convict_Death1.png");
+        charImg[(int)CRState::DEATH]->maxFrame.x = 11;
+        charImg[(int)CRState::DEATH]->scale.x = charImg[(int)CRState::DEATH]->imageSize.x / 11.0f * resizeValue;
+        charImg[(int)CRState::DEATH]->scale.y = charImg[(int)CRState::DEATH]->imageSize.y * resizeValue;
+        charImg[(int)CRState::DEATH]->pivot = OFFSET_B;
+        charImg[(int)CRState::DEATH]->SetParentRT(*col);
 
-        col->scale.x = idle->scale.x;
-        col->scale.y = idle->scale.y;
+        col->scale.x = charImg[(int)CRState::IDLE]->scale.x;
+        col->scale.y = charImg[(int)CRState::IDLE]->scale.y;
 
-        gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, GunType::BASIC));
-        gunVector[0]->VisibleOff();
+        
 
     }
     else if (playerType == PLType::PLBULLET) {
@@ -150,10 +149,6 @@ Player::Player(PLType _type)
 
 Player::~Player()
 {
-    delete idleWithWeapon;
-    delete walkWithWeapon;
-    delete dodgeRoll;
-    
     for (auto it = gunVector.begin(); it != gunVector.end(); it++) delete (*it);
 
     TEXTURE->DeleteTexture(L"Char_Convict_Idle.png");
@@ -172,13 +167,18 @@ Player::~Player()
 
 void Player::Init(Vector2 spawn)
 {
-    col->SetWorldPosX(spawn.x);
-    col->SetWorldPosY(spawn.y);
-    state = CRState::IDLE;
+    
+    Character::Init(spawn);
+    gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, target, GunType::BASIC));
+    gunVector[0]->VisibleOff();
     speed = 300.0f;
+    backUpSpeed = speed;
     gunNum = 1;
     isCarryWP = false;
     selectWPNum = 0;
+    rollWeight = 0.0f;
+    backUpRollWeight = rollWeight;
+    rollWeightScale = 0.05f;
     gunVector[selectWPNum]->VisibleOff();
 }
 
@@ -213,7 +213,14 @@ void Player::Update()
 {
     lastPos = col->GetWorldPos();
     CAM->position = col->GetWorldPos();
+    gunVector[selectWPNum]->Update();
+    Character::Update();
 
+    if (gunVector[selectWPNum]->GetIsCylinderEmpty() and gunVector[selectWPNum]->isReloading) {
+        plgui->ReLoadingBulletBar(reloadPerSec, backUpReloadPerSec);
+        gunVector[selectWPNum]->GunReLoading();
+    }
+    
     if (state == CRState::IDLE)
     {
         LookTarget(INPUT->GetWorldMousePos());
@@ -223,22 +230,26 @@ void Player::Update()
             or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
         {
             state = CRState::WALK;
-            walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown('1')) {
             selectWPNum = '1' - '0' - 1;
             isCarryWP = true;
             gunVector[selectWPNum]->VisibleOn();
+            reloadPerSec = (gunVector[selectWPNum]->GetReloadTime()-0.1f)/gunVector[selectWPNum]->GetBulletNum();
+            backUpReloadPerSec = reloadPerSec;
             state = CRState::IDLEWP;
-            idleWithWeapon->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            charImg[(int)CRState::IDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown('2')) {
             if (gunVector.size() >= '2' - '0') {
                 selectWPNum = '2' - '0' - 1;
                 isCarryWP = true;
                 gunVector[selectWPNum]->VisibleOn();
+                reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
+                backUpReloadPerSec = reloadPerSec;
                 state = CRState::IDLEWP;
-                idleWithWeapon->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                charImg[(int)CRState::IDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
             }
         }
     }
@@ -249,10 +260,14 @@ void Player::Update()
             or INPUT->KeyPress('S') or INPUT->KeyPress('D'))
         {
             state = CRState::WALKWP;
-            walkWithWeapon->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
+            plgui->ConsumeBullet(gunVector[selectWPNum]->GetIsCylinderEmpty());
             gunVector[selectWPNum]->FireBullet();
+        }
+        if (INPUT->KeyDown('R')) {
+            if (gunVector[selectWPNum]->GetIsCylinderEmpty())gunVector[selectWPNum]->isReloading = true;
         }
         if (isCarryWP) {
             if (INPUT->KeyDown('1')) {
@@ -265,7 +280,7 @@ void Player::Update()
                     gunVector[selectWPNum]->VisibleOff();
                     isCarryWP = false;
                     state = CRState::IDLE;
-                    idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
                 }
             }
             if (INPUT->KeyDown('2')) {
@@ -278,7 +293,7 @@ void Player::Update()
                     gunVector[selectWPNum]->VisibleOff();
                     isCarryWP = false;
                     state = CRState::IDLE;
-                    idle->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
                 }
             }
         }
@@ -292,31 +307,35 @@ void Player::Update()
             or INPUT->KeyPress('S') or INPUT->KeyPress('D')))
         {
             state = CRState::IDLE;
-            walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-            walk->frame.x = 0;
+            charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            charImg[(int)CRState::WALK]->frame.x = 0;
         }
         //walk->roll
         if (INPUT->KeyDown(VK_RBUTTON))
         {
-            beforeDashPoint = col->GetWorldPos();
+            backUpDashPoint = col->GetWorldPos();
             state = CRState::ROLL;
-            dodgeRoll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
         }
         if (INPUT->KeyDown('1')) {
             selectWPNum = '1' - '0' - 1;
             gunVector[selectWPNum]->VisibleOn();
             isCarryWP = true;
+            reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
+            backUpReloadPerSec = reloadPerSec;
             state = CRState::WALKWP;
-            walkWithWeapon->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown('2')) {
             if (gunVector.size() >= '2' - '0') {
                 selectWPNum = '2' - '0' - 1;
                 isCarryWP = true;
                 gunVector[selectWPNum]->VisibleOn();
+                reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
+                backUpReloadPerSec = reloadPerSec;
                 state = CRState::WALKWP;
-                walkWithWeapon->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
             }
         }
     }
@@ -328,20 +347,24 @@ void Player::Update()
         {
             if (isCarryWP) state = CRState::IDLEWP;
             else state = CRState::IDLE;
-            walkWithWeapon->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-            walkWithWeapon->frame.x = 0;
+            charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            charImg[(int)CRState::WALKWP]->frame.x = 0;
         }
         //walk->roll
         if (INPUT->KeyDown(VK_RBUTTON))
         {
-            beforeDashPoint = col->GetWorldPos();
+            backUpDashPoint = col->GetWorldPos();
             gunVector[selectWPNum]->VisibleOff();
             state = CRState::ROLL;
-            dodgeRoll->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
+            plgui->ConsumeBullet(gunVector[selectWPNum]->GetIsCylinderEmpty());
             gunVector[selectWPNum]->FireBullet();
+        }
+        if (INPUT->KeyDown('R')) {
+            if (gunVector[selectWPNum]->GetIsCylinderEmpty())gunVector[selectWPNum]->isReloading = true;
         }
         if (isCarryWP) {
             if (INPUT->KeyDown('1')) {
@@ -354,7 +377,7 @@ void Player::Update()
                     gunVector[selectWPNum]->VisibleOff();
                     isCarryWP = false;
                     state = CRState::WALK;
-                    walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
                 }
             }
             if (INPUT->KeyDown('2')) {
@@ -367,7 +390,7 @@ void Player::Update()
                     gunVector[selectWPNum]->VisibleOff();
                     isCarryWP = false;
                     state = CRState::WALK;
-                    walk->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
                 }
             }
         }
@@ -375,83 +398,47 @@ void Player::Update()
     else if (state == CRState::ROLL)
     {
         rollTime += DELTA;
+        rollWeight += DELTA * rollWeightScale;
+        Vector2 rollDistance = Vector2(300.0f, 300.0f);
+        rollDistance.Normalize();
         col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
+            , backUpDashPoint + Vector2(150.0f, 150.0f)* controlDir, rollWeight));
         LookTarget(col->GetWorldPos() + controlDir);
-        if (dodgeRoll->isAniStop())
+        if (charImg[(int)CRState::ROLL]->isAniStop())
         {
-            speed = 300.0f;
+            rollWeight = backUpRollWeight;
+            speed = backUpSpeed;
             if (isCarryWP) {
                 gunVector[selectWPNum]->VisibleOn();
                 state = CRState::IDLEWP;
-                walkWithWeapon->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+                charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 
             }
             else {
                 state = CRState::IDLE;
-                walk->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+                charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             }
         }
     }
-    gunVector[selectWPNum]->Update();
-    Character::Update();
-    idleWithWeapon->Update();
-    walkWithWeapon->Update();
-    dodgeRoll->Update();
 }
 
 void Player::Render()
 {
     gunVector[selectWPNum]->Render();
-    col->Render();
-    switch (state)
-    {
-    case CRState::IDLE:
-        idle->Render();
-        break;
-    case CRState::IDLEWP:
-        idleWithWeapon->Render();
-        break;
-    case CRState::WALK:
-        walk->Render();
-        break;
-    case CRState::WALKWP:
-        walkWithWeapon->Render();
-        break;
-    case CRState::ROLL:
-        dodgeRoll->Render();
-        break;
-    case CRState::DEATH:
-        death->Render();
-        break;
-    }
+    Character::Render();
 }
 
 void Player::LookTarget(Vector2 target)
 {
-
-    int index =
-        round((Utility::DirToRadian(target - col->GetWorldPos()) + PI) / (45.0f * ToRadian));
-    if (index == 8) index = 0;
-    idle->frame.y = dirFrame[index];
-    idleWithWeapon->frame.y = dirFrame[index];
-    walk->frame.y = dirFrame[index];
-    walkWithWeapon->frame.y = dirFrame[index];
-    dodgeRoll->frame.y = dirFrame[index];
-    death->frame.y = dirFrame[index];
-
+    Character::LookTarget(target);
+    if(state != CRState::DEATH) charImg[(int)state]->frame.y = dirFrame[index];
     if (index == 0 or index == 1 or index == 7) {
         gunVector[selectWPNum]->GetCol()->rotation.z = -atan2f((target - col->GetWorldPos()).y, (target - col->GetWorldPos()).x);
         gunVector[selectWPNum]->GetCol()->SetLocalPosX(-col->scale.x * 0.3f);
         gunVector[selectWPNum]->GetCol()->SetLocalPosY(col->scale.y * 0.25f);
         //gunVector[selectWPNum]->rotation.y = PI;
         gunVector[selectWPNum]->GetCol()->rotation.x = PI;
-        idle->rotation.y = PI;
-        idleWithWeapon->rotation.y = PI;
-        walk->rotation.y = PI;
-        walkWithWeapon->rotation.y = PI;
-        dodgeRoll->rotation.y = PI;
-        death->rotation.y = PI;
+        charImg[(int)state]->rotation.y = PI;
     }
     else {
         gunVector[selectWPNum]->GetCol()->rotation.z = atan2f((target - col->GetWorldPos()).y, (target - col->GetWorldPos()).x);
@@ -459,17 +446,13 @@ void Player::LookTarget(Vector2 target)
         gunVector[selectWPNum]->GetCol()->SetLocalPosY(col->scale.y * 0.25f);
         gunVector[selectWPNum]->GetCol()->rotation.y = 0.0f;
         gunVector[selectWPNum]->GetCol()->rotation.x = 0.0f;
-        idle->rotation.y = 0.0f;
-        idleWithWeapon->rotation.y = 0.0f;
-        walk->rotation.y = 0.0f;
-        walkWithWeapon->rotation.y = 0.0f;
-        dodgeRoll->rotation.y = 0.0f;
-        death->rotation.y = 0.0f;
+        charImg[(int)state]->rotation.y = 0.0f;
     }
 }
+
 void Player::GetFromChest(GunType _type)
 {
-    gunVector.push_back(new ASRGun(L"Convict_Gun2.png", col, _type));
+    gunVector.push_back(new ASRGun(L"Convict_Gun2.png", col, target, _type));
 }
 
 
@@ -477,7 +460,7 @@ void Player::GoBack()
 {
     if (INPUT->KeyDown(VK_RBUTTON)) {
         col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , beforeDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
+            , backUpDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
     }
     Character::GoBack();
 }

@@ -3,19 +3,22 @@
 class Player : public Character
 {
 private:
-	ObImage* idleWithWeapon;
-	ObImage* walkWithWeapon;
-	ObImage* dodgeRoll;
-	enum class PLType			playerType;
-	vector<class ASRGun*> gunVector;
+	class GameGUI*			plgui;
+	enum class PLType		playerType;
+	vector<class ASRGun*>	gunVector;
 
-	Vector2			beforeDashPoint;
+	Vector2					backUpDashPoint;
 
-	bool			isCarryWP;
-	int				gunNum;
-	int				selectWPNum;
+	bool					isCarryWP;
+	int						gunNum;
+	int						selectWPNum;
 
-	float			rollTime;
+	float					rollTime;
+	float					reloadPerSec;
+	float					backUpReloadPerSec;
+	float					rollWeight;
+	float					rollWeightScale;
+	float					backUpRollWeight;
 public:
 	Player();
 	Player(PLType _type);
@@ -28,8 +31,10 @@ public:
 
 	void GoBack();
 	void LookTarget(Vector2 target);
-	void GetFromChest(enum class GunType _type);
+	void GetFromChest(GunType _type);
+	void SetGui(class GameGUI* _plgui) { plgui = _plgui; }
 
+	int GetCurrentBulletNum(){ return gunVector[selectWPNum]->GetBulletNum(); }
 
 };
 

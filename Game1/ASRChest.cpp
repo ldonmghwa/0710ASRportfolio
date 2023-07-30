@@ -28,7 +28,6 @@ void ASRChest::Update()
 	if (not isExist) return;
 	ObRect::Update();
 	open->Update();
-	ImGui::Text("%d", open->frame.x);
 	if (open->frame.x == 5) {
 		if (disappearTime > 0) {
 			if (isGlit) {

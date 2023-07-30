@@ -174,14 +174,36 @@ void ASRMap::MappingBspTree()
 			}
 		}
 	}
+	//몬스터 스폰위치 매핑
+	for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+		//세로 y값
+		for (int i = (*it)->value.room.vertex[0].y - 1; i < (*it)->value.room.vertex[1].y + 1; i++) {
+			//가로 x값
+			for (int j = (*it)->value.room.vertex[0].x - 1; j < (*it)->value.room.vertex[1].x + 1; j++) {
+				for (auto it2 = (*it)->value.room.monsterSpawn.begin();
+					it2 != (*it)->value.room.monsterSpawn.end(); it2++) {
+					if ((*it2).x == j and (*it2).y == i) {
+						asrMap->SetTile(
+							0, 
+							Int2(j, i), 
+							Int2(5, 3), 
+							0, 
+							TILE_MSPAWN, 
+							Color(1.0f, 0.0f, 0.0f, 0.5f));
+					}
+				}
+			}
+		}
+	}
+
 	asrMap->SetTile(
 		0,
 		Int2(realMapVector[0]->value.room.middlePoint.x - 1,
 			realMapVector[0]->value.room.middlePoint.y - 1),
 		Int2(5, 3),
 		0,
-		TILE_SPAWN,
-		Color(1.0f, 0.0f, 0.0f, 0.5f)
+		TILE_PSPAWN,
+		Color(0.0f, 0.0f, 1.0f, 0.5f)
 	);
 	asrMap->UpdateSetTile();
 }

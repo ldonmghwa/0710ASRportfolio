@@ -1,6 +1,9 @@
 #include "common.h"
 
-ASRGuided::ASRGuided(wstring _wstr, Vector2 _destPos) : ASRBullet(_wstr)
+ASRGuided::ASRGuided(wstring _wstr
+    , Vector2 _destPos
+    , GameObject* _shooter
+    , float _power) : ASRBullet(_wstr, _shooter, _power)
 {
     distance = 600.0f;
     destPos = _destPos;

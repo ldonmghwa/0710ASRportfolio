@@ -1,20 +1,23 @@
 #include "common.h"
 
-ASRBullet::ASRBullet(wstring _wstr) : Item()
+ASRBullet::ASRBullet(wstring _wstr, GameObject* _shooter, float _power) 
+    : Item()
 {
-    isFire = false;
-    pressPower = 200.0f;
+    isFire = true;
+    pressPower = _power;
+    sourcePos = _shooter->GetWorldPos();
+    fireDir = _shooter->GetRight();
     type = ItemType::CONSUM;
     img = new ObImage(_wstr);
     img->scale.x = img->imageSize.x * 1.5f;
     img->scale.y = img->imageSize.y * 1.5f;
     col->scale = img->scale;
     col->isFilled = false;
+    col->SetWorldPos(_shooter->GetWorldPos());
     img->SetParentRT(*col);
+    col->Update();
     //col->SetWorldPos(Vector2(-1250.0f , -1250.0f));
     distance = 500.0f;
-    //cout << "ÃÑ¾Ë : " << col->GetWorldPos().x << ", " << col->GetWorldPos().y << endl;
-    //cout << "ÃÑ¾Ë : " << col->GetLocalPos().x << ", " << col->GetLocalPos().y << endl;
 }
 
 ASRBullet::~ASRBullet()
@@ -60,9 +63,20 @@ void ASRBullet::Render()
 
 bool ASRBullet::IsBulletReach()
 {
-    if ((col->GetLocalPos() - sourcePos).Length() > distance) {
+    if ((col->GetWorldPos() - sourcePos).Length() > distance) {
         isFire = false;
         return false;
     }
-    else true;
+    else return true;
+}
+
+bool ASRBullet::IsBulletReach(vector<GameObject*> target)
+{
+    for (int i = 0; i < target.size(); i++) {
+        if (col->Intersect(target[i])) {
+            isFire = false;
+            return false;
+        }
+        else return true;
+    }
 }

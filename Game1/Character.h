@@ -3,16 +3,20 @@
 class Character
 {
 protected:
+	vector<GameObject*> target;
 	ObRect*				col;
-	ObImage*			idle;
-	ObImage*			walk;
-	ObImage*			death;
+	ObImage*			charImg[(int)CRState::SIZE];
+
 	Vector2				lastPos;
 	Vector2				controlDir;
 	Vector2				dir2;
+
 	enum class CRState 	state;
-	int					dirFrame[8];
+	int					index;
+	int					dirFrame[8]; 
 	float				speed;
+	float				backUpSpeed;
+	float				resizeValue;
 public:
 	Character();
 	~Character();
@@ -27,6 +31,8 @@ public:
 	virtual void GoBack();
 	virtual void Attack();
 	virtual void LookTarget(Vector2 target);
+
+	void SetTarget(GameObject* _target) { target.push_back(_target); }
 
 	Vector2 GetFoot();
 };

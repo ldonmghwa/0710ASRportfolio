@@ -29,10 +29,12 @@
     <ClInclude Include="GUIStruct.h" />
     <ClInclude Include="GunBasic.h" />
     <ClInclude Include="GunGuided.h" />
+    <ClInclude Include="GunMinion.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainGameScene.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Mutal.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="stdafx.h" />
@@ -46,10 +48,12 @@
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="GunBasic.cpp" />
     <ClCompile Include="GunGuided.cpp" />
+    <ClCompile Include="GunMinion.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Mutal.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>

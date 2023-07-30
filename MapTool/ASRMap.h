@@ -4,6 +4,7 @@ struct RANDOMRoom {
 	Int2 vertex[2];
 	Int2 middlePoint;
 	Int2 wallPoint[3][2];
+	vector<Int2> monsterSpawn;
 };
 
 struct RECTRange {
@@ -100,6 +101,11 @@ typedef struct BSPTree {
 				value.room.wallPoint[1][0].y = value.room.wallPoint[1][1].y - 2;
 				value.room.wallPoint[2][0].y = value.room.vertex[0].y + RANDOM->Int(2, 3);
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 2;
+
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
 			}
 			else {
 				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(1, 2);
@@ -115,6 +121,10 @@ typedef struct BSPTree {
 				value.room.wallPoint[1][0].y = value.room.wallPoint[1][1].y - 1;
 				value.room.wallPoint[2][0].y = value.room.vertex[0].y + 1;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 1;
+
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
 			}
 		}
 		else {
@@ -133,6 +143,11 @@ typedef struct BSPTree {
 				value.room.wallPoint[1][1].y = value.room.wallPoint[1][0].y + 4;
 				value.room.wallPoint[2][0].y = value.room.wallPoint[1][1].y + 5;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 4;
+
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
 			}
 			else {
 				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(1, 2);
@@ -148,6 +163,10 @@ typedef struct BSPTree {
 				value.room.wallPoint[1][1].y = value.room.wallPoint[1][0].y + 3;
 				value.room.wallPoint[2][0].y = value.room.wallPoint[1][1].y + 4;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 3;
+
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
 			}
 			
 		}

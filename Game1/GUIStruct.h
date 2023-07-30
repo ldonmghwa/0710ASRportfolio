@@ -11,8 +11,14 @@ enum class CRState {
 	WALKWP,
 	ROLL,
 	DEATH,
-	//PLDEATH2,
+	HIT,
 	SIZE
+};
+
+enum class CharType {
+	PLAYABLE,
+	MONSTER
+	//NONEPLAY
 };
 
 enum class ItemType {
@@ -23,12 +29,18 @@ enum class ItemType {
 
 enum class GunType {
 	BASIC,
-	GUIDE
+	GUIDE,
+	MINION
 };
 
 enum class PLType {
 	PLCONVICT,
 	PLBULLET
+};
+
+enum class MTType {
+	MTMINION,
+	BOSS
 };
 
 struct HPBar {

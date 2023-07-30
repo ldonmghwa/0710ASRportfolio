@@ -5,7 +5,7 @@ private:
 	Vector2 destPos;
 public:
 	GunGuided(wstring _wstr, ObRect* _player,
-		GunType _type);
+		vector<GameObject*> _target, GunType _type);
 	~GunGuided();
 
 	void Update() override;

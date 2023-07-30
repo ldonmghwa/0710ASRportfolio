@@ -16,6 +16,7 @@ private:
 	RECT boxKeyRc;
 
 	int basicBulletNum;
+	int beforeBasicBulletNum;
 	int guideBulletNum;
 	int curMaxHPBar;
 	int curHPIdx;
@@ -29,8 +30,14 @@ public:
 	GameGUI();
 	~GameGUI();
 
-	void Init();
+	void Init(int _bulletNum);
 	void Update();
 	void Render();
+
+	void ConsumeBullet(bool isCylinderEmpty);
+	void ReLoadingBulletBar(float& reloadPerSec, float reloadTime);
+	void ReduceHPBar();
+	void ReduceBBBar();
+	void IncreaseMoneyBar();
 };
 

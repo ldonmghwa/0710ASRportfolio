@@ -3,7 +3,7 @@ class GunBasic : public ASRGun
 {
 public:
 	GunBasic(wstring _wstr, ObRect* _player,
-		GunType _type);
+		vector<GameObject*> _target, GunType _type);
 	~GunBasic();
 
 	void Update() override;

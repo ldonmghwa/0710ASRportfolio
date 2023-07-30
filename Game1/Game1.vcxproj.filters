@@ -23,12 +23,6 @@
     <ClInclude Include="Item.h">
       <Filter>GameItem</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>GameCharacter</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GameCharacter</Filter>
-    </ClInclude>
     <ClInclude Include="ASRBullet.h">
       <Filter>GameItem\CONSUM</Filter>
     </ClInclude>
@@ -42,6 +36,18 @@
       <Filter>GameItem\WEAPON</Filter>
     </ClInclude>
     <ClInclude Include="GunGuided.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>GameCharacter</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>GameCharacter\MONSTER</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameCharacter\PLAYABLE</Filter>
+    </ClInclude>
+    <ClInclude Include="GunMinion.h">
       <Filter>GameItem\WEAPON</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,12 +69,6 @@
     <ClCompile Include="Item.cpp">
       <Filter>GameItem</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>GameCharacter</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>GameCharacter</Filter>
-    </ClCompile>
     <ClCompile Include="ASRBullet.cpp">
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
@@ -82,6 +82,18 @@
       <Filter>GameItem\WEAPON</Filter>
     </ClCompile>
     <ClCompile Include="GunGuided.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GameCharacter</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>GameCharacter\MONSTER</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameCharacter\PLAYABLE</Filter>
+    </ClCompile>
+    <ClCompile Include="GunMinion.cpp">
       <Filter>GameItem\WEAPON</Filter>
     </ClCompile>
   </ItemGroup>
@@ -106,6 +118,12 @@
     </Filter>
     <Filter Include="GameItem\STUFF">
       <UniqueIdentifier>{205e3d4a-e44a-4cbf-9d97-417c1ce1d643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameCharacter\PLAYABLE">
+      <UniqueIdentifier>{2f67655a-0558-4211-b9dd-43f5f6d1e842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameCharacter\MONSTER">
+      <UniqueIdentifier>{155ac37f-d340-4d7d-a346-9a18205b627f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -2,13 +2,15 @@
 
 GunGuided::GunGuided(wstring _wstr
 	, ObRect* _player
-	, GunType _type) 
-	: ASRGun(_wstr, _player, _type)
+	, vector<GameObject*> _target
+	, GunType _type)
+	: ASRGun(_wstr, _player, _target, _type)
 {
 	bulletNum = 3;
-	beforeBulletNum = 3;
+	curBulletNum = bulletNum;
 	bulletPower = 600.0f;
-	beforeReloadTime = 3.0f;
+	backUpReloadTime = 3.0f;
+	reloadTime = 3.0f;
 }
 
 GunGuided::~GunGuided()
@@ -27,7 +29,7 @@ void GunGuided::Render()
 
 void GunGuided::FireBullet(Vector2 _destPos)
 {
-	if (!isReloading)
-		bulletCylinder.push_back(new ASRGuided(L"Convict_Gun2_Bullet.png", _destPos));
+	if (isCylinderEmpty) return;
+	bulletCylinder.push_back(new ASRGuided(L"Convict_Gun2_Bullet.png", _destPos, this->col, bulletPower));
 	ASRGun::FireBullet();
 }

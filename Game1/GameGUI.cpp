@@ -12,12 +12,7 @@ GameGUI::GameGUI()
 		cylinderBarTP[i]->scale.x = cylinderBarTP[i]->imageSize.x;
 		cylinderBarTP[i]->scale.y = cylinderBarTP[i]->imageSize.y;
 	}
-	basicBulletNum = 20;
-	clBar.clear();
-	clBar.reserve(basicBulletNum);
-	for (int i = 0; i < basicBulletNum; i++) {
-		clBar.push_back(new CLBar(GunType::BASIC));
-	}
+	
 	boxKeyImg = new ObImage(L"TreasureBoxKey.png");
 	boxKeyImg->scale.x = boxKeyImg->imageSize.x * 4.0f;
 	boxKeyImg->scale.y = boxKeyImg->imageSize.y * 4.0f;
@@ -56,8 +51,15 @@ GameGUI::~GameGUI()
 	TEXTURE->DeleteTexture(L"Money.png");
 }
 
-void GameGUI::Init()
+void GameGUI::Init(int _bulletNum)
 {
+	basicBulletNum = _bulletNum;
+	beforeBasicBulletNum = basicBulletNum;
+	clBar.clear();
+	clBar.reserve(basicBulletNum);
+	for (int i = 0; i < basicBulletNum; i++) {
+		clBar.push_back(new CLBar(GunType::BASIC));
+	}
 	curMaxHPBar = 3;
 	curHPIdx = curMaxHPBar - 1;
 	curMaxBBBar = 2;
@@ -126,12 +128,12 @@ void GameGUI::Update()
 		if (bbBar[curBBIdx]->bBarState < 0) bbBar[curBBIdx]->bBarState = 0;
 		cout << "bbBar state: " << bbBar[curBBIdx]->bBarState << endl;
 	}
-	if (INPUT->KeyDown('C')) {
+	/*if (INPUT->KeyDown('C')) {
 		if (clBar[curCLIdx]->cBarState == 0) curCLIdx--;
 		if (curCLIdx < 0) curCLIdx = 0;
 		clBar[curCLIdx]->cBarState -= 1;
 		if (clBar[curCLIdx]->cBarState < 0)clBar[curCLIdx]->cBarState = 0;
-	}
+	}*/
 
 
 }
@@ -175,4 +177,37 @@ void GameGUI::Render()
 	DWRITE->RenderText(L"¡¿" + to_wstring(moneyNum), moneyNumRc, 50.0f, L"µÕ±Ù¸ð²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 
+}
+
+void GameGUI::ConsumeBullet(bool isCylinderEmpty)
+{
+	if (isCylinderEmpty) return;
+	if (clBar[curCLIdx]->cBarState == 0) curCLIdx--;
+	if (curCLIdx < 0) curCLIdx = 0;
+	clBar[curCLIdx]->cBarState -= 1;
+	if (clBar[curCLIdx]->cBarState < 0)clBar[curCLIdx]->cBarState = 0;
+}
+
+void GameGUI::ReLoadingBulletBar(float& reloadPerSec, float reloadTime)
+{
+	reloadPerSec -= DELTA;
+	if (reloadPerSec < 0.0f) {
+		clBar[curCLIdx]->cBarState = 1;
+		curCLIdx++;
+		reloadPerSec = reloadTime;
+		if (curCLIdx == clBar.size()) curCLIdx--;
+	}
+}
+
+void GameGUI::ReduceHPBar()
+{
+	
+}
+
+void GameGUI::ReduceBBBar()
+{
+}
+
+void GameGUI::IncreaseMoneyBar()
+{
 }
