@@ -1,27 +1,30 @@
 #include "common.h"
 
-ASRBullet::ASRBullet(wstring _wstr, GameObject* _shooter, float _power) 
+ASRBullet::ASRBullet(wstring _wstr, 
+    GameObject* _shooter, float _power) 
     : Item()
 {
     isFire = true;
+    isBulletDeath = false;
     pressPower = _power;
+    resizeScale = 1.5f;
     sourcePos = _shooter->GetWorldPos();
     fireDir = _shooter->GetRight();
     type = ItemType::CONSUM;
     img = new ObImage(_wstr);
-    img->scale.x = img->imageSize.x * 1.5f;
-    img->scale.y = img->imageSize.y * 1.5f;
+    img->scale.x = img->imageSize.x * resizeScale;
+    img->scale.y = img->imageSize.y * resizeScale;
     col->scale = img->scale;
     col->isFilled = false;
     col->SetWorldPos(_shooter->GetWorldPos());
     img->SetParentRT(*col);
     col->Update();
-    //col->SetWorldPos(Vector2(-1250.0f , -1250.0f));
     distance = 500.0f;
 }
 
 ASRBullet::~ASRBullet()
 {
+    delete bulletDeath;
 }
 
 void ASRBullet::Fire(GameObject* shooter, float pressPower)
@@ -51,7 +54,10 @@ void ASRBullet::Update()
 
     col->Update();
     img->Update();
-    
+    if (isBulletDeath) {
+        bulletDeath->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+        bulletDeath->Update();
+    }
 }
 
 void ASRBullet::Render()
@@ -59,6 +65,15 @@ void ASRBullet::Render()
     if (not isFire) return;
     col->Render();
     img->Render();
+    if (isBulletDeath) bulletDeath->Render();
+}
+
+void ASRBullet::SetBulletDeathImg(wstring _fileName)
+{
+    bulletDeath = new ObImage(_fileName);
+    bulletDeath->scale.x = bulletDeath->imageSize.x * resizeScale;
+    bulletDeath->scale.y = bulletDeath->imageSize.y * resizeScale;
+    bulletDeath->SetParentRT(*col);
 }
 
 bool ASRBullet::IsBulletReach()
@@ -70,13 +85,14 @@ bool ASRBullet::IsBulletReach()
     else return true;
 }
 
-bool ASRBullet::IsBulletReach(vector<GameObject*> target)
+void ASRBullet::IsBulletReach(vector<Character*> target)
 {
     for (int i = 0; i < target.size(); i++) {
-        if (col->Intersect(target[i])) {
+        if (target[i]->isInvincible) return;
+        if (target[i]->healPoint <= 0) return;
+        if (col->Intersect(target[i]->GetCol())) {
+            target[i]->TakeDamage();
             isFire = false;
-            return false;
         }
-        else return true;
     }
 }

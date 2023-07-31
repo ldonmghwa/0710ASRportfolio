@@ -201,7 +201,10 @@ void GameGUI::ReLoadingBulletBar(float& reloadPerSec, float reloadTime)
 
 void GameGUI::ReduceHPBar()
 {
-	
+	if (hpBar[curHPIdx]->hpBarState == HPBarState::ZERO) curHPIdx--;
+	if (curHPIdx < 0) curHPIdx = 0;
+	hpBar[curHPIdx]->hpBarState -= 1;
+	if (hpBar[curHPIdx]->hpBarState < 0) hpBar[curHPIdx]->hpBarState = 0;
 }
 
 void GameGUI::ReduceBBBar()

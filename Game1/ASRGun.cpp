@@ -1,24 +1,27 @@
 #include "common.h"
 
-ASRGun::ASRGun(wstring _wstr, ObRect* _player,
-	vector<GameObject*> _target, GunType _type) : Item()
+ASRGun::ASRGun(wstring _wstr, Character* _player,
+	vector<Character*> _target, GunType _type) : Item()
 {
 	gunType = _type;
 	gunFileName = _wstr;
 	target = _target;
 	type = ItemType::WEAPON;
+	parentChar = _player;
 	resizeValue = 2.0f;
+
 	img = new ObImage(_wstr);
 	img->scale.x = img->imageSize.x * resizeValue;
 	img->scale.y = img->imageSize.y * resizeValue;
 	col->scale = img->scale;
 	col->isFilled = false;
 	img->SetParentRT(*col);
-	col->SetParentT(*_player);
-	col->SetLocalPosX(-_player->scale.x * 0.4f);
-	col->SetLocalPosY(_player->scale.y * 0.5f);
+	col->SetParentT(*_player->GetCol());
+	col->SetLocalPosX(-_player->GetCol()->scale.x * 0.4f);
+	col->SetLocalPosY(_player->GetCol()->scale.y * 0.5f);
 	img->pivot = OFFSET_LB;
 	col->pivot = OFFSET_LB;
+
 	isReloading = false; 
 	isCylinderEmpty = false;
 }
@@ -37,9 +40,8 @@ void ASRGun::Update()
 		}
 	}
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
-		if ((*it)->IsBulletReach(target)) {
-			(*it)->Update();
-		}
+		(*it)->IsBulletReach(target);
+		(*it)->Update();
 	}
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
 		if ((*it)->IsBulletReach()) {

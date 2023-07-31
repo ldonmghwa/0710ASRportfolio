@@ -12,10 +12,9 @@ Character::~Character()
 		if (!charImg[i]) delete charImg[i];
 	}
 }	
-void Character::Init(Vector2 spawn)
+void Character::Init()
 {
-	col->SetWorldPosX(spawn.x);
-	col->SetWorldPosY(spawn.y);
+	isInvincible = false;
 	state = CRState::IDLE;
 	charImg[(int)state]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 }
@@ -26,6 +25,11 @@ void Character::Control()
 
 void Character::Update()
 {
+	if (healPoint <= 0) {
+		isInvincible = true;
+		state = CRState::DEATH;
+		charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+	}
 	col->Update();
 	charImg[(int)state]->Update();
 }
@@ -50,6 +54,11 @@ void Character::LookTarget(Vector2 target)
 {
 	index = round((Utility::DirToRadian(target - col->GetWorldPos()) + PI) / (45.0f * ToRadian));
 	if (index == 8) index = 0;
+}
+
+void Character::TakeDamage()
+{
+	healPoint--;
 }
 
 Vector2 Character::GetFoot()

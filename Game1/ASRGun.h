@@ -2,12 +2,14 @@
 class ASRGun : public Item
 {
 protected:
-	vector<GameObject*>		 target;
+	vector<class Character*>		 target;
+	vector<class ASRBullet*> bulletCylinder;
+	class Character*		 parentChar;
 	enum class GunType		 gunType;
 	wstring					 gunFileName;
-	vector<class ASRBullet*> bulletCylinder;
 							 
 	bool					 isCylinderEmpty;
+	bool					 isHit;
 	int						 bulletNum;
 	int						 curBulletNum; 
 	float					 resizeValue;
@@ -18,8 +20,8 @@ public:
 	bool isReloading;
 
 public:
-	ASRGun(wstring _wstr, ObRect* _player, 
-		vector<GameObject*> _target, GunType _type);
+	ASRGun(wstring _wstr, Character* _player,
+		vector<Character*> _target, GunType _type);
 	~ASRGun();
 
 	virtual void Update() override;
@@ -27,7 +29,6 @@ public:
 
 	virtual void FireBullet();
 	void GunReLoading();
-
 	vector<class ASRBullet*> GetBulletVector() { return bulletCylinder; }
 	bool GetIsCylinderEmpty() { return isCylinderEmpty; }
 	int GetBulletNum() { return bulletNum; }

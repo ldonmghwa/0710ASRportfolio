@@ -1,8 +1,8 @@
 #include "common.h"
 
 GunGuided::GunGuided(wstring _wstr
-	, ObRect* _player
-	, vector<GameObject*> _target
+	, Character* _player
+	, vector<Character*> _target
 	, GunType _type)
 	: ASRGun(_wstr, _player, _target, _type)
 {
@@ -31,5 +31,6 @@ void GunGuided::FireBullet(Vector2 _destPos)
 {
 	if (isCylinderEmpty) return;
 	bulletCylinder.push_back(new ASRGuided(L"Convict_Gun2_Bullet.png", _destPos, this->col, bulletPower));
+	bulletCylinder.back()->SetBulletDeathImg(L"Convict_Gun2_Bullet_Death.png");
 	ASRGun::FireBullet();
 }

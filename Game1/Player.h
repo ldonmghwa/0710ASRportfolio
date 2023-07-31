@@ -24,12 +24,13 @@ public:
 	Player(PLType _type);
 	~Player();
 
-	void Init(Vector2 spawn);
+	void Init();
 	void Control();
 	void Update();
 	void Render();
 
 	void GoBack();
+	void TakeDamage() override;
 	void LookTarget(Vector2 target);
 	void GetFromChest(GunType _type);
 	void SetGui(class GameGUI* _plgui) { plgui = _plgui; }

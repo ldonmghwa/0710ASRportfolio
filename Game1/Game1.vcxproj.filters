@@ -29,9 +29,6 @@
     <ClInclude Include="ASRGuided.h">
       <Filter>GameItem\CONSUM</Filter>
     </ClInclude>
-    <ClInclude Include="ASRGun.h">
-      <Filter>GameItem\WEAPON</Filter>
-    </ClInclude>
     <ClInclude Include="GunBasic.h">
       <Filter>GameItem\WEAPON</Filter>
     </ClInclude>
@@ -48,6 +45,9 @@
       <Filter>GameCharacter\PLAYABLE</Filter>
     </ClInclude>
     <ClInclude Include="GunMinion.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
+    <ClInclude Include="ASRGun.h">
       <Filter>GameItem\WEAPON</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,9 +75,6 @@
     <ClCompile Include="ASRGuided.cpp">
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
-    <ClCompile Include="ASRGun.cpp">
-      <Filter>GameItem\WEAPON</Filter>
-    </ClCompile>
     <ClCompile Include="GunBasic.cpp">
       <Filter>GameItem\WEAPON</Filter>
     </ClCompile>
@@ -94,6 +91,9 @@
       <Filter>GameCharacter\PLAYABLE</Filter>
     </ClCompile>
     <ClCompile Include="GunMinion.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="ASRGun.cpp">
       <Filter>GameItem\WEAPON</Filter>
     </ClCompile>
   </ItemGroup>

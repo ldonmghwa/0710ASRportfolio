@@ -165,12 +165,13 @@ Player::~Player()
 
 }
 
-void Player::Init(Vector2 spawn)
+void Player::Init()
 {
     
-    Character::Init(spawn);
-    gunVector.push_back(new GunBasic(L"Convict_Gun1.png", col, target, GunType::BASIC));
+    Character::Init();
+    gunVector.push_back(new GunBasic(L"Convict_Gun1.png", this, target, GunType::BASIC));
     gunVector[0]->VisibleOff();
+    healPoint = 6;
     speed = 300.0f;
     backUpSpeed = speed;
     gunNum = 1;
@@ -313,6 +314,7 @@ void Player::Update()
         //walk->roll
         if (INPUT->KeyDown(VK_RBUTTON))
         {
+            isInvincible = true;
             backUpDashPoint = col->GetWorldPos();
             state = CRState::ROLL;
             charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
@@ -353,6 +355,7 @@ void Player::Update()
         //walk->roll
         if (INPUT->KeyDown(VK_RBUTTON))
         {
+            isInvincible = true;
             backUpDashPoint = col->GetWorldPos();
             gunVector[selectWPNum]->VisibleOff();
             state = CRState::ROLL;
@@ -406,6 +409,7 @@ void Player::Update()
         LookTarget(col->GetWorldPos() + controlDir);
         if (charImg[(int)CRState::ROLL]->isAniStop())
         {
+            isInvincible = false;
             rollWeight = backUpRollWeight;
             speed = backUpSpeed;
             if (isCarryWP) {
@@ -418,6 +422,14 @@ void Player::Update()
                 state = CRState::IDLE;
                 charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             }
+        }
+    }
+    else if (state == CRState::DEATH) {
+        if (INPUT->KeyDown('F')) {
+            healPoint = 6;
+            state = CRState::IDLE;        
+            charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+            charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
     }
 }
@@ -452,7 +464,7 @@ void Player::LookTarget(Vector2 target)
 
 void Player::GetFromChest(GunType _type)
 {
-    gunVector.push_back(new ASRGun(L"Convict_Gun2.png", col, target, _type));
+    gunVector.push_back(new ASRGun(L"Convict_Gun2.png", this, target, _type));
 }
 
 
@@ -463,4 +475,10 @@ void Player::GoBack()
             , backUpDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
     }
     Character::GoBack();
+}
+
+void Player::TakeDamage()
+{
+    Character::TakeDamage();
+    plgui->ReduceHPBar();
 }

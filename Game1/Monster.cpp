@@ -58,14 +58,17 @@ Monster::~Monster()
     TEXTURE->DeleteTexture(L"BulletKin_Death.png");
 }
 
-void Monster::Init(Vector2 spawn)
+void Monster::Init()
 {
-    gun = new GunMinion(L"BulletKin_Gun.png", col, target, GunType::MINION);
-    Character::Init(spawn);
-    speed = 25.0f;
-    attackRange = 400.0f;
-    detectionRange = 600.0f; 
+    gun = new GunMinion(L"BulletKin_Gun.png", this, target, GunType::MINION);
+    Character::Init();
+    healPoint = 3;
+    speed = 50.0f;
+    attackRange = 300.0f;
+    detectionRange = 400.0f; 
     shootingInterval = 2.0f;
+    source = col->GetWorldPos();
+    dest = col->GetWorldPos();
 }
 
 void Monster::Control()
@@ -82,8 +85,8 @@ void Monster::Update()
     }
     if (state == CRState::IDLE)
     {
-        LookTarget(target[0]->GetWorldPos());
-        if((col->GetWorldPos() - target[0]->GetWorldPos()).Length() < detectionRange) {
+        LookTarget(target[0]->GetCol()->GetWorldPos());
+        if((col->GetWorldPos() - target[0]->GetCol()->GetWorldPos()).Length() < detectionRange) {
             shootingInterval = 2.0f;
             state = CRState::WALK;
             charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
@@ -92,18 +95,32 @@ void Monster::Update()
     else if (state == CRState::WALK)
     {
         shootingInterval -= DELTA;
-        LookTarget(target[0]->GetWorldPos());
-        Vector2 moveDir = target[0]->GetWorldPos() - col->GetWorldPos();
+        LookTarget(target[0]->GetCol()->GetWorldPos());
+        /*Vector2 moveDir = target[0]->GetCol()->GetWorldPos() - col->GetWorldPos();
         moveDir.Normalize();
-        col->MoveWorldPos(moveDir * speed * DELTA);
-        if ((col->GetWorldPos() - target[0]->GetWorldPos()).Length() >= detectionRange) {
+        col->MoveWorldPos(moveDir * speed * DELTA);*/
+        if ((col->GetWorldPos() - target[0]->GetCol()->GetWorldPos()).Length() >= detectionRange) {
             state = CRState::IDLE;
             charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
-        if ((col->GetWorldPos() - target[0]->GetWorldPos()).Length() < attackRange) {
+        if ((col->GetWorldPos() - target[0]->GetCol()->GetWorldPos()).Length() < attackRange) {
             if (shootingInterval < 0) {
                 shootingInterval = 2.0f;
                 gun->FireBullet();
+            }
+        }
+        Int2 monsterIdx;
+        if (tileMap->PathFinding(col->GetWorldPos(),
+            target[0]->GetCol()->GetWorldPos(),
+            targetWay)){
+            if (targetWay.size() > 0) {
+                Vector2 source = targetWay.back()->Pos;
+                targetWay.pop_back();
+                Vector2 dest = targetWay.back()->Pos;
+                Vector2 dir = dest - source;
+                dir.Normalize();
+                col->MoveWorldPos(dir * speed * DELTA);
+
             }
         }
         if (gun->isReloading) {
@@ -111,12 +128,15 @@ void Monster::Update()
             charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
     }
+    else if (state == CRState::DEATH) {
+        
+    }
 }
 
 void Monster::Render()
 {
-    Character::Render();
     gun->Render();
+    Character::Render();
 }
 
 void Monster::GoBack()
@@ -124,10 +144,17 @@ void Monster::GoBack()
     Character::GoBack();
 }
 
+void Monster::SearchPlayer()
+{
+
+}
+
 void Monster::LookTarget(Vector2 target)
 {
     Character::LookTarget(target);
-    if (state != CRState::DEATH or state != CRState::HIT) charImg[(int)state]->frame.y = dirFrame[index];
+    if (state != CRState::DEATH or state != CRState::HIT)
+        charImg[(int)state]->frame.y
+        = dirFrame[index];
     if (index == 0 or index == 1) {
         gun->GetCol()->rotation.z = -atan2f((target - col->GetWorldPos()).y, (target - col->GetWorldPos()).x);
         gun->GetCol()->SetLocalPosX(-col->scale.x * 0.3f);

@@ -10,13 +10,12 @@ MainGameScene::MainGameScene()
 
 	map->scale.x = 50.0f;
 	map->scale.y = 50.0f;
+	map->CreateTileCost();
 
 	gui = new GameGUI();
 	plConvict = new Player();
 
 	Int2 tileIdx;
-	Int2 tileIdx2;
-	cout << map->GetTileSize().x << ", " << map->GetTileSize().y << endl;
 	int chestIdx = 0;
 	for (int i = 0; i < 101; i++) {
 		for (int j = 0; j < 101; j++) {
@@ -32,25 +31,24 @@ MainGameScene::MainGameScene()
 				);
 				chestIdx++;
 			}
-			tileIdx2.x = j;
-			tileIdx2.y = i;
-			if (map->GetTileState(tileIdx2) == TILE_PSPAWN) {
-				plConvict->Init(
+			if (map->GetTileState(tileIdx) == TILE_PSPAWN) {
+				plConvict->SetSpawnPos(
 					Vector2(
-						map->TilePosToWorldMiddlePos(tileIdx2).x - 1250.0f * 2,
-						map->TilePosToWorldMiddlePos(tileIdx2).y - 1250.0f * 2
+						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
+						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
 					)
 				);
 				plConvict->GetCol()->Update();
 			}
 			if (map->GetTileState(tileIdx) == TILE_MSPAWN) {
 				minionVector.push_back(new Monster());
-				minionVector[minionVector.size() - 1]->Init(
+				minionVector[minionVector.size() - 1]->SetSpawnPos(
 					Vector2(
 						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
 						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
 					)
 				);
+				//minionVector[minionVector.size() - 1]->Update();
 			}
 
 		}
@@ -70,14 +68,19 @@ MainGameScene::~MainGameScene()
 
 void MainGameScene::Init()
 {
+	
+	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
+		(*it)->SetTarget(plConvict);
+		(*it)->SetTileMap(map);
+		plConvict->SetTarget((*it));
+	}
+	plConvict->Init();
+	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
+		(*it)->Init();
+	}
 	gui->Init(plConvict->GetCurrentBulletNum());
 	map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
 	plConvict->SetGui(gui);
-	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
-		(*it)->SetTarget(plConvict->GetCol());
-		plConvict->SetTarget((*it)->GetCol());
-
-	}
 }
 
 void MainGameScene::Release()
@@ -96,10 +99,13 @@ void MainGameScene::Update()
 			plConvict->GoBack();
 		}
 	}
+	
 
 	map->Update();
 	gui->Update();
-	for (auto it = minionVector.begin(); it != minionVector.end(); it++)(*it)->Update();
+	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
+		(*it)->Update();
+	}
 	for (auto it = chestVector.begin(); it != chestVector.end(); it++) (*it)->Update();
 	plConvict->Update();
 }
@@ -114,9 +120,6 @@ void MainGameScene::LateUpdate()
 				break;
 			}
 		}
-	}
-	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
-		plConvict->SetTarget((*it)->GetCol());
 	}
 }
 
