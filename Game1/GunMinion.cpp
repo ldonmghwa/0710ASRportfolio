@@ -15,6 +15,7 @@ GunMinion::GunMinion(wstring _wstr,
 
 GunMinion::~GunMinion()
 {
+	TEXTURE->DeleteTexture(L"BulletKin_Bullet_Death.png");
 }
 
 void GunMinion::Update()
@@ -30,7 +31,11 @@ void GunMinion::Render()
 void GunMinion::FireBullet()
 {
 	if (isCylinderEmpty) return;
-	bulletCylinder.push_back(new ASRBullet(L"BulletKin_Bullet.png", this->col, bulletPower));
-	bulletCylinder.back()->SetBulletDeathImg(L"BulletKin_Bullet_Death.png");
+	bulletCylinder.push_back(
+		new BulletMinion(L"BulletKin_Bullet.png", 
+			this->col, 
+			bulletPower,
+			L"BulletKin_Bullet_Death.png")
+	);
 	ASRGun::FireBullet();
 }

@@ -1,18 +1,21 @@
 #include "common.h"
 
-ASRGun::ASRGun(wstring _wstr, Character* _player,
-	vector<Character*> _target, GunType _type) : Item()
+ASRGun::ASRGun(wstring _wstr,
+	Character* _player,
+	vector<Character*> _target, 
+	GunType _type) : Item()
 {
 	gunType = _type;
 	gunFileName = _wstr;
 	target = _target;
 	type = ItemType::WEAPON;
 	parentChar = _player;
-	resizeValue = 2.0f;
+	resizeScale = 2.0f;
 
 	img = new ObImage(_wstr);
-	img->scale.x = img->imageSize.x * resizeValue;
-	img->scale.y = img->imageSize.y * resizeValue;
+	img->scale.x = img->imageSize.x * resizeScale;
+	img->scale.y = img->imageSize.y * resizeScale;
+	
 	col->scale = img->scale;
 	col->isFilled = false;
 	img->SetParentRT(*col);
@@ -30,12 +33,12 @@ ASRGun::~ASRGun()
 {
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) delete (*it);
 }
-
 void ASRGun::Update()
 {
-	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
-		if (!(*it)->GetIsFire()) {
-			bulletCylinder.erase(it);
+	for (int i = 0;
+		i < bulletCylinder.size(); i++) {
+		if (!bulletCylinder[i]->GetIsFire() && bulletCylinder[i]->GetDeathImgAniStop()) {
+			bulletCylinder.erase(bulletCylinder.begin() + i);
 			break;
 		}
 	}
@@ -47,7 +50,6 @@ void ASRGun::Update()
 		if ((*it)->IsBulletReach()) {
 			(*it)->Update();
 		}
-		
 	}
 	
 	Item::Update();

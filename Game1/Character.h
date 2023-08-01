@@ -47,6 +47,7 @@ public:
 	}
 	void SetTarget(class Character* _target) { target.push_back(_target); }
 	void SetTileMap(ObTileMap* _tileMap) { tileMap = _tileMap; }
+	int GetIndex() { return index; }
 	Vector2 GetFoot();
 };
 

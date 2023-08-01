@@ -1,9 +1,9 @@
 #include "common.h"
 
-GunBasic::GunBasic(wstring _wstr
-	, Character* _player
-	, vector<Character*> _target
-	, GunType _type)
+GunBasic::GunBasic(wstring _wstr,
+	Character* _player,
+	vector<Character*> _target,
+	GunType _type)
 	: ASRGun(_wstr, _player, _target, _type)
 {
 	bulletNum = 10;
@@ -31,7 +31,11 @@ void GunBasic::Render()
 void GunBasic::FireBullet()
 {
 	if (isCylinderEmpty) return;
-	bulletCylinder.push_back(new ASRBullet(L"Convict_Gun1_Bullet.png", this->col, bulletPower));
-	bulletCylinder.back()->SetBulletDeathImg(L"Convict_Gun1_Bullet_Death.png");
+	bulletCylinder.push_back(
+		new ASRBullet(L"Convict_Gun1_Bullet.png",
+			this->col,
+			bulletPower,
+			 L"Convict_Gun1_Bullet_Death.png")
+	);
 	ASRGun::FireBullet();
 }

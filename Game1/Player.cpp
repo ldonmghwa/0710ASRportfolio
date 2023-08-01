@@ -169,7 +169,13 @@ void Player::Init()
 {
     
     Character::Init();
-    gunVector.push_back(new GunBasic(L"Convict_Gun1.png", this, target, GunType::BASIC));
+    gunVector.push_back(
+        new GunBasic(
+            L"Convict_Gun1.png",
+            this, 
+            target, 
+            GunType::BASIC)
+    );
     gunVector[0]->VisibleOff();
     healPoint = 6;
     speed = 300.0f;
@@ -265,7 +271,9 @@ void Player::Update()
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
             plgui->ConsumeBullet(gunVector[selectWPNum]->GetIsCylinderEmpty());
-            gunVector[selectWPNum]->FireBullet();
+            if (gunVector[selectWPNum]->GetGunType() == GunType::GUIDE) {
+                gunVector[selectWPNum]->FireBullet();
+            }
         }
         if (INPUT->KeyDown('R')) {
             if (gunVector[selectWPNum]->GetIsCylinderEmpty())gunVector[selectWPNum]->isReloading = true;
@@ -464,7 +472,13 @@ void Player::LookTarget(Vector2 target)
 
 void Player::GetFromChest(GunType _type)
 {
-    gunVector.push_back(new ASRGun(L"Convict_Gun2.png", this, target, _type));
+    gunVector.push_back(
+        new GunGuided(
+            L"Convict_Gun2.png",
+            this, 
+            target,
+            _type)
+    );
 }
 
 

@@ -60,7 +60,10 @@ Monster::~Monster()
 
 void Monster::Init()
 {
-    gun = new GunMinion(L"BulletKin_Gun.png", this, target, GunType::MINION);
+    gun = new GunMinion(L"BulletKin_Gun.png",
+        this, 
+        target, 
+        GunType::MINION);
     Character::Init();
     healPoint = 3;
     speed = 50.0f;

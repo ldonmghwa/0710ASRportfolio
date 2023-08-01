@@ -26,7 +26,7 @@
     <ClInclude Include="ASRBullet.h">
       <Filter>GameItem\CONSUM</Filter>
     </ClInclude>
-    <ClInclude Include="ASRGuided.h">
+    <ClInclude Include="BulletGuided.h">
       <Filter>GameItem\CONSUM</Filter>
     </ClInclude>
     <ClInclude Include="GunBasic.h">
@@ -50,6 +50,9 @@
     <ClInclude Include="ASRGun.h">
       <Filter>GameItem\WEAPON</Filter>
     </ClInclude>
+    <ClInclude Include="BulletMinion.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -72,7 +75,7 @@
     <ClCompile Include="ASRBullet.cpp">
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
-    <ClCompile Include="ASRGuided.cpp">
+    <ClCompile Include="BulletGuided.cpp">
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
     <ClCompile Include="GunBasic.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="ASRGun.cpp">
       <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletMinion.cpp">
+      <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
