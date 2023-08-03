@@ -2,6 +2,7 @@
 
 Monster::Monster() : Character()
 {
+
     monsterType = MTType::MTMINION;
     resizeValue = 2.5f;
     charImg[(int)CRState::IDLE] = new ObImage(L"BulletKin_Idle.png");
@@ -67,8 +68,8 @@ void Monster::Init()
     Character::Init();
     healPoint = 3;
     speed = 50.0f;
-    attackRange = 300.0f;
-    detectionRange = 400.0f; 
+    attackRange = 400.0f;
+    detectionRange = 500.0f; 
     shootingInterval = 2.0f;
     source = col->GetWorldPos();
     dest = col->GetWorldPos();
@@ -138,18 +139,12 @@ void Monster::Update()
 
 void Monster::Render()
 {
-    gun->Render();
     Character::Render();
 }
 
 void Monster::GoBack()
 {
     Character::GoBack();
-}
-
-void Monster::SearchPlayer()
-{
-
 }
 
 void Monster::LookTarget(Vector2 target)

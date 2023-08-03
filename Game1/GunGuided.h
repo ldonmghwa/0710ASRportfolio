@@ -2,9 +2,12 @@
 class GunGuided : public ASRGun
 {
 private:
-	ObLine* crossLineX;
-	ObLine* crossLineY;
+	ObRect* crossLineX;
+	ObRect* crossLineY;
 	Vector2 destPos;
+public:
+	float	aimingTime;
+	float	backUpAimingTime;
 public:
 	GunGuided(wstring _wstr,
 		Character* _player,
@@ -15,6 +18,7 @@ public:
 	void Update() override;
 	void Render() override;
 
-	void FireBullet(Vector2 _destPos);
+	void FireBullet();
+	void FireBullet(Character* _destPos);
 };
 

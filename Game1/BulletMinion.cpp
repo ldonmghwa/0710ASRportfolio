@@ -5,6 +5,7 @@ BulletMinion::BulletMinion(wstring _wstr,
     float _power, 
     wstring _deathImg) : ASRBullet(_wstr, _shooter, _power, _deathImg)
 {
+    damagePoint = 1;
     distance = 500.0f;
     deathImg->scale.x = deathImg->imageSize.x / 8.0f * resizeScale;
     deathImg->scale.y = deathImg->imageSize.y * resizeScale;

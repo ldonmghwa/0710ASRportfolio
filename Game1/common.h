@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <conio.h>
 #include "Item.h"
 #include "ASRBullet.h"
 #include "BulletGuided.h"
@@ -13,4 +14,6 @@
 #include "GUIStruct.h"
 #include "Character.h"
 #include "Player.h"
+#include "Boss.h"
 #include "Monster.h"
+

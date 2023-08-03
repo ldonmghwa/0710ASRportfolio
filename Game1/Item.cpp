@@ -1,6 +1,7 @@
 #include "common.h"
 Item::Item()
 {
+	isVisible = true;
 	col = new ObRect();
 }
 Item::~Item()
@@ -16,4 +17,9 @@ void Item::Update()
 void Item::Render()
 {
 	col->Render();
+}
+
+void Item::Render(Camera* uicam)
+{
+	col->Render(uicam);
 }

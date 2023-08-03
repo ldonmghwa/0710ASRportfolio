@@ -176,17 +176,29 @@ void Player::Init()
             target, 
             GunType::BASIC)
     );
-    gunVector[0]->VisibleOff();
+    gunVector.push_back(
+        new GunGuided(
+            L"Convict_Gun2.png",
+            this,
+            target,
+            GunType::GUIDE)
+    );
+    gunVector[0]->isVisible = false;
+    gunVector[1]->isVisible = false;
+    gunVector[0]->Update();
+    gunVector[1]->Update();
     healPoint = 6;
     speed = 300.0f;
     backUpSpeed = speed;
     gunNum = 1;
     isCarryWP = false;
+    isAiming = false;
+    isGunReloading = false;
     selectWPNum = 0;
+    clickcount = 0;
     rollWeight = 0.0f;
     backUpRollWeight = rollWeight;
     rollWeightScale = 0.05f;
-    gunVector[selectWPNum]->VisibleOff();
 }
 
 void Player::Control()
@@ -220,12 +232,38 @@ void Player::Update()
 {
     lastPos = col->GetWorldPos();
     CAM->position = col->GetWorldPos();
-    gunVector[selectWPNum]->Update();
+    for (auto it = gunVector.begin(); it != gunVector.end(); it++) (*it)->Update();
     Character::Update();
-
-    if (gunVector[selectWPNum]->GetIsCylinderEmpty() and gunVector[selectWPNum]->isReloading) {
-        plgui->ReLoadingBulletBar(reloadPerSec, backUpReloadPerSec);
-        gunVector[selectWPNum]->GunReLoading();
+    ImGui::Text("%d", gunVector[selectWPNum]->isAiming);
+    /*if (_kbhit()) {
+        if ((_getch() >= selectWPNum + '0' and
+            _getch() <= selectWPNum + '9') and (state != CRState::ROLL)) {
+            if (_getch() != selectWPNum + '0') {
+                if (state == CRState::IDLE) state = CRState::IDLEWP;
+                else if (state == CRState::WALK) state = CRState::WALKWP;
+                isCarryWP = true;
+                gunVector[selectWPNum]->isVisible = false;
+                selectWPNum = _getch() - '0' - 1;
+                gunVector[selectWPNum]->isVisible = true;
+                plgui->ChangeGun(gunVector[selectWPNum]->GetBulletNum());
+            }
+            else {
+                gunVector[selectWPNum]->isVisible = false;
+                isCarryWP = false;
+                if (state == CRState::IDLEWP) {
+                    state = CRState::IDLE;
+                    charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                }
+                else if (state == CRState::WALKWP) {
+                    state = CRState::WALK;
+                    charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                }
+            }
+        }
+    }*/
+    if (gunVector[selectWPNum]->GetIsCylinderEmpty() 
+        and gunVector[selectWPNum]->isReloading) {
+        gunVector[selectWPNum]->GunReLoading(isGunReloading);
     }
     
     if (state == CRState::IDLE)
@@ -239,24 +277,26 @@ void Player::Update()
             state = CRState::WALK;
             charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
-        if (INPUT->KeyDown('1')) {
-            selectWPNum = '1' - '0' - 1;
-            isCarryWP = true;
-            gunVector[selectWPNum]->VisibleOn();
-            reloadPerSec = (gunVector[selectWPNum]->GetReloadTime()-0.1f)/gunVector[selectWPNum]->GetBulletNum();
-            backUpReloadPerSec = reloadPerSec;
-            state = CRState::IDLEWP;
-            charImg[(int)CRState::IDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-        }
-        if (INPUT->KeyDown('2')) {
-            if (gunVector.size() >= '2' - '0') {
-                selectWPNum = '2' - '0' - 1;
+        if (!isGunReloading) {
+            if (INPUT->KeyDown('1')) {
+                selectWPNum = '1' - '0' - 1;
                 isCarryWP = true;
-                gunVector[selectWPNum]->VisibleOn();
+                gunVector[selectWPNum]->isVisible = true;
                 reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
                 backUpReloadPerSec = reloadPerSec;
                 state = CRState::IDLEWP;
                 charImg[(int)CRState::IDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+            }
+            if (INPUT->KeyDown('2')) {
+                if (gunVector.size() >= '2' - '0') {
+                    selectWPNum = '2' - '0' - 1;
+                    isCarryWP = true;
+                    gunVector[selectWPNum]->isVisible = true;
+                    reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
+                    backUpReloadPerSec = reloadPerSec;
+                    state = CRState::IDLEWP;
+                    charImg[(int)CRState::IDLEWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                }
             }
         }
     }
@@ -270,23 +310,35 @@ void Player::Update()
             charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
-            plgui->ConsumeBullet(gunVector[selectWPNum]->GetIsCylinderEmpty());
+            if (gunVector[selectWPNum]->GetGunType() == GunType::BASIC) {
+                gunVector[selectWPNum]->FireBullet();
+            }
+            else if (gunVector[selectWPNum]->GetGunType() == GunType::GUIDE
+                and isAiming) {
+                isAiming = false;
+            }
+        }
+        if (INPUT->KeyDown('Q')) {
+            isAiming = true;
             if (gunVector[selectWPNum]->GetGunType() == GunType::GUIDE) {
                 gunVector[selectWPNum]->FireBullet();
             }
         }
         if (INPUT->KeyDown('R')) {
-            if (gunVector[selectWPNum]->GetIsCylinderEmpty())gunVector[selectWPNum]->isReloading = true;
+            if (gunVector[selectWPNum]->GetIsCylinderEmpty()) {
+                gunVector[selectWPNum]->isReloading = true;
+                isGunReloading = true;
+            }
         }
-        if (isCarryWP) {
+        if (isCarryWP and !isGunReloading) {
             if (INPUT->KeyDown('1')) {
                 if (selectWPNum != '1' - '0' - 1) {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     selectWPNum = '1' - '0' - 1;
-                    gunVector[selectWPNum]->VisibleOn();
+                    gunVector[selectWPNum]->isVisible = true; 
                 }
                 else {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     isCarryWP = false;
                     state = CRState::IDLE;
                     charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
@@ -294,12 +346,12 @@ void Player::Update()
             }
             if (INPUT->KeyDown('2')) {
                 if (selectWPNum != '2' - '0' - 1) {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     selectWPNum = '2' - '0' - 1;
-                    gunVector[selectWPNum]->VisibleOn();
+                    gunVector[selectWPNum]->isVisible = true;
                 }
                 else {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     isCarryWP = false;
                     state = CRState::IDLE;
                     charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
@@ -330,7 +382,7 @@ void Player::Update()
         }
         if (INPUT->KeyDown('1')) {
             selectWPNum = '1' - '0' - 1;
-            gunVector[selectWPNum]->VisibleOn();
+            gunVector[selectWPNum]->isVisible = true;
             isCarryWP = true;
             reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
             backUpReloadPerSec = reloadPerSec;
@@ -341,7 +393,7 @@ void Player::Update()
             if (gunVector.size() >= '2' - '0') {
                 selectWPNum = '2' - '0' - 1;
                 isCarryWP = true;
-                gunVector[selectWPNum]->VisibleOn();
+                gunVector[selectWPNum]->isVisible = true;
                 reloadPerSec = (gunVector[selectWPNum]->GetReloadTime() - 0.1f) / gunVector[selectWPNum]->GetBulletNum();
                 backUpReloadPerSec = reloadPerSec;
                 state = CRState::WALKWP;
@@ -365,27 +417,41 @@ void Player::Update()
         {
             isInvincible = true;
             backUpDashPoint = col->GetWorldPos();
-            gunVector[selectWPNum]->VisibleOff();
+            gunVector[selectWPNum]->isVisible = false;
             state = CRState::ROLL;
             charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
             rollTime = 0.0f;
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
-            plgui->ConsumeBullet(gunVector[selectWPNum]->GetIsCylinderEmpty());
-            gunVector[selectWPNum]->FireBullet();
+            if (gunVector[selectWPNum]->GetGunType() == GunType::BASIC) {
+                gunVector[selectWPNum]->FireBullet();
+            }
+            else if (gunVector[selectWPNum]->GetGunType() == GunType::GUIDE
+                and isAiming) {
+                isAiming = false;
+            }
+        }
+        if (INPUT->KeyDown('Q')) {
+            isAiming = true;
+            if (gunVector[selectWPNum]->GetGunType() == GunType::GUIDE) {
+                gunVector[selectWPNum]->FireBullet();
+            }
         }
         if (INPUT->KeyDown('R')) {
-            if (gunVector[selectWPNum]->GetIsCylinderEmpty())gunVector[selectWPNum]->isReloading = true;
+            if (gunVector[selectWPNum]->GetIsCylinderEmpty()) {
+                isGunReloading = true;
+                gunVector[selectWPNum]->isReloading = true;
+            }
         }
-        if (isCarryWP) {
+        if (isCarryWP and !isGunReloading) {
             if (INPUT->KeyDown('1')) {
                 if (selectWPNum != '1' - '0' - 1) {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     selectWPNum = '1' - '0' - 1;
-                    gunVector[selectWPNum]->VisibleOn();
+                    gunVector[selectWPNum]->isVisible = true;
                 }
                 else {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     isCarryWP = false;
                     state = CRState::WALK;
                     charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
@@ -393,12 +459,12 @@ void Player::Update()
             }
             if (INPUT->KeyDown('2')) {
                 if (selectWPNum != '2' - '0' - 1) {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     selectWPNum = '2' - '0' - 1;
-                    gunVector[selectWPNum]->VisibleOn();
+                    gunVector[selectWPNum]->isVisible = true;
                 }
                 else {
-                    gunVector[selectWPNum]->VisibleOff();
+                    gunVector[selectWPNum]->isVisible = false;
                     isCarryWP = false;
                     state = CRState::WALK;
                     charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
@@ -421,10 +487,9 @@ void Player::Update()
             rollWeight = backUpRollWeight;
             speed = backUpSpeed;
             if (isCarryWP) {
-                gunVector[selectWPNum]->VisibleOn();
+                gunVector[selectWPNum]->isVisible = true;
                 state = CRState::IDLEWP;
                 charImg[(int)CRState::WALKWP]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-
             }
             else {
                 state = CRState::IDLE;
@@ -444,7 +509,7 @@ void Player::Update()
 
 void Player::Render()
 {
-    gunVector[selectWPNum]->Render();
+    for (auto it = gunVector.begin(); it != gunVector.end(); it++) (*it)->Render();
     Character::Render();
 }
 
@@ -491,8 +556,12 @@ void Player::GoBack()
     Character::GoBack();
 }
 
-void Player::TakeDamage()
+void Player::NumberKeyInput()
 {
-    Character::TakeDamage();
+}
+
+void Player::TakeDamage(int _damagePoint)
+{
+    Character::TakeDamage(_damagePoint);
     plgui->ReduceHPBar();
 }

@@ -4,6 +4,7 @@
 
 MainGameScene::MainGameScene()
 {
+	LIGHT->radius = 10000.0f;
 	map = new ObTileMap();
 	map->file = "asrMap.txt";
 	map->Load();
@@ -116,7 +117,7 @@ void MainGameScene::LateUpdate()
 		if ((*it)->Intersect(plConvict->GetCol())) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
-				//plConvict->GetFromChest((*it)->GetItemType());
+				plConvict->GetFromChest((*it)->GetItemType());
 				break;
 			}
 		}

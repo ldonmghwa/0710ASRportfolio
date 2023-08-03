@@ -2,17 +2,17 @@
 class Item
 {
 protected:
-	ObImage* img;
-	ObRect* col;
+	ObImage*			img;
+	ObRect*				col;
 	enum class ItemType type;
+public:
+	bool				isVisible;
 public:
 	Item();
 	~Item();
 	virtual void Update();
 	virtual void Render();
-
-	void VisibleOff() { img->isVisible = false; col->isVisible = false; }
-	void VisibleOn() { img->isVisible = true; col->isVisible = true; }
+	virtual void Render(Camera* uicam);
 	ObRect* GetCol() { return col; }
 };
 

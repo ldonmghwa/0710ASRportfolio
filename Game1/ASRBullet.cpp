@@ -8,9 +8,9 @@ ASRBullet::ASRBullet(wstring _wstr,
 {
     isFire = true;
     isHitting = false;
-    isRending = false;
+    damagePoint = 1;
     pressPower = _power;
-    resizeScale = 1.5f;
+    resizeScale = 2.0f;
     sourcePos = _shooter->GetWorldPos();
     fireDir = _shooter->GetRight();
     type = ItemType::CONSUM;
@@ -59,25 +59,35 @@ void ASRBullet::Fire(Vector2 sourPos, Vector2 dir, float pressPower)
 
 void ASRBullet::Update()
 {
-    if (isHitting) deathImg->Update();
-    if (not isFire) return;
-    Vector2 velocity = (fireDir * pressPower);
-    col->MoveWorldPos(velocity * DELTA);
-    col->rotation.z = atan2f(velocity.y, velocity.x);
-    Item::Update();
-    img->Update();
-    
+    //if (isVisible) {
+        if (isHitting) deathImg->Update();
+        if (not isFire) return;
+        Vector2 velocity = (fireDir * pressPower);
+        col->MoveWorldPos(velocity * DELTA);
+        col->rotation.z = atan2f(velocity.y, velocity.x);
+        Item::Update();
+        img->Update();
+    //}
 }
 
 void ASRBullet::Render()
 {
-    if (isHitting) deathImg->Render();
-    if (not isFire) return;
-    Item::Render();
-    img->Render();
-    
+    //if (isVisible) {
+        if (isHitting) deathImg->Render();
+        if (not isFire) return;
+        Item::Render();
+        img->Render();
+    //}
 }
-
+void ASRBullet::Render(Camera* uicam)
+{
+    if (isVisible) {
+        if (isHitting) deathImg->Render();
+        if (not isFire) return;
+        Item::Render(uicam);
+        img->Render(uicam);
+    }
+}
 bool ASRBullet::IsBulletReach()
 {
     if ((col->GetWorldPos() - sourcePos).Length() > distance) {
@@ -93,7 +103,7 @@ void ASRBullet::IsBulletReach(vector<Character*> target)
         if (target[i]->isInvincible) continue;
         if (target[i]->healPoint <= 0) continue;
         if (col->Intersect(target[i]->GetCol()) && !isHitting) {        
-            target[i]->TakeDamage();
+            target[i]->TakeDamage(this->damagePoint);
             isHitting = true;
             isFire = false;
         }

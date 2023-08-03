@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="ASRBullet.h" />
     <ClInclude Include="ASRChest.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="BulletGuided.h" />
     <ClInclude Include="ASRGun.h" />
     <ClInclude Include="BulletMinion.h" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <ClCompile Include="ASRBullet.cpp" />
     <ClCompile Include="ASRChest.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BulletGuided.cpp" />
     <ClCompile Include="ASRGun.cpp" />
     <ClCompile Include="BulletMinion.cpp" />

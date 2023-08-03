@@ -81,18 +81,13 @@ struct BBBar {
 struct CLBar {
 	ObImage* cylinderBar[2];
 	int cBarState;
-	CLBar(GunType bulletType) {
+	CLBar() {
 		cBarState = 1;
-		if (bulletType == GunType::BASIC) {
-			cylinderBar[0] = new ObImage(L"BasicBulletFull.png");
-			cylinderBar[1] = new ObImage(L"BasicBulletZero.png");
-			for (int i = 0; i < 2; i++) {
-				cylinderBar[i]->scale.x = cylinderBar[i]->imageSize.x * 0.8f;
-				cylinderBar[i]->scale.y = cylinderBar[i]->imageSize.y * 0.8f;
-			}
-		}
-		else if (bulletType == GunType::GUIDE) {
-
+		cylinderBar[0] = new ObImage(L"BasicBulletFull.png");
+		cylinderBar[1] = new ObImage(L"BasicBulletZero.png");
+		for (int i = 0; i < 2; i++) {
+			cylinderBar[i]->scale.x = cylinderBar[i]->imageSize.x * 0.8f;
+			cylinderBar[i]->scale.y = cylinderBar[i]->imageSize.y * 0.8f;
 		}
 	}
 	~CLBar() {

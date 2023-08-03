@@ -10,8 +10,11 @@ private:
 	Vector2					backUpDashPoint;
 
 	bool					isCarryWP;
+	bool					isAiming;
+	bool					isGunReloading;
 	int						gunNum;
 	int						selectWPNum;
+	int clickcount;
 
 	float					rollTime;
 	float					reloadPerSec;
@@ -30,7 +33,8 @@ public:
 	void Render();
 
 	void GoBack();
-	void TakeDamage() override;
+	void NumberKeyInput();
+	void TakeDamage(int _damagePoint) override;
 	void LookTarget(Vector2 target);
 	void GetFromChest(GunType _type);
 	void SetGui(class GameGUI* _plgui) { plgui = _plgui; }

@@ -6,11 +6,25 @@ GunBasic::GunBasic(wstring _wstr,
 	GunType _type)
 	: ASRGun(_wstr, _player, _target, _type)
 {
+	isClbarAvailable = true;
 	bulletNum = 10;
-	curBulletNum = bulletNum;
+	curBulletNum = bulletNum; 
+	curCLIdx = curBulletNum - 1;
+
 	bulletPower = 400.0f;
-	backUpReloadTime = 2.0f;
 	reloadTime = 2.0f;
+	backUpReloadTime = reloadTime;
+	reloadPerSec = (reloadTime - 0.1f) / bulletNum;
+	backUpReloadPerSec = reloadPerSec;
+
+	cylinderBarTP[0] = new ObImage(L"CylinderUp.png");
+	cylinderBarTP[1] = new ObImage(L"CylinderDown.png");
+	for (int i = 0; i < 2; i++) {
+		cylinderBarTP[i]->scale.x = cylinderBarTP[i]->imageSize.x;
+		cylinderBarTP[i]->scale.y = cylinderBarTP[i]->imageSize.y;
+	}
+
+	for (int i = 0; i < bulletNum; i++) clbarList.push_back(new CLBar());
 }
 
 GunBasic::~GunBasic()

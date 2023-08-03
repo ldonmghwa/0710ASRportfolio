@@ -1,7 +1,7 @@
 #pragma once
 class Monster : public Character
 {
-private:
+protected:
 	enum class MTType monsterType;
 	class GunMinion* gun;
 
@@ -22,7 +22,6 @@ public:
 	void Render();
 
 	void GoBack();
-	void SearchPlayer();
 	void LookTarget(Vector2 target);
 	
 	class GunMinion* GetGun() { return gun; }

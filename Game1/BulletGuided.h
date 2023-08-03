@@ -2,10 +2,10 @@
 class BulletGuided : public ASRBullet
 {
 private:
-	Vector2 destPos;
+	class Character* target;
 public:
 	BulletGuided(wstring _wstr, 
-		Vector2 _destPos, 
+		Character* _target,
 		GameObject* _shooter, 
 		float _power,
 		wstring _deathImg);

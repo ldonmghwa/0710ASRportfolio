@@ -6,11 +6,14 @@ GunMinion::GunMinion(wstring _wstr,
 	GunType _type)
 	: ASRGun(_wstr, _player, _target, _type)
 {
-	bulletNum = 10;
+	isClbarAvailable = false;
+	bulletNum = 3;
 	curBulletNum = bulletNum;
-	bulletPower = 200.0f;
-	backUpReloadTime = 3.0f;
-	reloadTime = 3.0f;
+	bulletPower = 100.0f;
+	reloadTime = 5.0f;
+	backUpReloadTime = reloadTime;
+	reloadPerSec = (reloadTime - 0.1f) / bulletNum;
+	backUpReloadPerSec = reloadPerSec;
 }
 
 GunMinion::~GunMinion()

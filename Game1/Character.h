@@ -40,7 +40,7 @@ public:
 	virtual void Attack();
 	virtual void LookTarget(Vector2 target);
 
-	virtual void TakeDamage();
+	virtual void TakeDamage(int _damagePoint);
 	void SetSpawnPos(Vector2 spawn){
 		col->SetWorldPosX(spawn.x);
 		col->SetWorldPosY(spawn.y);

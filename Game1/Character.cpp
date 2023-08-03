@@ -56,9 +56,9 @@ void Character::LookTarget(Vector2 target)
 	if (index == 8) index = 0;
 }
 
-void Character::TakeDamage()
+void Character::TakeDamage(int _damagePoint)
 {
-	healPoint--;
+	healPoint -= _damagePoint;
 }
 
 Vector2 Character::GetFoot()
