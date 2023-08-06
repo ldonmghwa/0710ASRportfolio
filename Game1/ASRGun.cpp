@@ -46,7 +46,7 @@ void ASRGun::Update()
 {
 	for (int i = 0;
 		i < bulletCylinder.size(); i++) {
-		if (!bulletCylinder[i]->GetIsFire() && bulletCylinder[i]->GetDeathImgAniStop()) {
+		if (!bulletCylinder[i]->GetIsFire()&& bulletCylinder[i]->GetDeathImgAniStop()) {
 			bulletCylinder.erase(bulletCylinder.begin() + i);
 			break;
 		}
@@ -86,7 +86,10 @@ void ASRGun::Update()
 
 void ASRGun::Render()
 {
-	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) (*it)->Render();
+	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++)
+	{
+		(*it)->Render();
+	}
 	if (isVisible) {
 		if (isClbarAvailable) {
 			for (auto it = clbarList.begin(); it != clbarList.end(); it++) {

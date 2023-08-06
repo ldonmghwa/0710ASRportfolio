@@ -13,6 +13,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual void Render(Camera* uicam);
-	ObRect* GetCol() { return col; }
+	ObRect* GetCol() { return col; }	
 };
 

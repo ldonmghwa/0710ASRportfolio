@@ -20,10 +20,10 @@ BulletGuided::~BulletGuided()
 
 void BulletGuided::Update()
 {
+    
     if (isVisible) {
         if (isHitting) deathImg->Update();
         if (not isFire) return;
-        cout << target->GetCol()->GetWorldPos().x << ", " << target->GetCol()->GetWorldPos().y << endl;
         Vector2 velocity1 = (target->GetCol()->GetWorldPos() - col->GetWorldPos());
         velocity1.Normalize();
         Vector2 velocity = velocity1 * pressPower;

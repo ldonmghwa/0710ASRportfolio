@@ -8,6 +8,7 @@ private:
 	vector<class ASRGun*>	gunVector;
 
 	Vector2					backUpDashPoint;
+	Vector2					rollDistance;
 
 	bool					isCarryWP;
 	bool					isAiming;
@@ -23,8 +24,8 @@ private:
 	float					rollWeightScale;
 	float					backUpRollWeight;
 public:
-	Player();
-	Player(PLType _type);
+	Player(string _name);
+	Player(string _name, PLType _type);
 	~Player();
 
 	void Init();

@@ -9,6 +9,7 @@ protected:
 	ObImage*			charImg[(int)CRState::SIZE];
 	ObTileMap*			tileMap;
 
+	string				charName;
 	Vector2				lastPos;
 	Vector2				controlDir;
 	Vector2				dir2;
@@ -26,7 +27,7 @@ public:
 	bool				isInvincible;
 	int					healPoint;
 public:
-	Character();
+	Character(string _name);
 	~Character();
 
 	ObRect* GetCol() { return col; }

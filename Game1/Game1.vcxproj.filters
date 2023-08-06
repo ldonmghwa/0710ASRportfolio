@@ -56,6 +56,15 @@
     <ClInclude Include="Boss.h">
       <Filter>GameCharacter\MONSTER</Filter>
     </ClInclude>
+    <ClInclude Include="GunBoss.h">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletBoss.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletBossGuided.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -107,6 +116,15 @@
     </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>GameCharacter\MONSTER</Filter>
+    </ClCompile>
+    <ClCompile Include="GunBoss.cpp">
+      <Filter>GameItem\WEAPON</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBoss.cpp">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBossGuided.cpp">
+      <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

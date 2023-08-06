@@ -7,12 +7,13 @@ protected:
 	ObImage*	deathImg;
 
 	bool		isFire;
-	bool		isHitting;
 
 	int			damagePoint;
 	float		pressPower;
 	float		distance;
 	float		resizeScale;
+public:
+	bool		isHitting;
 public:
 	Vector2		sourcePos;
 	ASRBullet(wstring _wstr, GameObject* _shooter, float _power, wstring _deathImg);
@@ -27,6 +28,6 @@ public:
 	bool GetIsFire() { return isFire; }
 	bool GetDeathImgAniStop() { return deathImg->isAniStop(); }
 	bool IsBulletReach();
-	void IsBulletReach(vector<class Character*> target);
+	void IsBulletReach(vector<class Character*> target);	
 };
 

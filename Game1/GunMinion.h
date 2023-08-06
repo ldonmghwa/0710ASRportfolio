@@ -12,6 +12,5 @@ public:
 	void Render() override;
 
 	void FireBullet() override;
-
 };
 

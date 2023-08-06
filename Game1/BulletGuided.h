@@ -1,7 +1,7 @@
 #pragma once
 class BulletGuided : public ASRBullet
 {
-private:
+protected:
 	class Character* target;
 public:
 	BulletGuided(wstring _wstr, 
@@ -12,6 +12,6 @@ public:
 	~BulletGuided();
 
 	void Update();
-	void Render() override;
+	void Render();
 };
 

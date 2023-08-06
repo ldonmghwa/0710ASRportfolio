@@ -195,6 +195,15 @@ void ASRMap::MappingBspTree()
 			}
 		}
 	}
+	asrMap->SetTile(
+		0,
+		Int2(realMapVector[1]->value.room.middlePoint.x - 1,
+			realMapVector[1]->value.room.vertex[1].y - 1),
+		Int2(5, 3),
+		0,
+		TILE_MBSPAWN,
+		Color(0.0f, 1.0f, 0.0f, 0.5f)
+	);
 
 	asrMap->SetTile(
 		0,

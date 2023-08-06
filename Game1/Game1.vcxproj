@@ -22,6 +22,8 @@
     <ClInclude Include="ASRBullet.h" />
     <ClInclude Include="ASRChest.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BulletBoss.h" />
+    <ClInclude Include="BulletBossGuided.h" />
     <ClInclude Include="BulletGuided.h" />
     <ClInclude Include="ASRGun.h" />
     <ClInclude Include="BulletMinion.h" />
@@ -30,6 +32,7 @@
     <ClInclude Include="GameGUI.h" />
     <ClInclude Include="GUIStruct.h" />
     <ClInclude Include="GunBasic.h" />
+    <ClInclude Include="GunBoss.h" />
     <ClInclude Include="GunGuided.h" />
     <ClInclude Include="GunMinion.h" />
     <ClInclude Include="IntroScene.h" />
@@ -45,12 +48,15 @@
     <ClCompile Include="ASRBullet.cpp" />
     <ClCompile Include="ASRChest.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BulletBoss.cpp" />
+    <ClCompile Include="BulletBossGuided.cpp" />
     <ClCompile Include="BulletGuided.cpp" />
     <ClCompile Include="ASRGun.cpp" />
     <ClCompile Include="BulletMinion.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameGUI.cpp" />
     <ClCompile Include="GunBasic.cpp" />
+    <ClCompile Include="GunBoss.cpp" />
     <ClCompile Include="GunGuided.cpp" />
     <ClCompile Include="GunMinion.cpp" />
     <ClCompile Include="IntroScene.cpp" />

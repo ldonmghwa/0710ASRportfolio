@@ -8,12 +8,13 @@ protected:
 	float attackRange;
 	float detectionRange;
 	float shootingInterval;
+	float backUpShootingInterval;
 	float weight;
 
 	Vector2 dest;
 	Vector2 source;
 public:
-	Monster();
+	Monster(string _name, bool _isBoss);
 	~Monster();
 
 	void Init();

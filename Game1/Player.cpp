@@ -1,7 +1,7 @@
 #include "common.h"
 
-Player::Player()
-    : Character()
+Player::Player(string _name)
+    : Character(_name)
 {
     resizeValue = 3.0f;
     playerType = PLType::PLCONVICT;
@@ -69,8 +69,8 @@ Player::Player()
     dirFrame[7] = 3;
 }
 
-Player::Player(PLType _type) 
-    : Character()
+Player::Player(string _name, PLType _type)
+    : Character(_name)
 {
     resizeValue = 3.0f;
     if (_type == PLType::PLCONVICT)
@@ -187,18 +187,22 @@ void Player::Init()
     gunVector[1]->isVisible = false;
     gunVector[0]->Update();
     gunVector[1]->Update();
-    healPoint = 6;
+    healPoint = 20000;
     speed = 300.0f;
     backUpSpeed = speed;
     gunNum = 1;
     isCarryWP = false;
     isAiming = false;
     isGunReloading = false;
+    isInvincible = false;
     selectWPNum = 0;
     clickcount = 0;
     rollWeight = 0.0f;
     backUpRollWeight = rollWeight;
-    rollWeightScale = 0.05f;
+    rollWeightScale = 0.005f;
+    float rollDistanceVector = 250.0f;
+    rollDistance = Vector2(rollDistanceVector, rollDistanceVector);
+    rollDistance.Normalize();
 }
 
 void Player::Control()
@@ -234,7 +238,6 @@ void Player::Update()
     CAM->position = col->GetWorldPos();
     for (auto it = gunVector.begin(); it != gunVector.end(); it++) (*it)->Update();
     Character::Update();
-    ImGui::Text("%d", gunVector[selectWPNum]->isAiming);
     /*if (_kbhit()) {
         if ((_getch() >= selectWPNum + '0' and
             _getch() <= selectWPNum + '9') and (state != CRState::ROLL)) {
@@ -377,7 +380,7 @@ void Player::Update()
             isInvincible = true;
             backUpDashPoint = col->GetWorldPos();
             state = CRState::ROLL;
-            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
             rollTime = 0.0f;
         }
         if (INPUT->KeyDown('1')) {
@@ -419,7 +422,7 @@ void Player::Update()
             backUpDashPoint = col->GetWorldPos();
             gunVector[selectWPNum]->isVisible = false;
             state = CRState::ROLL;
-            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+            charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
             rollTime = 0.0f;
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
@@ -475,11 +478,10 @@ void Player::Update()
     else if (state == CRState::ROLL)
     {
         rollTime += DELTA;
-        rollWeight += DELTA * rollWeightScale;
-        Vector2 rollDistance = Vector2(300.0f, 300.0f);
-        rollDistance.Normalize();
-        col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , backUpDashPoint + Vector2(150.0f, 150.0f)* controlDir, rollWeight));
+        //rollWeight += DELTA * rollWeightScale;
+        /*col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
+            , backUpDashPoint + rollDistance * controlDir, rollWeight));*/
+        col->MoveWorldPos(500.0f * controlDir * DELTA);
         LookTarget(col->GetWorldPos() + controlDir);
         if (charImg[(int)CRState::ROLL]->isAniStop())
         {
@@ -498,6 +500,8 @@ void Player::Update()
         }
     }
     else if (state == CRState::DEATH) {
+        //charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+        //charImg[(int)CRState::DEATH]->Update();
         if (INPUT->KeyDown('F')) {
             healPoint = 6;
             state = CRState::IDLE;        
@@ -551,7 +555,7 @@ void Player::GoBack()
 {
     if (INPUT->KeyDown(VK_RBUTTON)) {
         col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , backUpDashPoint + Vector2(300.0f, 300.0f) * controlDir, 0.001f));
+            , backUpDashPoint + rollDistance * controlDir, 0.001f));
     }
     Character::GoBack();
 }

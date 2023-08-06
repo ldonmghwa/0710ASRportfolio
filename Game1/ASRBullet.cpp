@@ -59,7 +59,7 @@ void ASRBullet::Fire(Vector2 sourPos, Vector2 dir, float pressPower)
 
 void ASRBullet::Update()
 {
-    //if (isVisible) {
+    if (isVisible) {
         if (isHitting) deathImg->Update();
         if (not isFire) return;
         Vector2 velocity = (fireDir * pressPower);
@@ -67,17 +67,17 @@ void ASRBullet::Update()
         col->rotation.z = atan2f(velocity.y, velocity.x);
         Item::Update();
         img->Update();
-    //}
+    }
 }
 
 void ASRBullet::Render()
 {
-    //if (isVisible) {
+    if (isVisible) {
         if (isHitting) deathImg->Render();
         if (not isFire) return;
         Item::Render();
         img->Render();
-    //}
+    }
 }
 void ASRBullet::Render(Camera* uicam)
 {
@@ -92,6 +92,7 @@ bool ASRBullet::IsBulletReach()
 {
     if ((col->GetWorldPos() - sourcePos).Length() > distance) {
         isFire = false;
+        deathImg->ChangeAnim(ANIMSTATE::STOP, 0.1f);
         return false;
     }
     else return true;
@@ -104,8 +105,8 @@ void ASRBullet::IsBulletReach(vector<Character*> target)
         if (target[i]->healPoint <= 0) continue;
         if (col->Intersect(target[i]->GetCol()) && !isHitting) {        
             target[i]->TakeDamage(this->damagePoint);
+            this->isVisible = false;
             isHitting = true;
-            isFire = false;
         }
     }
 }

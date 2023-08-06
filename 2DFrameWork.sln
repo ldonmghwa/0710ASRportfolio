@@ -28,6 +28,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Txt", "Txt", "{BC1DD457-26F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E1A-8E5E-46EE-82F6-D613BF3CD580}"
 	ProjectSection(SolutionItems) = preProject
+		Contents\Images\Agonizer_Attack.png = Contents\Images\Agonizer_Attack.png
+		Contents\Images\Agonizer_Bullet_Basic.png = Contents\Images\Agonizer_Bullet_Basic.png
+		Contents\Images\Agonizer_Bullet_Basic_Death_11x1.png = Contents\Images\Agonizer_Bullet_Basic_Death_11x1.png
+		Contents\Images\Agonizer_Bullet_Guided.png = Contents\Images\Agonizer_Bullet_Guided.png
+		Contents\Images\Agonizer_Bullet_Guided_Death.png = Contents\Images\Agonizer_Bullet_Guided_Death.png
+		Contents\Images\Agonizer_Death.png = Contents\Images\Agonizer_Death.png
+		Contents\Images\Agonizer_Gun.png = Contents\Images\Agonizer_Gun.png
+		Contents\Images\Agonizer_Idle.png = Contents\Images\Agonizer_Idle.png
 		Contents\Images\BasicBulletFull.png = Contents\Images\BasicBulletFull.png
 		Contents\Images\BasicBulletZero.png = Contents\Images\BasicBulletZero.png
 		Contents\Images\BlankBulletFull.png = Contents\Images\BlankBulletFull.png

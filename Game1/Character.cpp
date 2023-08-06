@@ -1,8 +1,9 @@
 #include "common.h"
 
-Character::Character()
+Character::Character(string _name)
 {
 	col = new ObRect();
+	charName = _name;
 }
 
 Character::~Character()
@@ -17,6 +18,7 @@ void Character::Init()
 	isInvincible = false;
 	state = CRState::IDLE;
 	charImg[(int)state]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 }
 
 void Character::Control()
@@ -28,7 +30,8 @@ void Character::Update()
 	if (healPoint <= 0) {
 		isInvincible = true;
 		state = CRState::DEATH;
-		charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
+		//charImg[(int)CRState::DEATH]->frame.x = 1;
+		//
 	}
 	col->Update();
 	charImg[(int)state]->Update();

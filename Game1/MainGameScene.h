@@ -6,6 +6,7 @@ private:
 	vector<class ASRChest*> chestVector;
 	class GameGUI* gui;
 	class Player* plConvict;
+	class Boss*	boss;
 	vector<class Monster*> minionVector;
 	float fadeout = 0.0f;
 
