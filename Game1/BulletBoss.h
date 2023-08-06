@@ -3,7 +3,6 @@
 class BulletBoss : public ASRBullet
 {
 private:
-	
 	float				 bulletLifeTime;
 	float				 backUpBulletLifeTime;
 	enum class BossScene type;
@@ -20,7 +19,7 @@ public:
 
 	void Update();
 	void Render();
-
+	void Fire();
 	void SetBulletLifeTime(float _lifeTime) { bulletLifeTime = _lifeTime; }
 };
 

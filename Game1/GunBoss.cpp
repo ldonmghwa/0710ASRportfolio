@@ -80,21 +80,7 @@ void GunBoss::Update()
 			break;
 		}
 	}
-	/*if (mazeBullet.size() > 0) {
-		for (auto it = mazeBullet.begin(); it != mazeBullet.end(); it++) {
-			if ((*it)->isTimeOut) {
-				timeOutCount++;
-				mazeBullet.erase(it);
-				break;
-			}
-		}
-	}
-	if (mazeBullet.size() > 0) {
-		if (timeOutCount == mazeBullet.size()) {
-			mazeBullet.clear();
-			mazeBullet.shrink_to_fit();
-		}
-	}*/
+
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
 		(*it)->IsBulletReach(target);
 		(*it)->Update();
@@ -108,10 +94,10 @@ void GunBoss::Update()
 		if (mazeBullet.size() > 0) {
 			for (int i = 0; i < mazeBulletPos.size(); i++) {
 				for (int j = 0; j < mazeBulletPos.back().size(); j++) {
-					
+					if (mazeBulletPos[i][j] == '1') {
 						mazeBullet[i * mazeBulletPos.back().size() + j]->IsBulletReach(target);
 						mazeBullet[i * mazeBulletPos.back().size() + j]->Update();
-					
+					}
 				}
 			}
 		}
@@ -152,15 +138,17 @@ void GunBoss::MazeBullet()
 	int size;
 	for (int i = 0; i < mazeBulletPos.size(); i++) {
 		for (int j = 0; j < mazeBulletPos.back().size(); j++) {
-			mazeBullet.push_back(
-				new BulletBoss(L"Agonizer_Bullet_Basic.png",
-					this->col,
-					mazeBulletPower,
-					L"Agonizer_Bullet_Basic_Death_11x1.png",
-					3.0f,
-					BossScene::MAZE
-				)
-			); 
+			if (mazeBullet.size() != mazeBulletPos.size() * mazeBulletPos.back().size()) {
+				mazeBullet.push_back(
+					new BulletBoss(L"Agonizer_Bullet_Basic.png",
+						this->col,
+						mazeBulletPower,
+						L"Agonizer_Bullet_Basic_Death_11x1.png",
+						3.0f,
+						BossScene::MAZE
+					)
+				);
+			}
 			mazeBullet.back()->SetBulletLifeTime(0.416f * mazeBulletPos.size());
 			size = mazeBulletPos.back().size() / 2;
 			mazeBullet.back()->GetCol()->SetWorldPos(
@@ -175,6 +163,7 @@ void GunBoss::MazeBullet()
 			else {
 				mazeBullet.back()->isVisible = true;
 			}
+			mazeBullet.back()->Fire();
 		}
 	}
 }

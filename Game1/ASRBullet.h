@@ -10,6 +10,7 @@ protected:
 
 	int			damagePoint;
 	float		pressPower;
+	float		backUpPressPower;
 	float		distance;
 	float		resizeScale;
 public:

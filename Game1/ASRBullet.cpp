@@ -10,6 +10,7 @@ ASRBullet::ASRBullet(wstring _wstr,
     isHitting = false;
     damagePoint = 1;
     pressPower = _power;
+    backUpPressPower = pressPower;
     resizeScale = 2.0f;
     sourcePos = _shooter->GetWorldPos();
     fireDir = _shooter->GetRight();
