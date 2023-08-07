@@ -27,6 +27,7 @@ ASRBullet::ASRBullet(wstring _wstr,
     deathImg->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
 
     col->scale = img->scale;
+    col->isVisible = false;
     col->isFilled = false;
     col->SetWorldPos(_shooter->GetWorldPos());
     img->SetParentRT(*col);
@@ -60,8 +61,9 @@ void ASRBullet::Fire(Vector2 sourPos, Vector2 dir, float pressPower)
 
 void ASRBullet::Update()
 {
+    if (isHitting) 
+        deathImg->Update();
     if (isVisible) {
-        if (isHitting) deathImg->Update();
         if (not isFire) return;
         Vector2 velocity = (fireDir * pressPower);
         col->MoveWorldPos(velocity * DELTA);
@@ -73,12 +75,18 @@ void ASRBullet::Update()
 
 void ASRBullet::Render()
 {
+    if (isHitting)
+        deathImg->Render();
     if (isVisible) {
-        if (isHitting) deathImg->Render();
         if (not isFire) return;
         Item::Render();
         img->Render();
     }
+}
+void ASRBullet::Fire()
+{
+    pressPower = backUpPressPower;
+    isFire = true;
 }
 void ASRBullet::Render(Camera* uicam)
 {

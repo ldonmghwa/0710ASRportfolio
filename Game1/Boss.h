@@ -10,13 +10,18 @@ private:
 
 	float attackRange;
 	float detectionRange;
-	float shootingInterval;
-	float backUpShootingInterval;
+	float basicShootingInterval;
+	float backUpBasicShootingInterval;
+	float guidedShootingInterval;
+	float backUpGuidedShootingInterval;
+	float rotateShootingInterval;
+	float backUpRotateShootingInterval;
 
 	float shootSceneChangeTime;
 	float backUpShootSceneChangeTime;
 	float mazeBulletLifeTime;
 	float backUpMazeBulletLifeTime;
+	float incrementValue;
 
 	Vector2 dest;
 	Vector2 source;
@@ -31,6 +36,7 @@ public:
 	void Update();
 	void Render();
 
+	void TargetSearch();
 	void LookTarget(Vector2 target);
 };
 

@@ -37,6 +37,7 @@ Boss::Boss(string _name) : Character(_name)
     col->scale.x = charImg[(int)CRState::IDLE]->scale.x;
     col->scale.y = charImg[(int)CRState::IDLE]->scale.y;
     col->pivot = OFFSET_B;
+    col->isVisible = false;
     col->isFilled = false;
 
     dirFrame[0] = 0;
@@ -66,19 +67,25 @@ void Boss::Init()
         target,
         GunType::BOSS);
     Character::Init();
-    gun->shootScene[(int)BossScene::GUIDE] = true;
+    gun->shootScene[(int)BossScene::ROTATE] = true;
     isSetSpawning = true;
     healPoint = 100;
-    gun->shootSceneIdx = (int)BossScene::GUIDE;
+    gun->shootSceneIdx = (int)BossScene::ROTATE;
     speed = 70.0f;
+    backUpSpeed = speed;
     detectionRange = 900.0f;
     attackRange = detectionRange;
-    shootingInterval = 2.0f;
-    backUpShootingInterval = shootingInterval;
-    shootSceneChangeTime = 6.5f;
+    basicShootingInterval = 0.1f;
+    backUpBasicShootingInterval = basicShootingInterval;
+    guidedShootingInterval = 1.5f;
+    backUpGuidedShootingInterval = guidedShootingInterval;
+    rotateShootingInterval = 0.2f;
+    backUpRotateShootingInterval = rotateShootingInterval;
+    shootSceneChangeTime = 100.5f;
     backUpShootSceneChangeTime = shootSceneChangeTime;
-
-    mazeBulletLifeTime = 12.5f;
+    gun->guidedShootingInterval = guidedShootingInterval;
+    incrementValue = 10.0f;
+    mazeBulletLifeTime = 10.5f;
     backUpMazeBulletLifeTime = mazeBulletLifeTime;
     source = col->GetWorldPos();
     dest = col->GetWorldPos();
@@ -97,7 +104,7 @@ void Boss::Update()
     {
         LookTarget(target[0]->GetCol()->GetWorldPos());
         if ((col->GetWorldPos() - target[0]->GetCol()->GetWorldPos()).Length() < detectionRange) {
-            shootingInterval = backUpShootingInterval;
+            basicShootingInterval = backUpBasicShootingInterval;
             state = CRState::WALK;
             charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
@@ -130,44 +137,36 @@ void Boss::Update()
     }
     else if (state == CRState::HIT) {
         ImGui::Text("%d", gun->shootSceneIdx);
-        LookTarget(target[0]->GetCol()->GetWorldPos());
         Int2 monsterIdx;
         if (shootSceneChangeTime < 0) {
             gun->shootScene[gun->shootSceneIdx] = false;
             gun->shootSceneIdx += 1;
             if (gun->shootSceneIdx == (int)BossScene::SIZE)
                 gun->shootSceneIdx = (int)BossScene::BASIC;
+            if (speed != backUpSpeed) speed = backUpSpeed;
             gun->shootScene[gun->shootSceneIdx] = true;
-            shootingInterval = backUpShootingInterval;
+            basicShootingInterval = backUpBasicShootingInterval;
+            guidedShootingInterval = backUpGuidedShootingInterval;
             shootSceneChangeTime = backUpShootSceneChangeTime;
         }
         if (gun->shootScene[(int)BossScene::BASIC]) {
+            LookTarget(target[0]->GetCol()->GetWorldPos());
             shootSceneChangeTime -= DELTA;
-            shootingInterval -= DELTA;
-            if (shootingInterval < 0) {
-                shootingInterval = backUpShootingInterval;
-                gun->FireBullet();
+            basicShootingInterval -= DELTA;
+            
+            if (basicShootingInterval < 0) {
+                basicShootingInterval = backUpBasicShootingInterval;
+                gun->FireBullet(10.0f, 500.0f);
             }
-            if (tileMap->PathFinding(col->GetWorldPos(),
-                target[0]->GetCol()->GetWorldPos(),
-                targetWay)) {
-                if (targetWay.size() > 0) {
-                    Vector2 source = targetWay.back()->Pos;
-                    targetWay.pop_back();
-                    Vector2 dest = targetWay.back()->Pos;
-                    Vector2 dir = dest - source;
-                    dir.Normalize();
-                    col->MoveWorldPos(dir * speed * DELTA);
-                }
-            }
+            TargetSearch();
         }
         else if (gun->shootScene[(int)BossScene::MAZE]) {
             shootSceneChangeTime = backUpShootSceneChangeTime;
             mazeBulletLifeTime -= DELTA;
             this->col->SetWorldPos(spawnPos);
             if (isSetSpawning) {
-                target[0]->GetCol()->SetWorldPosX(spawnPos.x);
-                target[0]->GetCol()->SetWorldPosY(spawnPos.y - 700.0f);
+                target[0]->GetCol()->SetWorldPosX(spawnPos.x + 100.0f);
+                target[0]->GetCol()->SetWorldPosY(spawnPos.y - 750.0f);
                 gun->MazeBullet();
                 isSetSpawning = false;
             }
@@ -175,29 +174,32 @@ void Boss::Update()
                 gun->shootScene[gun->shootSceneIdx] = false;
                 gun->shootSceneIdx += 1;
                 gun->shootScene[gun->shootSceneIdx] = true;
-                shootingInterval = backUpShootingInterval;
+                isSetSpawning = true;
+                basicShootingInterval = backUpBasicShootingInterval;
                 mazeBulletLifeTime = backUpMazeBulletLifeTime;
             }
         }
-        else if (gun->shootScene[(int)BossScene::GUIDE]) {
+        else if (gun->shootScene[(int)BossScene::ROTATE]) {
+            speed = 200.0f;
             shootSceneChangeTime -= DELTA;
-            shootingInterval -= DELTA;
-            if (shootingInterval < 0) {
-                shootingInterval = backUpShootingInterval;
+            rotateShootingInterval -= DELTA;
+            //gun->GetCol()->rotation.z += incrementValue * DELTA;
+            //incrementValue += 0.5f;
+            if (rotateShootingInterval < 0) {
+                rotateShootingInterval = backUpRotateShootingInterval;
+                gun->RotateBullet(10.0f, 300.0f);
+            }
+            //TargetSearch();
+        }
+        else if (gun->shootScene[(int)BossScene::GUIDE]) {
+            LookTarget(target[0]->GetCol()->GetWorldPos());
+            shootSceneChangeTime -= DELTA;
+            guidedShootingInterval -= DELTA;
+            if (guidedShootingInterval < 0) {
+                guidedShootingInterval = backUpGuidedShootingInterval;
                 gun->GuideBullet(target[0]);
             }
-            if (tileMap->PathFinding(col->GetWorldPos(),
-                target[0]->GetCol()->GetWorldPos(),
-                targetWay)) {
-                if (targetWay.size() > 0) {
-                    Vector2 source = targetWay.back()->Pos;
-                    targetWay.pop_back();
-                    Vector2 dest = targetWay.back()->Pos;
-                    Vector2 dir = dest - source;
-                    dir.Normalize();
-                    col->MoveWorldPos(dir * speed * DELTA);
-                }
-            }
+            TargetSearch();
         }
     }
     else if (state == CRState::DEATH) {
@@ -213,6 +215,22 @@ void Boss::Render()
 {
     Character::Render();
     gun->Render();
+}
+
+void Boss::TargetSearch()
+{
+    if (tileMap->PathFinding(col->GetWorldPos(),
+        target[0]->GetCol()->GetWorldPos(),
+        targetWay)) {
+        if (targetWay.size() > 0) {
+            Vector2 source = targetWay.back()->Pos;
+            targetWay.pop_back();
+            Vector2 dest = targetWay.back()->Pos;
+            Vector2 dir = dest - source;
+            dir.Normalize();
+            col->MoveWorldPos(dir * speed * DELTA);
+        }
+    }
 }
 
 void Boss::LookTarget(Vector2 target)

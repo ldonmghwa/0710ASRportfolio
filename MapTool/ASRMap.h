@@ -199,6 +199,7 @@ private:
 	int depth;
 	int keyCount;
 	int tileDegreeOfFall;
+	int bossRoomIdx;
 
 	bool isWH;
 private:

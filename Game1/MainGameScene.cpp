@@ -91,6 +91,7 @@ void MainGameScene::Init()
 		plConvict->SetTarget((*it));
 	}
 	boss->SetTarget(plConvict);
+	plConvict->SetTarget(boss);
 	boss->SetTileMap(map);
 	plConvict->Init();
 	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
@@ -136,7 +137,7 @@ void MainGameScene::LateUpdate()
 		if ((*it)->Intersect(plConvict->GetCol())) {
 			if (INPUT->KeyDown('E')) {
 				(*it)->OpenTheChest();
-				plConvict->GetFromChest((*it)->GetItemType());
+				//plConvict->GetFromChest((*it)->GetItemType());
 				break;
 			}
 		}

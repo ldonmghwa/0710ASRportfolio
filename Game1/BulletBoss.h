@@ -3,8 +3,8 @@
 class BulletBoss : public ASRBullet
 {
 private:
-	float				 bulletLifeTime;
 	float				 backUpBulletLifeTime;
+	float				 dis;
 	enum class BossScene type;
 public:
 	bool				 isTimeOut;
@@ -14,12 +14,12 @@ public:
 		float _power,
 		wstring _deathImg,
 		float _resizeScale,
-		BossScene _type);
+		BossScene _type,
+		float _dis);
 	~BulletBoss();
 
 	void Update();
+	void Update(float _dis);
 	void Render();
-	void Fire();
-	void SetBulletLifeTime(float _lifeTime) { bulletLifeTime = _lifeTime; }
 };
 

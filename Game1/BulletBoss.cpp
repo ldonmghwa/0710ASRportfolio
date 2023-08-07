@@ -5,12 +5,14 @@ BulletBoss::BulletBoss(wstring _wstr,
 	float _power,
 	wstring _deathImg,
 	float _resizeScale,
-	BossScene _type) : ASRBullet(_wstr, _shooter, _power, _deathImg)
+	BossScene _type,
+	float _dis) : ASRBullet(_wstr, _shooter, _power, _deathImg)
 {
 	isTimeOut = false;
 	isFire = false;
+	dis = _dis;
 	distance = 100000.0f;
-	bulletLifeTime = 12.0f;
+	bulletLifeTime = 15.0f;
 	backUpBulletLifeTime = bulletLifeTime;
 	img->scale.x = img->imageSize.x * resizeScale * _resizeScale;
 	img->scale.y = img->imageSize.y * resizeScale * _resizeScale;
@@ -38,13 +40,27 @@ void BulletBoss::Update()
 	}
 }
 
+void BulletBoss::Update(float _dis)
+{
+	if (isHitting)
+		deathImg->Update();
+	if (isVisible) {
+		if (not isFire) return;
+		dis += _dis;
+		col->SetLocalPosY(dis);
+		col->rotation2.z += DELTA * 5.0f;
+		Item::Update();
+		img->Update();
+	}
+	bulletLifeTime -= DELTA;
+	if (bulletLifeTime <= 0.0f) {
+		isTimeOut = true;
+		isFire = false;
+		bulletLifeTime = backUpBulletLifeTime;
+	}
+}
+
 void BulletBoss::Render()
 {
 	ASRBullet::Render();
-}
-
-void BulletBoss::Fire()
-{
-	pressPower = backUpPressPower;
-	isFire = true;
 }

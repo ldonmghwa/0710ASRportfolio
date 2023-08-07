@@ -21,8 +21,8 @@ BulletGuided::~BulletGuided()
 void BulletGuided::Update()
 {
     
+    if (isHitting) deathImg->Update();
     if (isVisible) {
-        if (isHitting) deathImg->Update();
         if (not isFire) return;
         Vector2 velocity1 = (target->GetCol()->GetWorldPos() - col->GetWorldPos());
         velocity1.Normalize();

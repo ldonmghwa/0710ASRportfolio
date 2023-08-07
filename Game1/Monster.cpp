@@ -40,6 +40,7 @@ Monster::Monster(string _name, bool _isBoss) : Character(_name)
         col->scale.y = charImg[(int)CRState::IDLE]->scale.y;
         col->pivot = OFFSET_B;
         col->isFilled = false;
+        col->isVisible = false;
 
         dirFrame[0] = 1;
         dirFrame[1] = 1;

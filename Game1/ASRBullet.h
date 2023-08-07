@@ -13,6 +13,8 @@ protected:
 	float		backUpPressPower;
 	float		distance;
 	float		resizeScale;
+	float		bulletLifeTime;
+	float		backUpBulletLifeTime;
 public:
 	bool		isHitting;
 public:
@@ -24,8 +26,10 @@ public:
 	void Fire(Vector2 pos, Vector2 dir, float pressPower);
 	void Update();
 	void Render();
+	void Fire();
 	void Render(Camera* uicam);
 	void Release() { isFire = false; }
+	void SetBulletLifeTime(float _lifeTime) { bulletLifeTime = _lifeTime; }
 	bool GetIsFire() { return isFire; }
 	bool GetDeathImgAniStop() { return deathImg->isAniStop(); }
 	bool IsBulletReach();

@@ -135,6 +135,7 @@ Player::Player(string _name, PLType _type)
 
     col->pivot = OFFSET_B;
     col->isFilled = false;
+    col->isVisible = false;
 
 
     dirFrame[0] = 1;
@@ -200,7 +201,7 @@ void Player::Init()
     rollWeight = 0.0f;
     backUpRollWeight = rollWeight;
     rollWeightScale = 0.005f;
-    float rollDistanceVector = 250.0f;
+    float rollDistanceVector = 300.0f;
     rollDistance = Vector2(rollDistanceVector, rollDistanceVector);
     rollDistance.Normalize();
 }

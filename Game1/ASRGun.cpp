@@ -18,6 +18,7 @@ ASRGun::ASRGun(wstring _wstr,
 
 	col->scale = img->scale;
 	col->isFilled = false;
+	col->isVisible = false;
 	img->SetParentRT(*col);
 	col->SetParentT(*_player->GetCol());
 	col->SetLocalPosX(-_player->GetCol()->scale.x * 0.4f);

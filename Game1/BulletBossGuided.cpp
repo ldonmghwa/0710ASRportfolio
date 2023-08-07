@@ -6,8 +6,8 @@ BulletBossGuided::BulletBossGuided(wstring _wstr,
     float _power, 
     wstring _deathImg) : BulletGuided(_wstr, _target, _shooter, _power, _deathImg)
 {
-    lifeTime = 5.0f;
-    backUpLifeTime = lifeTime;
+    bulletLifeTime = 10;
+    backUpBulletLifeTime = bulletLifeTime;
     damagePoint = 5;
     img->scale.x = img->imageSize.x / 8.0f * resizeScale;
     img->scale.y = img->imageSize.y * resizeScale;
@@ -25,11 +25,11 @@ BulletBossGuided::~BulletBossGuided()
 
 void BulletBossGuided::Update()
 {
-    lifeTime -= DELTA;
+    bulletLifeTime -= DELTA;
     BulletGuided::Update();
-    if (lifeTime < 0) {
+    if (bulletLifeTime < 0) {
         isFire = false;
-        lifeTime = backUpLifeTime;
+        bulletLifeTime = backUpBulletLifeTime;
     }
 }
 

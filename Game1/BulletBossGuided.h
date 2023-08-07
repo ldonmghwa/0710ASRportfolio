@@ -1,9 +1,6 @@
 #pragma once
 class BulletBossGuided : public BulletGuided
 {
-private:
-	float lifeTime;
-	float backUpLifeTime;
 public:
 	BulletBossGuided(wstring _wstr,
 		Character* _target,
