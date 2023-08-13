@@ -1,4 +1,16 @@
 #pragma once
+#define TILENONEINT2 Int2(7, 14) 
+#define TILESANDINT2 Int2(7, 1)
+#define TILEWALLPTINT2 Int2(0, 15)
+#define TILEWALLPTLDINT2 Int2(0, 19)
+#define TILEWALLPTRDINT2 Int2(5, 19)
+#define TILEWALLPTLUINT2 Int2(0, 14)
+#define TILEWALLPTRUINT2 Int2(5, 14)
+#define TILEWALLPTBTLINT2 Int2(0, 20)
+#define TILEWALLPTBTINT2 Int2(1, 20)
+#define TILEWALLPTBTRINT2 Int2(5, 20)
+#define TILEOBSTPTRINT2 Int2(0, 0)
+#define TILECHESTINT2 Int2(0, 7)
 
 struct RANDOMRoom {
 	Int2 vertex[2];
@@ -85,88 +97,89 @@ typedef struct BSPTree {
 
 		value.room.middlePoint.x = (value.room.vertex[0].x + value.room.vertex[1].x) / 2;
 		value.room.middlePoint.y = (value.room.vertex[0].y + value.room.vertex[1].y) / 2;
+		//가로 > 세로
 		if (value.room.vertex[1].x - value.room.vertex[0].x > value.room.vertex[1].y - value.room.vertex[0].y) {
+			//큰방일때
 			if(value.room.vertex[1].x - value.room.vertex[0].x> 20
 				and value.room.vertex[1].y - value.room.vertex[0].y > 15){
 				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(3, 4);
 				value.room.wallPoint[0][1].x = value.room.wallPoint[0][0].x + 4;
-				value.room.wallPoint[1][0].x = value.room.wallPoint[0][1].x + 5;
+				value.room.wallPoint[1][0].x = value.room.vertex[1].x - 6;
 				value.room.wallPoint[1][1].x = value.room.wallPoint[1][0].x + 4;
 				value.room.wallPoint[2][0].x = value.room.middlePoint.x - 2;
 				value.room.wallPoint[2][1].x = value.room.wallPoint[2][0].x + 4;
 
-				value.room.wallPoint[0][1].y = value.room.vertex[1].y - RANDOM->Int(2, 3);
-				value.room.wallPoint[0][0].y = value.room.wallPoint[0][1].y - 2;
-				value.room.wallPoint[1][1].y = value.room.vertex[1].y - RANDOM->Int(2, 3);
-				value.room.wallPoint[1][0].y = value.room.wallPoint[1][1].y - 2;
-				value.room.wallPoint[2][0].y = value.room.vertex[0].y + RANDOM->Int(2, 3);
+				value.room.wallPoint[0][1].y = value.room.vertex[1].y - RANDOM->Int(3, 4);
+				value.room.wallPoint[0][0].y = value.room.wallPoint[0][1].y - 2;	
+				value.room.wallPoint[1][1].y = value.room.vertex[1].y - RANDOM->Int(3, 4);
+				value.room.wallPoint[1][0].y = value.room.wallPoint[1][1].y - 2;	
+				value.room.wallPoint[2][0].y = value.room.vertex[0].y + RANDOM->Int(3, 4);
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 2;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
 			}
+			//작은방일때
 			else {
-				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(1, 2);
+				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(2, 3);
 				value.room.wallPoint[0][1].x = value.room.wallPoint[0][0].x + 3;
-				value.room.wallPoint[1][0].x = value.room.wallPoint[0][1].x + 4;
+				value.room.wallPoint[1][0].x = value.room.vertex[1].x - 5;
 				value.room.wallPoint[1][1].x = value.room.wallPoint[1][0].x + 3;
 				value.room.wallPoint[2][0].x = value.room.middlePoint.x - 2;
 				value.room.wallPoint[2][1].x = value.room.wallPoint[2][0].x + 3;
 
-				value.room.wallPoint[0][1].y = value.room.vertex[1].y - 1;
+				value.room.wallPoint[0][1].y = value.room.vertex[1].y - 2;
 				value.room.wallPoint[0][0].y = value.room.wallPoint[0][1].y - 1;
-				value.room.wallPoint[1][1].y = value.room.vertex[1].y -1;
+				value.room.wallPoint[1][1].y = value.room.vertex[1].y - 2;
 				value.room.wallPoint[1][0].y = value.room.wallPoint[1][1].y - 1;
-				value.room.wallPoint[2][0].y = value.room.vertex[0].y + 1;
+				value.room.wallPoint[2][0].y = value.room.vertex[0].y + 3;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 1;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
 			}
 		}
+		//세로 > 가로
 		else {
+			//큰방일 때 
 			if (value.room.vertex[1].x - value.room.vertex[0].x > 15
 				and value.room.vertex[1].y - value.room.vertex[0].y > 20) {
-				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(2, 3);
+				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(3, 4);
 				value.room.wallPoint[0][1].x = value.room.wallPoint[0][0].x + 2;
-				value.room.wallPoint[1][1].x = value.room.vertex[1].x - RANDOM->Int(2, 3);
+				value.room.wallPoint[1][1].x = value.room.vertex[1].x - RANDOM->Int(3, 4);
 				value.room.wallPoint[1][0].x = value.room.wallPoint[1][1].x - 2;
-				value.room.wallPoint[2][1].x = value.room.vertex[1].x - RANDOM->Int(2, 3);
+				value.room.wallPoint[2][1].x = value.room.vertex[1].x - RANDOM->Int(3, 4);
 				value.room.wallPoint[2][0].x = value.room.wallPoint[2][1].x - 2;
 
 				value.room.wallPoint[0][0].y = value.room.middlePoint.y - 2;
 				value.room.wallPoint[0][1].y = value.room.wallPoint[0][0].y + 4;
 				value.room.wallPoint[1][0].y = value.room.vertex[0].y + RANDOM->Int(3, 4);
 				value.room.wallPoint[1][1].y = value.room.wallPoint[1][0].y + 4;
-				value.room.wallPoint[2][0].y = value.room.wallPoint[1][1].y + 5;
+				value.room.wallPoint[2][0].y = value.room.vertex[1].y - 6;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 4;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
 			}
 			else {
-				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(1, 2);
+				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(2, 3);
 				value.room.wallPoint[0][1].x = value.room.wallPoint[0][0].x + 1;
-				value.room.wallPoint[1][1].x = value.room.vertex[1].x - 1;
+				value.room.wallPoint[1][1].x = value.room.vertex[1].x - 2;
 				value.room.wallPoint[1][0].x = value.room.wallPoint[1][1].x - 1;
-				value.room.wallPoint[2][1].x = value.room.vertex[1].x - 1;
+				value.room.wallPoint[2][1].x = value.room.vertex[1].x - 2;
 				value.room.wallPoint[2][0].x = value.room.wallPoint[2][1].x - 1;
 
 				value.room.wallPoint[0][0].y = value.room.middlePoint.y - 1;
 				value.room.wallPoint[0][1].y = value.room.wallPoint[0][0].y + 3;
-				value.room.wallPoint[1][0].y = value.room.vertex[0].y + RANDOM->Int(1, 2);
+				value.room.wallPoint[1][0].y = value.room.vertex[0].y + RANDOM->Int(3, 4);
 				value.room.wallPoint[1][1].y = value.room.wallPoint[1][0].y + 3;
-				value.room.wallPoint[2][0].y = value.room.wallPoint[1][1].y + 4;
+				value.room.wallPoint[2][0].y = value.room.vertex[1].y - 5;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 3;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
 			}
 			
 		}
@@ -200,6 +213,15 @@ private:
 	int keyCount;
 	int tileDegreeOfFall;
 	int bossRoomIdx;
+	int tileImgIdx;
+
+	//ObIso*		isoMap;
+	Int2		tileSize;
+	ObRect*		LineX, *LineY;
+	int			brushImgIdx;
+	Int2		brushFrame;
+	int			brushState;
+	Color		brushColor;
 
 	bool isWH;
 private:

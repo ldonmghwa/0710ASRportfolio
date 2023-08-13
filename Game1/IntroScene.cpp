@@ -3,12 +3,16 @@
 
 IntroScene::IntroScene()
 {
-	titleImage = new ObImage(L"intro.png");
-	titleImage->scale.x = titleImage->imageSize.x / 5.0f * 10.0f;
-	titleImage->scale.y = titleImage->imageSize.y / 10.0f * 10.0f;
-	titleImage->maxFrame.x = 5;
-	titleImage->maxFrame.y = 10;
-	titleImage->ChangeAnim(ANIMSTATE::LOOP, 0.1f, false);
+	titleImage = new ObImage(L"Intro_10x14.png");
+	titleImage->scale.x = titleImage->imageSize.x / 10.0f * 2.5f;
+	titleImage->scale.y = titleImage->imageSize.y / 14.0f * 2.2f;
+	titleImage->maxFrame.x = 10;
+	titleImage->maxFrame.y = 14;
+	titleImage->ChangeAnim(ANIMSTATE::LOOP, 0.1f, true);
+
+	titleLogoImage = new ObImage(L"Enter_the_Gungeon_Logo.png");
+	titleLogoImage->scale.x = titleImage->imageSize.x / 8.0f ;
+	titleLogoImage->scale.y = titleImage->imageSize.y / 18.0f;
 	
 	playButton = new ObRect();
 	playButton->scale.x = 130.0f;
@@ -22,6 +26,11 @@ IntroScene::IntroScene()
 
 	playButton->SetWorldPos(Vector2(-700.0f, -300.0f));
 	endButton->SetWorldPos(Vector2(-700.0f, -400.0f));
+
+	introSDkey = "ETGMainTheme";
+	SOUND->AddSound("Enter_The_Gungeon_Main_Theme.mp3", introSDkey);
+	SOUND->SetVolume(introSDkey, 1.0f);
+
 }
 
 IntroScene::~IntroScene()
@@ -29,7 +38,12 @@ IntroScene::~IntroScene()
 	delete titleImage;
 	delete playButton;
 	delete endButton;
-	TEXTURE->DeleteTexture(L"intro.png");
+	delete titleLogoImage;
+
+	TEXTURE->DeleteTexture(L"Intro_10x14.png");
+	TEXTURE->DeleteTexture(L"Enter_the_Gungeon_Logo.png");
+
+	SOUND->DeleteSound(introSDkey);
 }
 
 void IntroScene::Init()
@@ -49,7 +63,9 @@ void IntroScene::Update()
 	{
 		SCENE->ChangeScene("MAINGAMESCENE");
 	}
+	SOUND->Play(introSDkey);
 	titleImage->Update();
+	titleLogoImage->Update();
 	playButton->Update();
 	endButton->Update();
 }
@@ -98,6 +114,7 @@ void IntroScene::Render()
 		, L"µÕ±Ù¸ğ²Ã", Color(1, 1, 1, 1), DWRITE_FONT_WEIGHT_THIN,
 		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_EXPANDED);
 	titleImage->Render();
+	titleLogoImage->Render();
 	playButton->Render();
 	endButton->Render();
 }

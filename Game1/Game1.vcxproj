@@ -24,6 +24,7 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BulletBoss.h" />
     <ClInclude Include="BulletBossGuided.h" />
+    <ClInclude Include="BulletBossRotateGuide.h" />
     <ClInclude Include="BulletGuided.h" />
     <ClInclude Include="ASRGun.h" />
     <ClInclude Include="BulletMinion.h" />
@@ -50,6 +51,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BulletBoss.cpp" />
     <ClCompile Include="BulletBossGuided.cpp" />
+    <ClCompile Include="BulletBossRotateGuide.cpp" />
     <ClCompile Include="BulletGuided.cpp" />
     <ClCompile Include="ASRGun.cpp" />
     <ClCompile Include="BulletMinion.cpp" />

@@ -16,6 +16,8 @@ Character::~Character()
 void Character::Init()
 {
 	isInvincible = false;
+	isGlitStart = false;
+	moneyCount = 0;
 	state = CRState::IDLE;
 	charImg[(int)state]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 	charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::ONCE, 0.1f);
@@ -30,8 +32,6 @@ void Character::Update()
 	if (healPoint <= 0) {
 		isInvincible = true;
 		state = CRState::DEATH;
-		//charImg[(int)CRState::DEATH]->frame.x = 1;
-		//
 	}
 	col->Update();
 	charImg[(int)state]->Update();
@@ -47,10 +47,43 @@ void Character::GoBack()
 {
 	col->SetWorldPos(lastPos);
 	Update();
+	//isPlayerAttachedToWall = false;
 }
 
 void Character::Attack()
 {
+}
+
+void Character::Glit()
+{
+	if (isGlitStart) {
+		glitTime -= DELTA;
+		glitingTime -= DELTA;
+		if (isGlit) {
+			charImg[(int)state]->color = Vector4(1.0f, 1.0f, 1.0f, 0.5f);
+			if (glitingTime < 0) {
+				isGlit = false;
+				glitingTime = backUpGlitingTime;
+			}
+		}
+		else {
+			charImg[(int)state]->color = Vector4(0.5f, 0.5f, 0.5f, 0.5f);
+			if (glitingTime < 0) {
+				isGlit = true;
+				glitingTime = backUpGlitingTime;
+			}
+		}
+		if (glitTime < 0) {
+			for (int i = 0; i < (int)CRState::SIZE; i++) {
+				if (charImg[i]) {
+					charImg[i]->color = Vector4(0.5f, 0.5f, 0.5f, 0.5f);
+				}
+			}
+			isGlitStart = false;
+			isInvincible = false;
+			glitTime = backUpGlitTime;
+		}
+	}
 }
 
 void Character::LookTarget(Vector2 target)

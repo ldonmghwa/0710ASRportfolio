@@ -23,6 +23,7 @@ ASRGun::ASRGun(wstring _wstr,
 	col->SetParentT(*_player->GetCol());
 	col->SetLocalPosX(-_player->GetCol()->scale.x * 0.4f);
 	col->SetLocalPosY(_player->GetCol()->scale.y * 0.5f);
+	this->tileMap = _player->tileMap;
 	img->pivot = OFFSET_LB;
 	col->pivot = OFFSET_LB;
 
@@ -45,15 +46,33 @@ ASRGun::~ASRGun()
 }
 void ASRGun::Update()
 {
-	for (int i = 0;
+	/*for (int i = 0;
 		i < bulletCylinder.size(); i++) {
 		if (!bulletCylinder[i]->GetIsFire()&& bulletCylinder[i]->GetDeathImgAniStop()) {
 			bulletCylinder.erase(bulletCylinder.begin() + i);
 			break;
 		}
+	}*/
+	for (auto it = bulletCylinder.begin();
+		it != bulletCylinder.end(); it++) {
+		if ((*it)->GetDeathImgAniStop()) {
+			bulletCylinder.erase(it);
+			break;
+		}
+	}
+	for (auto it = bulletCylinder.begin();
+		it != bulletCylinder.end(); it++) {
+		if (!(*it)->GetIsFire()) {
+			bulletCylinder.erase(it);
+			break;
+		}
 	}
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
 		(*it)->IsBulletReach(target);
+		(*it)->Update();
+	}
+	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
+		(*it)->IsBulletReach(tileMap);
 		(*it)->Update();
 	}
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
@@ -107,6 +126,7 @@ void ASRGun::Render()
 
 void ASRGun::FireBullet()
 {
+	SOUND->Play(shotSDKey);
 	if(clbarList.size()>0) ReduceClbarImg();
 	curBulletNum--;
 	if (curBulletNum <= 0) isCylinderEmpty = true;
@@ -114,6 +134,7 @@ void ASRGun::FireBullet()
 
 void ASRGun::GunReLoading()
 {
+	SOUND->Play(reloadSDKey);
 	reloadTime -= DELTA;
 	if (clbarList.size() > 0)ReloadingClbarImg();
 	if (reloadTime < 0.0f) {
@@ -126,6 +147,7 @@ void ASRGun::GunReLoading()
 
 void ASRGun::GunReLoading(bool& isGunReloading)
 {
+	SOUND->Play(reloadSDKey);
 	reloadTime -= DELTA;
 	if (clbarList.size() > 0)ReloadingClbarImg();
 	if (reloadTime < 0.0f) {

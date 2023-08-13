@@ -39,6 +39,7 @@ enum TileState
     TILE_PSPAWN,
     TILE_MSPAWN,
     TILE_MBSPAWN,
+    TILE_PSPAWNB,
     TILE_SIZE
 };
 

@@ -67,24 +67,35 @@ void Boss::Init()
         target,
         GunType::BOSS);
     Character::Init();
-    gun->shootScene[(int)BossScene::ROTATE] = true;
+    gun->shootScene[(int)BossScene::ROTATEGUIDE] = true;
+    gun->shootSceneIdx = (int)BossScene::ROTATEGUIDE;
+    isRotateChange = true;
     isSetSpawning = true;
-    healPoint = 100;
-    gun->shootSceneIdx = (int)BossScene::ROTATE;
+    healPoint = 50;
     speed = 70.0f;
     backUpSpeed = speed;
-    detectionRange = 900.0f;
+
+    detectionRange = 700.0f;
     attackRange = detectionRange;
-    basicShootingInterval = 0.1f;
+
+    basicShootingInterval = 2.0f;
     backUpBasicShootingInterval = basicShootingInterval;
     guidedShootingInterval = 1.5f;
     backUpGuidedShootingInterval = guidedShootingInterval;
-    rotateShootingInterval = 0.2f;
+    rotateShootingInterval = 0.1f;
     backUpRotateShootingInterval = rotateShootingInterval;
-    shootSceneChangeTime = 100.5f;
+    shootSceneChangeTime = 10.5f;
     backUpShootSceneChangeTime = shootSceneChangeTime;
     gun->guidedShootingInterval = guidedShootingInterval;
-    incrementValue = 10.0f;
+    rotateGuideShootingInterval = 0.2f;
+    backUpRotateGuideShootingInterval = rotateGuideShootingInterval;
+
+    glitTime = 0.4f;
+    backUpGlitTime = glitTime;
+    glitingTime = 0.1f;
+    backUpGlitingTime = glitingTime;
+
+    incrementValue = 0.0f;
     mazeBulletLifeTime = 10.5f;
     backUpMazeBulletLifeTime = mazeBulletLifeTime;
     source = col->GetWorldPos();
@@ -96,7 +107,7 @@ void Boss::Update()
     lastPos = col->GetWorldPos();
     gun->Update();
     Character::Update();
-
+    Character::Glit();
     if (gun->GetIsCylinderEmpty()) {
         gun->GunReLoading();
     }
@@ -136,7 +147,6 @@ void Boss::Update()
         }
     }
     else if (state == CRState::HIT) {
-        ImGui::Text("%d", gun->shootSceneIdx);
         Int2 monsterIdx;
         if (shootSceneChangeTime < 0) {
             gun->shootScene[gun->shootSceneIdx] = false;
@@ -153,7 +163,7 @@ void Boss::Update()
             LookTarget(target[0]->GetCol()->GetWorldPos());
             shootSceneChangeTime -= DELTA;
             basicShootingInterval -= DELTA;
-            
+
             if (basicShootingInterval < 0) {
                 basicShootingInterval = backUpBasicShootingInterval;
                 gun->FireBullet(10.0f, 500.0f);
@@ -180,16 +190,24 @@ void Boss::Update()
             }
         }
         else if (gun->shootScene[(int)BossScene::ROTATE]) {
-            speed = 200.0f;
+            speed = 100.0f;
             shootSceneChangeTime -= DELTA;
             rotateShootingInterval -= DELTA;
-            //gun->GetCol()->rotation.z += incrementValue * DELTA;
-            //incrementValue += 0.5f;
+            /*if (isRotateChange) {
+                incrementValue += DELTA;
+                if (incrementValue > 2.5f) isRotateChange = false;
+            }
+            else {
+                incrementValue -= DELTA;
+                if (incrementValue < -2.5f) isRotateChange = true;
+            }*/
+            gun->GetCol()->rotation.z -= DELTA * 5.0f;
             if (rotateShootingInterval < 0) {
                 rotateShootingInterval = backUpRotateShootingInterval;
-                gun->RotateBullet(10.0f, 300.0f);
+                gun->RotateBullet(5.0f, 300.0f);
+                speed = backUpSpeed;
             }
-            //TargetSearch();
+            TargetSearch();
         }
         else if (gun->shootScene[(int)BossScene::GUIDE]) {
             LookTarget(target[0]->GetCol()->GetWorldPos());
@@ -197,12 +215,26 @@ void Boss::Update()
             guidedShootingInterval -= DELTA;
             if (guidedShootingInterval < 0) {
                 guidedShootingInterval = backUpGuidedShootingInterval;
-                gun->GuideBullet(target[0]);
+                gun->GuideBullet();
             }
             TargetSearch();
         }
+        else if (gun->shootScene[(int)BossScene::ROTATEGUIDE]) {
+            shootSceneChangeTime -= DELTA;
+            rotateGuideShootingInterval -= DELTA;
+            //gun->GetCol()->rotation.z -= DELTA * 5.0f;
+            if (rotateGuideShootingInterval < 0) {
+                rotateGuideShootingInterval = backUpRotateGuideShootingInterval;
+                gun->RotateGuideBullet();
+            }
+        }
     }
     else if (state == CRState::DEATH) {
+        moneyCount++;
+        if (moneyCount < 2) {
+            target[0]->IncreaseMoney(100);
+        }
+
         //cout << charImg[(int)CRState::DEATH]->frame.x << endl;
         //ImGui::Text("minion death frame.x %d", charImg[(int)CRState::DEATH]->frame.x);
 

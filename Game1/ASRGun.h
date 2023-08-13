@@ -9,6 +9,7 @@ protected:
 	enum class GunType		 gunType;
 	wstring					 gunFileName;
 	ObImage*				 cylinderBarTP[2];
+	ObTileMap*				 tileMap;
 
 	bool					 isCylinderEmpty;
 	bool					 isClbarAvailable;
@@ -24,6 +25,9 @@ protected:
 public:
 	bool					 isReloading;
 	bool					 isAiming;
+
+	string					 reloadSDKey;
+	string					 shotSDKey;
 public:
 	ASRGun(wstring _wstr,
 		Character* _player,

@@ -10,6 +10,8 @@ private:
 	vector<class Monster*> minionVector;
 	float fadeout = 0.0f;
 
+	string introSDkey;
+
 public:
 	MainGameScene();
 	~MainGameScene();

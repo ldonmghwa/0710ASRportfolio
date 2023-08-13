@@ -25,11 +25,17 @@ GunBasic::GunBasic(wstring _wstr,
 	}
 
 	for (int i = 0; i < bulletNum; i++) clbarList.push_back(new CLBar());
+	shotSDKey = "PlayerGun1Shot";
+	reloadSDKey = "PlayerGun1Reload";
+	SOUND->AddSound("38special_shot_01.wav", shotSDKey);
+	SOUND->AddSound("38special_reload_01.wav", reloadSDKey);
 }
 
 GunBasic::~GunBasic()
 {
 	TEXTURE->DeleteTexture(L"Convict_Gun1_Bullet_Death.png");
+	SOUND->DeleteSound(shotSDKey);
+	SOUND->DeleteSound(reloadSDKey);
 }
 
 void GunBasic::Update()

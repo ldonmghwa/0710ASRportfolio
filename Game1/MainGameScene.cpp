@@ -56,17 +56,17 @@ MainGameScene::MainGameScene()
 				boss->isSetSpawning = true;
 				boss->GetCol()->Update();
 			}
-			//if (map->GetTileState(tileIdx) == TILE_MSPAWN) {
-			//	minionVector.push_back(new Monster("Minion" + to_string(minionCount), false));
-			//	minionVector[minionVector.size() - 1]->SetSpawnPos(
-			//		Vector2(
-			//			map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-			//			map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
-			//		)
-			//	);
-			//	minionCount++;
-			//	//minionVector[minionVector.size() - 1]->Update();
-			//}
+			if (map->GetTileState(tileIdx) == TILE_MSPAWN) {
+				minionVector.push_back(new Monster("Minion" + to_string(minionCount), false));
+				minionVector[minionVector.size() - 1]->SetSpawnPos(
+					Vector2(
+						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
+						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+					)
+				);
+				minionCount++;
+				//minionVector[minionVector.size() - 1]->Update();
+			}
 		}
 	}
 }
@@ -87,12 +87,13 @@ void MainGameScene::Init()
 	
 	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
 		(*it)->SetTarget(plConvict);
-		(*it)->SetTileMap(map);
+		(*it)->tileMap = map;
 		plConvict->SetTarget((*it));
 	}
 	boss->SetTarget(plConvict);
 	plConvict->SetTarget(boss);
-	boss->SetTileMap(map);
+	boss->tileMap = map;
+	plConvict->tileMap = map;
 	plConvict->Init();
 	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {
 		(*it)->Init();
@@ -101,6 +102,7 @@ void MainGameScene::Init()
 	gui->Init(plConvict->GetCurrentBulletNum());
 	map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
 	plConvict->SetGui(gui);
+	plConvict->chestKeyNum = chestVector.size();
 }
 
 void MainGameScene::Release()
@@ -113,12 +115,12 @@ void MainGameScene::Update()
 	//if (INPUT->KeyPress(VK_DOWN)) CAM->position += DOWN * 300.0f * DELTA;
 	//if (INPUT->KeyPress(VK_LEFT)) CAM->position += LEFT * 300.0f * DELTA;
 	//if (INPUT->KeyPress(VK_RIGHT)) CAM->position += RIGHT * 300.0f * DELTA;
-	Int2 plIdx;
+	/*Int2 plIdx;
 	if (map->WorldPosToTileIdx(plConvict->GetFoot(), plIdx)) {
 		if (map->GetTileState(plIdx) == TILE_WALL) {
 			plConvict->GoBack();
 		}
-	}
+	}*/
 	
 
 	map->Update();
@@ -133,12 +135,26 @@ void MainGameScene::Update()
 
 void MainGameScene::LateUpdate()
 {
-	for (auto it = chestVector.begin(); it != chestVector.end(); it++) {
-		if ((*it)->Intersect(plConvict->GetCol())) {
-			if (INPUT->KeyDown('E')) {
-				(*it)->OpenTheChest();
-				//plConvict->GetFromChest((*it)->GetItemType());
-				break;
+	if (plConvict->chestKeyNum > 0) {
+		for (auto it = chestVector.begin(); it != chestVector.end(); it++) {
+			if ((*it)->Intersect(plConvict->GetCol())) {
+				if (INPUT->KeyDown('E')) {
+					(*it)->OpenTheChest();
+					plConvict->chestKeyNum--;
+					if (plConvict->gunNum < 2) {
+						plConvict->GetFromChest((*it)->GetItemType());
+					}
+					else if (RANDOM->Int(0, 99) < 60) {
+						plConvict->IncreaseMoney(10);
+					}
+					else if (RANDOM->Int(0, 99) < 80) {
+						plConvict->AddHp();
+					}
+					else if (RANDOM->Int(0, 99) < 100) {
+						plConvict->AddBlankBullet();
+					}
+					break;
+				}
 			}
 		}
 	}

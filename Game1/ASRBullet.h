@@ -17,8 +17,10 @@ protected:
 	float		backUpBulletLifeTime;
 public:
 	bool		isHitting;
+	bool		isTimeOut;
 public:
 	Vector2		sourcePos;
+public:
 	ASRBullet(wstring _wstr, GameObject* _shooter, float _power, wstring _deathImg);
 	~ASRBullet();
 
@@ -29,10 +31,14 @@ public:
 	void Fire();
 	void Render(Camera* uicam);
 	void Release() { isFire = false; }
-	void SetBulletLifeTime(float _lifeTime) { bulletLifeTime = _lifeTime; }
+	void SetBulletLifeTime(float _lifeTime) {
+		bulletLifeTime = _lifeTime; 
+		backUpBulletLifeTime = _lifeTime;
+	}
 	bool GetIsFire() { return isFire; }
 	bool GetDeathImgAniStop() { return deathImg->isAniStop(); }
 	bool IsBulletReach();
+	void IsBulletReach(ObTileMap* _tileMap);
 	void IsBulletReach(vector<class Character*> target);	
 };
 

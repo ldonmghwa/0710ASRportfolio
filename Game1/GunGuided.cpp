@@ -37,6 +37,10 @@ GunGuided::GunGuided(wstring _wstr,
 	}
 
 	for (int i = 0; i < bulletNum; i++) clbarList.push_back(new CLBar());
+	shotSDKey = "PlayerGun2Shot";
+	reloadSDKey = "PlayerGun2Reload";
+	SOUND->AddSound("bigshotgun_shot_01.wav", shotSDKey);
+	SOUND->AddSound("bigshotgun_reload_01.wav", reloadSDKey);
 }
 
 GunGuided::~GunGuided()
@@ -44,6 +48,8 @@ GunGuided::~GunGuided()
 	delete crossLineX;
 	delete crossLineY;
 	TEXTURE->DeleteTexture(L"Convict_Gun2_Bullet_Death.png");
+	SOUND->DeleteSound(shotSDKey);
+	SOUND->DeleteSound(reloadSDKey);
 }
 
 void GunGuided::Update()

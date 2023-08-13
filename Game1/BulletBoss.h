@@ -3,11 +3,11 @@
 class BulletBoss : public ASRBullet
 {
 private:
+	bool				 isRotateChange;
 	float				 backUpBulletLifeTime;
 	float				 dis;
+	float				 incrementValue;
 	enum class BossScene type;
-public:
-	bool				 isTimeOut;
 public:
 	BulletBoss(wstring _wstr,
 		GameObject* _shooter,

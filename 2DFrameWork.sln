@@ -36,6 +36,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E
 		Contents\Images\Agonizer_Death.png = Contents\Images\Agonizer_Death.png
 		Contents\Images\Agonizer_Gun.png = Contents\Images\Agonizer_Gun.png
 		Contents\Images\Agonizer_Idle.png = Contents\Images\Agonizer_Idle.png
+		Contents\Images\atlas0_41.png = Contents\Images\atlas0_41.png
+		Contents\Images\atlas0_411.png = Contents\Images\atlas0_411.png
+		Contents\Images\atlas0_412.png = Contents\Images\atlas0_412.png
 		Contents\Images\BasicBulletFull.png = Contents\Images\BasicBulletFull.png
 		Contents\Images\BasicBulletZero.png = Contents\Images\BasicBulletZero.png
 		Contents\Images\BlankBulletFull.png = Contents\Images\BlankBulletFull.png
@@ -64,10 +67,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E
 		Contents\Images\Convict_Gun2_Bullet_Death.png = Contents\Images\Convict_Gun2_Bullet_Death.png
 		Contents\Images\CylinderDown.png = Contents\Images\CylinderDown.png
 		Contents\Images\CylinderUp.png = Contents\Images\CylinderUp.png
+		Contents\Images\Enter_the_Gungeon_Logo.png = Contents\Images\Enter_the_Gungeon_Logo.png
 		Contents\Images\HeartBarFull.png = Contents\Images\HeartBarFull.png
 		Contents\Images\HeartBarHalf.png = Contents\Images\HeartBarHalf.png
 		Contents\Images\HeartBarZero.png = Contents\Images\HeartBarZero.png
 		Contents\Images\intro.png = Contents\Images\intro.png
+		Contents\Images\Intro_10x14.png = Contents\Images\Intro_10x14.png
 		Contents\Images\iso.png = Contents\Images\iso.png
 		Contents\Images\Money.png = Contents\Images\Money.png
 		Contents\Images\mutalisk.png = Contents\Images\mutalisk.png
@@ -75,6 +80,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{23927E
 		Contents\Images\player_walk.png = Contents\Images\player_walk.png
 		Contents\Images\Roll.png = Contents\Images\Roll.png
 		Contents\Images\Tile.png = Contents\Images\Tile.png
+		Contents\Images\Tile1.png = Contents\Images\Tile1.png
+		Contents\Images\Tile1__.png = Contents\Images\Tile1__.png
 		Contents\Images\Tile2.png = Contents\Images\Tile2.png
 		Contents\Images\TreasureBoxKey.png = Contents\Images\TreasureBoxKey.png
 	EndProjectSection
@@ -88,6 +95,23 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapTool", "MapTool\MapTool.vcxproj", "{AA547DFB-B6A2-48EE-B8B0-7B4791B28C6D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C2138BC9-A195-455F-91A6-5FF469EB5E61} = {C2138BC9-A195-455F-91A6-5FF469EB5E61}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sound", "Sound", "{3181CB7F-499D-4A8D-B969-D21FDD5D5652}"
+	ProjectSection(SolutionItems) = preProject
+		Contents\Sound\38special_reload_01.wav = Contents\Sound\38special_reload_01.wav
+		Contents\Sound\38special_shot_01.wav = Contents\Sound\38special_shot_01.wav
+		Contents\Sound\ak47_shot_01.wav = Contents\Sound\ak47_shot_01.wav
+		Contents\Sound\ArmorGunB_Reload_01.wav = Contents\Sound\ArmorGunB_Reload_01.wav
+		Contents\Sound\ArmorGunB_Shot_01.wav = Contents\Sound\ArmorGunB_Shot_01.wav
+		Contents\Sound\bigshotgun_reload_01.wav = Contents\Sound\bigshotgun_reload_01.wav
+		Contents\Sound\bigshotgun_shot_01.wav = Contents\Sound\bigshotgun_shot_01.wav
+		Contents\Sound\blackhole_loop_01_2423DF75.wav = Contents\Sound\blackhole_loop_01_2423DF75.wav
+		Contents\Sound\bubblegun_shot_05.wav = Contents\Sound\bubblegun_shot_05.wav
+		Contents\Sound\darken_world_01.wav = Contents\Sound\darken_world_01.wav
+		Contents\Sound\demonwall_death_01.wav = Contents\Sound\demonwall_death_01.wav
+		Contents\Sound\Enter_The_Gungeon_Main_Theme.mp3 = Contents\Sound\Enter_The_Gungeon_Main_Theme.mp3
+		Contents\Sound\kali_blast_01.wav = Contents\Sound\kali_blast_01.wav
 	EndProjectSection
 EndProject
 Global

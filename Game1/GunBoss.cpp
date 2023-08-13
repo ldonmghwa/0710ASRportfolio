@@ -16,9 +16,11 @@ GunBoss::GunBoss(wstring _wstr,
 	backUpReloadTime = reloadTime;
 	reloadPerSec = (reloadTime - 0.1f) / bulletNum;
 	backUpReloadPerSec = reloadPerSec;
-	incrementValue = 0.03f;
-	rotateCount = 10.0f;
-	backUpRotateCount = rotateCount;
+	rotateYPosIncrementValue = 100.0f ;
+	//rotateYPosIncrementValue = 0.1f;
+	cout << "delta: " << DELTA;
+	rotateXPos = 0.0f;
+	backUpRotateCount = rotateXPos;
 	this->isVisible = true;
 	col->SetLocalPosX(0.0f);
 	col->SetLocalPosY(_player->GetCol()->scale.y * 0.2f);
@@ -60,6 +62,17 @@ GunBoss::GunBoss(wstring _wstr,
 
 	for (int i = 0; i < (int)BossScene::SIZE; i++)
 		shootScene[i] = false;
+
+	shotSDKey = "BossGunShot";
+	mazeSoundKey = "MazeShot";
+	rotateSoundKey = "RotateShot";
+	guideSoundKey = "GuideShot";
+	rotateGuideSoundKey = "RotateGuideShot";
+	SOUND->AddSound("ak47_shot_01.wav", shotSDKey);
+	SOUND->AddSound("kali_blast_01.wav", mazeSoundKey);
+	SOUND->AddSound("blackhole_loop_01_2423DF75.wav", rotateSoundKey);
+	SOUND->AddSound("darken_world_01.wav", guideSoundKey);
+	SOUND->AddSound("bubblegun_shot_05.wav", rotateGuideSoundKey);
 }
 
 GunBoss::~GunBoss()
@@ -67,6 +80,11 @@ GunBoss::~GunBoss()
 	for (auto it = mazeBullet.begin(); it != mazeBullet.end(); it++) delete (*it);
 	TEXTURE->DeleteTexture(L"Agonizer_Bullet_Basic_Death_11x1.png");
 	TEXTURE->DeleteTexture(L"Agonizer_Bullet_Guided_Death.png");
+	SOUND->DeleteSound(shotSDKey);
+	SOUND->DeleteSound(mazeSoundKey);
+	SOUND->DeleteSound(rotateSoundKey);
+	SOUND->DeleteSound(guideSoundKey);
+	SOUND->DeleteSound(rotateGuideSoundKey);
 }
 
 void GunBoss::Update()
@@ -85,10 +103,13 @@ void GunBoss::Update()
 			break;
 		}
 	}
-	
 
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
 		(*it)->IsBulletReach(target);
+		(*it)->Update();
+	}
+	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
+		(*it)->IsBulletReach(tileMap);
 		(*it)->Update();
 	}
 	for (auto it = bulletCylinder.begin(); it != bulletCylinder.end(); it++) {
@@ -109,10 +130,11 @@ void GunBoss::Update()
 		}
 	}
 	else if (shootScene[(int)BossScene::ROTATE]) {
+		SOUND->Play(shotSDKey);
 		if (rotateBullet.size() > 0) {
 			for (int i = 0; i < rotateBullet.size(); i++) {
 				rotateBullet[i]->IsBulletReach(target);
-				rotateBullet[i]->Update(incrementValue);
+				rotateBullet[i]->Update(rotateYPosIncrementValue);
 			}
 		}
 	}
@@ -152,7 +174,7 @@ void GunBoss::FireBullet(float _lifeTime, float _bulletPower)
 	bulletCylinder.push_back(
 		new BulletBoss(L"Agonizer_Bullet_Basic.png",
 			this->col,
-			bulletPower,
+			1000.0f,
 			L"Agonizer_Bullet_Basic_Death_11x1.png",
 			1.5f,
 			BossScene::BASIC,
@@ -176,17 +198,16 @@ void GunBoss::RotateBullet(float _lifeTime, float _bulletPower)
 			L"Agonizer_Bullet_Basic_Death_11x1.png",
 			1.5f,
 			BossScene::BASIC,
-			1.0f
+			0.0f
 		)
 	);
 	rotateBullet.back()->GetCol()->SetParentRT(*(this->col));
-	rotateCount = 10.0f;
-	rotateBullet.back()->GetCol()->SetLocalPosX(rotateCount);
-	cout << rotateBullet.back()->GetCol()->GetLocalPos().x << ", "
-		<< rotateBullet.back()->GetCol()->GetLocalPos().y << endl;
-	rotateBullet.back()->GetCol()->Update();
+	rotateBullet.back()->GetCol()->SetLocalPosX(rotateXPos);
+	rotateBullet.back()->GetCol()->SetLocalPosY(rotateXPos);
 	rotateBullet.back()->SetBulletLifeTime(_lifeTime);
+	rotateBullet.back()->GetCol()->Update();
 	rotateBullet.back()->Fire();
+	shotSDKey = rotateSoundKey;
 	ASRGun::FireBullet();
 
 }
@@ -224,19 +245,42 @@ void GunBoss::MazeBullet()
 			mazeBullet.back()->Fire();
 		}
 	}
+	SOUND->Play(mazeSoundKey);
 }
 
-void GunBoss::GuideBullet(Character* _target)
+void GunBoss::GuideBullet()
 {
 	if (isCylinderEmpty) return;
 	bulletCylinder.push_back(
 		new BulletBossGuided(L"Agonizer_Bullet_Guided.png",
-			_target,
+			target[0],
 			this->col,
 			guidedBulletPower,
 			L"Agonizer_Bullet_Guided_Death.png"
 		)
 	);
 	bulletCylinder.back()->SetBulletLifeTime(guidedShootingInterval * 3 + 5.0f);
+	shotSDKey = guideSoundKey;
+	ASRGun::FireBullet();
+}
+
+void GunBoss::RotateGuideBullet()
+{
+	if (isCylinderEmpty) return;
+	bulletCylinder.push_back(
+		new BulletBossRotateGuide(L"Agonizer_Bullet_Basic.png",
+			target[0],
+			this->col,
+			150,
+			L"Agonizer_Bullet_Basic_Death_11x1.png"
+		)
+	);
+	bulletCylinder.back()->GetCol()->SetParentRT(*(this->col));
+	bulletCylinder.back()->GetCol()->SetLocalPosX(rotateXPos);
+	bulletCylinder.back()->GetCol()->SetLocalPosY(rotateXPos);
+	bulletCylinder.back()->GetCol()->Update();
+	bulletCylinder.back()->Fire();
+	//bulletCylinder.back()->Fire();
+	shotSDKey = rotateGuideSoundKey;
 	ASRGun::FireBullet();
 }

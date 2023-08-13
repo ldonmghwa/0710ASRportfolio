@@ -45,7 +45,7 @@ void GameGUI::Init(int _bulletNum)
 	curHPIdx = curMaxHPBar - 1;
 	curMaxBBBar = 2;
 	curBBIdx = curMaxBBBar - 1;
-	boxKeyNum = 0;
+	boxKeyNum = 3;
 	moneyNum = 0;
 }
 
@@ -80,13 +80,6 @@ void GameGUI::Update()
 	moneyImg->Update();
 
 
-	//Utility::Saturate(curHPIdx, 0, curMaxHPBar - 1);
-	if (INPUT->KeyDown('Z')) {
-		if (hpBar[curHPIdx]->hpBarState == HPBarState::ZERO) curHPIdx--;
-		if (curHPIdx < 0) curHPIdx = 0;
-		hpBar[curHPIdx]->hpBarState -= 1;
-		if (hpBar[curHPIdx]->hpBarState < 0) hpBar[curHPIdx]->hpBarState = 0;
-	}
 	if (INPUT->KeyDown('X')) {
 		if (bbBar[curBBIdx]->bBarState == 0) curBBIdx--;
 		if (curBBIdx < 0) curBBIdx = 0;
@@ -142,8 +135,37 @@ void GameGUI::ReduceHPBar()
 
 void GameGUI::ReduceBBBar()
 {
+	if (bbBar[curBBIdx]->bBarState == 0) curBBIdx--;
+	if (curBBIdx < 0) curBBIdx = 0;
+	bbBar[curBBIdx]->bBarState -= 1;
+	if (bbBar[curBBIdx]->bBarState < 0) bbBar[curBBIdx]->bBarState = 0;
 }
 
-void GameGUI::IncreaseMoneyBar()
+void GameGUI::IncreaseHPBar()
 {
+	if (hpBar[curHPIdx]->hpBarState == HPBarState::ZERO
+		or hpBar[curHPIdx]->hpBarState == HPBarState::HALF) {
+		hpBar[curHPIdx]->hpBarState += 1;
+		curHPIdx++;
+	}
+	if (curHPIdx >= curMaxHPBar) curHPIdx--;
+}
+
+void GameGUI::IncreaseBBBar()
+{
+	if (bbBar[curBBIdx]->bBarState == 0) {
+		bbBar[curBBIdx]->bBarState = 1;
+		curBBIdx++;
+	}
+	if (curBBIdx >= curMaxBBBar) curBBIdx--;
+}
+
+void GameGUI::IncreaseMoneyBar(int _money)
+{
+	moneyNum = _money;
+}
+
+void GameGUI::IncreaseBoxKeyBar(int _boxKeyNum)
+{
+	boxKeyNum = _boxKeyNum;
 }

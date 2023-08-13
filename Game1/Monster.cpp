@@ -138,6 +138,10 @@ void Monster::Update()
         }
     }
     else if (state == CRState::DEATH) {
+        moneyCount++;
+        if (moneyCount < 2) {
+            target[0]->IncreaseMoney(5);
+        }
         //cout << charImg[(int)CRState::DEATH]->frame.x << endl;
         //ImGui::Text("minion death frame.x %d", charImg[(int)CRState::DEATH]->frame.x);
        

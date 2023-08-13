@@ -177,40 +177,60 @@ void Player::Init()
             target, 
             GunType::BASIC)
     );
-    gunVector.push_back(
-        new GunGuided(
-            L"Convict_Gun2.png",
-            this,
-            target,
-            GunType::GUIDE)
-    );
     gunVector[0]->isVisible = false;
-    gunVector[1]->isVisible = false;
     gunVector[0]->Update();
-    gunVector[1]->Update();
-    healPoint = 20000;
-    speed = 300.0f;
-    backUpSpeed = speed;
+
+    healPoint = 6;
+    maxHealPoint = healPoint;
+    blankBulletNum = 2;
+    maxBlankBulletNum = blankBulletNum;
     gunNum = 1;
+    money = 0;
+    selectWPNum = 0; 
+
     isCarryWP = false;
     isAiming = false;
     isGunReloading = false;
     isInvincible = false;
-    selectWPNum = 0;
-    clickcount = 0;
+    isBBTime = false;
+    isGlitStart = false;
+    isGlit = false;
+
+    speed = 300.0f;
+    backUpSpeed = speed;
     rollWeight = 0.0f;
     backUpRollWeight = rollWeight;
+    blankBulletTime = 3.0f;
+    backUpBlankBulletTime = blankBulletTime;
+    glitTime = 2.0f;
+    backUpGlitTime = glitTime;
+    glitingTime = 0.1f;
+    backUpGlitingTime = glitingTime;
     rollWeightScale = 0.005f;
     float rollDistanceVector = 300.0f;
     rollDistance = Vector2(rollDistanceVector, rollDistanceVector);
     rollDistance.Normalize();
+
+
+
+    Int2 tileIdx;
+    for (int i = 0; i < 101; i++) {
+        for (int j = 0; j < 101; j++) {
+            tileIdx.x = j;
+            tileIdx.y = i;
+            if (tileMap->GetTileState(tileIdx) == TILE_PSPAWNB) {
+                bossRoomPos.x = tileMap->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2;
+                bossRoomPos.y = tileMap->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2;
+                
+            }
+        }
+    }
 }
 
 void Player::Control()
 {
-    controlDir = Vector2();
-
     //계속 누를때
+    controlDir = Vector2();
     if (INPUT->KeyPress('W'))
     {
         controlDir.y = 1.0f;
@@ -231,45 +251,53 @@ void Player::Control()
     controlDir.Normalize();
 
     col->MoveWorldPos(controlDir * DELTA * speed);
+    
 }
 
 void Player::Update()
 {
     lastPos = col->GetWorldPos();
+    
     CAM->position = col->GetWorldPos();
     for (auto it = gunVector.begin(); it != gunVector.end(); it++) (*it)->Update();
     Character::Update();
-    /*if (_kbhit()) {
-        if ((_getch() >= selectWPNum + '0' and
-            _getch() <= selectWPNum + '9') and (state != CRState::ROLL)) {
-            if (_getch() != selectWPNum + '0') {
-                if (state == CRState::IDLE) state = CRState::IDLEWP;
-                else if (state == CRState::WALK) state = CRState::WALKWP;
-                isCarryWP = true;
-                gunVector[selectWPNum]->isVisible = false;
-                selectWPNum = _getch() - '0' - 1;
-                gunVector[selectWPNum]->isVisible = true;
-                plgui->ChangeGun(gunVector[selectWPNum]->GetBulletNum());
-            }
-            else {
-                gunVector[selectWPNum]->isVisible = false;
-                isCarryWP = false;
-                if (state == CRState::IDLEWP) {
-                    state = CRState::IDLE;
-                    charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-                }
-                else if (state == CRState::WALKWP) {
-                    state = CRState::WALK;
-                    charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-                }
+    plgui->IncreaseMoneyBar(money);
+    plgui->IncreaseBoxKeyBar(chestKeyNum);
+    if (isGlitStart) {
+        isInvincible = true;
+        Character::Glit();
+    }
+    if (!isInvincible && speed != 1500.0f) {
+        if (tileMap->WorldPosToTileIdx(GetFoot(), plIdx)) {
+            if (tileMap->GetTileState(plIdx) == TILE_WALL) {
+                GoBack();
             }
         }
-    }*/
+    }
     if (gunVector[selectWPNum]->GetIsCylinderEmpty() 
         and gunVector[selectWPNum]->isReloading) {
         gunVector[selectWPNum]->GunReLoading(isGunReloading);
     }
-    
+    if (INPUT->KeyDown('B')) {
+        col->SetWorldPos(bossRoomPos);
+    }
+    if (INPUT->KeyDown(VK_F1)) {
+        if (isInvincible) isInvincible = false;
+        else  isInvincible = true;
+        if (isInvincible) speed = 1500.0f;
+        else speed = backUpSpeed;
+    }
+    if (INPUT->KeyDown(VK_SPACE)) {
+        if (!isGlitStart){
+            if (blankBulletNum > 0) {
+                blankBulletNum -= 1;
+                glitTime = 10.0f;
+                plgui->ReduceBBBar();
+                isGlitStart = true;
+                isInvincible = true;
+            }
+        }
+    }
     if (state == CRState::IDLE)
     {
         LookTarget(INPUT->GetWorldMousePos());
@@ -349,16 +377,18 @@ void Player::Update()
                 }
             }
             if (INPUT->KeyDown('2')) {
-                if (selectWPNum != '2' - '0' - 1) {
-                    gunVector[selectWPNum]->isVisible = false;
-                    selectWPNum = '2' - '0' - 1;
-                    gunVector[selectWPNum]->isVisible = true;
-                }
-                else {
-                    gunVector[selectWPNum]->isVisible = false;
-                    isCarryWP = false;
-                    state = CRState::IDLE;
-                    charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                if (gunVector.size() >= '2' - '0') {
+                    if (selectWPNum != '2' - '0' - 1) {
+                        gunVector[selectWPNum]->isVisible = false;
+                        selectWPNum = '2' - '0' - 1;
+                        gunVector[selectWPNum]->isVisible = true;
+                    }
+                    else {
+                        gunVector[selectWPNum]->isVisible = false;
+                        isCarryWP = false;
+                        state = CRState::IDLE;
+                        charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    }
                 }
             }
         }
@@ -462,16 +492,18 @@ void Player::Update()
                 }
             }
             if (INPUT->KeyDown('2')) {
-                if (selectWPNum != '2' - '0' - 1) {
-                    gunVector[selectWPNum]->isVisible = false;
-                    selectWPNum = '2' - '0' - 1;
-                    gunVector[selectWPNum]->isVisible = true;
-                }
-                else {
-                    gunVector[selectWPNum]->isVisible = false;
-                    isCarryWP = false;
-                    state = CRState::WALK;
-                    charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                if (gunVector.size() >= '2' - '0') {
+                    if (selectWPNum != '2' - '0' - 1) {
+                        gunVector[selectWPNum]->isVisible = false;
+                        selectWPNum = '2' - '0' - 1;
+                        gunVector[selectWPNum]->isVisible = true;
+                    }
+                    else {
+                        gunVector[selectWPNum]->isVisible = false;
+                        isCarryWP = false;
+                        state = CRState::WALK;
+                        charImg[(int)CRState::WALK]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+                    }
                 }
             }
         }
@@ -549,21 +581,33 @@ void Player::GetFromChest(GunType _type)
             target,
             _type)
     );
+    gunVector.back()->isVisible = false;
+    gunVector.back()->Update();
+    gunNum++;
+}
+
+void Player::AddHp()
+{
+    if (healPoint < maxHealPoint) {
+        plgui->IncreaseHPBar();
+        healPoint++;
+    }
+}
+
+void Player::AddBlankBullet()
+{
+    if (blankBulletNum < maxBlankBulletNum) {
+        plgui->IncreaseBBBar();
+        blankBulletNum++;
+    }
 }
 
 
 void Player::GoBack()
 {
-    if (INPUT->KeyDown(VK_RBUTTON)) {
-        col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , backUpDashPoint + rollDistance * controlDir, 0.001f));
-    }
-    Character::GoBack();
+   Character::GoBack();
 }
 
-void Player::NumberKeyInput()
-{
-}
 
 void Player::TakeDamage(int _damagePoint)
 {

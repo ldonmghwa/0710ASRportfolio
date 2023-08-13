@@ -14,11 +14,17 @@ GunMinion::GunMinion(wstring _wstr,
 	backUpReloadTime = reloadTime;
 	reloadPerSec = (reloadTime - 0.1f) / bulletNum;
 	backUpReloadPerSec = reloadPerSec;
+	shotSDKey = "MinionGunShot";
+	reloadSDKey = "MinionGunReload";
+	SOUND->AddSound("ArmorGunB_Shot_01.wav", shotSDKey);
+	SOUND->AddSound("ArmorGunB_Reload_01.wav", reloadSDKey);
 }
 
 GunMinion::~GunMinion()
 {
 	TEXTURE->DeleteTexture(L"BulletKin_Bullet_Death.png");
+	SOUND->DeleteSound(shotSDKey);
+	SOUND->DeleteSound(reloadSDKey);
 }
 
 void GunMinion::Update()

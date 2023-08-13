@@ -49,6 +49,7 @@ enum class BossScene {
 	MAZE,
 	GUIDE,
 	ROTATE,
+	ROTATEGUIDE,
 	SIZE
 };
 

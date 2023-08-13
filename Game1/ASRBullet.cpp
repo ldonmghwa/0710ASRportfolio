@@ -107,6 +107,17 @@ bool ASRBullet::IsBulletReach()
     else return true;
 }
 
+void ASRBullet::IsBulletReach(ObTileMap* _tileMap)
+{
+    Int2 bulletIdx;
+    if (_tileMap->WorldPosToTileIdx(this->col->GetWorldPos(), bulletIdx)) {
+        if (_tileMap->GetTileState(bulletIdx) == TILE_WALL) {
+            isHitting = true;
+            this->isVisible = false;
+        }
+    }
+}
+
 void ASRBullet::IsBulletReach(vector<Character*> target)
 {
     for (int i = 0; i < target.size(); i++) {
@@ -114,6 +125,7 @@ void ASRBullet::IsBulletReach(vector<Character*> target)
         if (target[i]->healPoint <= 0) continue;
         if (col->Intersect(target[i]->GetCol()) && !isHitting) {        
             target[i]->TakeDamage(this->damagePoint);
+            target[i]->isGlitStart = true;
             this->isVisible = false;
             isHitting = true;
         }

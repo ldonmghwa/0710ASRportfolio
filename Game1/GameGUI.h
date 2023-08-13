@@ -33,6 +33,9 @@ public:
 
 	void ReduceHPBar();
 	void ReduceBBBar();
-	void IncreaseMoneyBar();
+	void IncreaseHPBar();
+	void IncreaseBBBar();
+	void IncreaseMoneyBar(int _money);
+	void IncreaseBoxKeyBar(int _boxKeyNum);
 };
 

@@ -6,7 +6,8 @@ class Boss : public Character
 private:
 	enum class MTType monsterType;
 	class GunBoss* gun;
-
+	
+	bool isRotateChange;
 
 	float attackRange;
 	float detectionRange;
@@ -16,6 +17,8 @@ private:
 	float backUpGuidedShootingInterval;
 	float rotateShootingInterval;
 	float backUpRotateShootingInterval;
+	float rotateGuideShootingInterval;
+	float backUpRotateGuideShootingInterval;
 
 	float shootSceneChangeTime;
 	float backUpShootSceneChangeTime;

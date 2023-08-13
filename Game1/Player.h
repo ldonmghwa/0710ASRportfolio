@@ -9,13 +9,18 @@ private:
 
 	Vector2					backUpDashPoint;
 	Vector2					rollDistance;
+	Vector2					bossRoomPos;
+	
+	Int2					plIdx;
 
 	bool					isCarryWP;
 	bool					isAiming;
 	bool					isGunReloading;
-	int						gunNum;
+	bool					isBBTime;
+
 	int						selectWPNum;
-	int clickcount;
+	int						blankBulletNum;
+	int						maxBlankBulletNum;
 
 	float					rollTime;
 	float					reloadPerSec;
@@ -23,6 +28,11 @@ private:
 	float					rollWeight;
 	float					rollWeightScale;
 	float					backUpRollWeight;
+	float					blankBulletTime;
+	float					backUpBlankBulletTime;
+public:
+	int						gunNum;
+	int						chestKeyNum;
 public:
 	Player(string _name);
 	Player(string _name, PLType _type);
@@ -34,11 +44,13 @@ public:
 	void Render();
 
 	void GoBack();
-	void NumberKeyInput();
 	void TakeDamage(int _damagePoint) override;
 	void LookTarget(Vector2 target);
 	void GetFromChest(GunType _type);
 	void SetGui(class GameGUI* _plgui) { plgui = _plgui; }
+
+	void AddHp();
+	void AddBlankBullet();
 
 	int GetCurrentBulletNum(){ return gunVector[selectWPNum]->GetBulletNum(); }
 

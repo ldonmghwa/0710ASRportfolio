@@ -65,6 +65,9 @@
     <ClInclude Include="BulletBossGuided.h">
       <Filter>GameItem\CONSUM</Filter>
     </ClInclude>
+    <ClInclude Include="BulletBossRotateGuide.h">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -124,6 +127,9 @@
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
     <ClCompile Include="BulletBossGuided.cpp">
+      <Filter>GameItem\CONSUM</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBossRotateGuide.cpp">
       <Filter>GameItem\CONSUM</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "BulletMinion.h"
 #include "BulletBoss.h"
 #include "BulletBossGuided.h"
+#include "BulletBossRotateGuide.h"
 #include "ASRChest.h"
 #include "ASRGun.h"
 #include "GunBasic.h"

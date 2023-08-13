@@ -3,12 +3,15 @@ class IntroScene : public Scene
 {
 private:
 	ObImage* titleImage;
+	ObImage* titleLogoImage;
 	ObRect* playButton;
 	ObRect* endButton;
 	float playButtonScale;
 	float endButtonScale;
 	bool isPlayButtonOn;
 	bool isEndButtonOn;
+
+	string introSDkey;
 
 public:
 	IntroScene();
