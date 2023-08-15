@@ -8,7 +8,7 @@ BulletBossGuided::BulletBossGuided(wstring _wstr,
 {
     bulletLifeTime = 10;
     backUpBulletLifeTime = bulletLifeTime;
-    damagePoint = 5;
+    damagePoint = 1;
     img->scale.x = img->imageSize.x / 8.0f * resizeScale;
     img->scale.y = img->imageSize.y * resizeScale;
     img->maxFrame.x = 8;

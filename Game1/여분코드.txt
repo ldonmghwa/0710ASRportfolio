@@ -1,0 +1,122 @@
+
+	//if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 1000))
+	//{
+	//	asrMap->ResizeTile(tileSize);
+	//}
+	////TileScale
+	////ImGui::SliderFloat2("TileScale", (float*)&asrMap->scale, 1.0f, 200.0f);
+	//if (ImGui::InputFloat("TileScale", (float*)&asrMap->scale.x, 1.0f, 200.0f))
+	//{
+	//	asrMap->scale.y = asrMap->scale.x;
+	//}
+	////TilePos
+	//Vector2 pos = asrMap->GetWorldPos();
+	//if (ImGui::SliderFloat2("TilePos", (float*)&pos, -1000.0f, 1000.0f))
+	//{
+	//	asrMap->SetWorldPos(pos);
+	//}
+
+	//if (GUI->FileImGui("Save", "Save Map",
+	//	".txt", "../Contents/TileMap"))
+	//{
+	//	string path = ImGuiFileDialog::Instance()->GetFilePathName();
+	//	Utility::Replace(&path, "\\", "/");
+	//	size_t tok = path.find_last_of("/") + 1;
+	//	path = path.substr(tok, path.length() - tok);
+	//	asrMap->file = path;
+	//	asrMap->Save();
+	//}
+	//ImGui::SameLine();
+
+	//if (GUI->FileImGui("Load", "Load Map", ".txt", "../Contents/TileMap"))
+	//{
+	//	string path = ImGuiFileDialog::Instance()->GetFilePathName();
+	//	Utility::Replace(&path, "\\", "/");
+	//	size_t tok = path.find_last_of("/") + 1;
+	//	path = path.substr(tok, path.length() - tok);
+	//	asrMap->file = path;
+	//	asrMap->Load();
+	//	tileSize = asrMap->GetTileSize();
+	//}
+
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	string str = "Texture" + to_string(i);
+	//	if (GUI->FileImGui(str.c_str(), str.c_str(),
+	//		".jpg,.png,.bmp,.dds,.tga", "../Contents/Images"))
+	//	{
+	//		string path = ImGuiFileDialog::Instance()->GetFilePathName();
+	//		Utility::Replace(&path, "\\", "/");
+	//		size_t tok = path.find_last_of("/") + 1;
+	//		path = path.substr(tok, path.length() - tok);
+	//		SafeDelete(asrMap->tileImages[i]);
+	//		wstring wImgFile = L"";
+	//		wImgFile.assign(path.begin(), path.end());
+	//		asrMap->tileImages[i] = new ObImage(wImgFile);
+	//		break;
+	//	}
+	//	if (i < 3)
+	//	{
+	//		ImGui::SameLine();
+	//	}
+	//}
+	////ImgIdx
+	//if (ImGui::InputInt("ImgIdx", &brushImgIdx))
+	//{
+	//	brushImgIdx = Utility::Saturate(brushImgIdx, 0, 3);
+
+	//	if (not asrMap->tileImages[brushImgIdx])
+	//	{
+	//		brushImgIdx = 0;
+	//	}
+	//}
+	////maxFrame
+	//ImGui::InputInt2("maxFrame", (int*)&asrMap->tileImages[brushImgIdx]->maxFrame);
+
+	//Int2 MF = asrMap->tileImages[brushImgIdx]->maxFrame;
+	//ImVec2 size;
+	//size.x = 300.0f / (float)MF.x;
+	//size.y = 300.0f / (float)MF.y;
+	//ImVec2 LT, RB;
+	//int index = 0;
+	//for (UINT i = 0; i < MF.y; i++)
+	//{
+	//	for (UINT j = 0; j < MF.x; j++)
+	//	{
+	//		if (j != 0)
+	//		{
+	//			//같은줄에 배치
+	//			ImGui::SameLine();
+	//		}
+	//		//텍스쳐 좌표
+	//		LT.x = 1.0f / MF.x * j;
+	//		LT.y = 1.0f / MF.y * i;
+	//		RB.x = 1.0f / MF.x * (j + 1);
+	//		RB.y = 1.0f / MF.y * (i + 1);
+
+	//		ImGui::PushID(index);
+	//		if (ImGui::ImageButton((void*)asrMap->tileImages[brushImgIdx]->GetSRV()
+	//			, size, LT, RB))
+	//		{
+	//			brushFrame.x = j;
+	//			brushFrame.y = i;
+	//		}
+	//		index++;
+	//		ImGui::PopID();
+	//	}
+	//}
+
+	////TileState
+	//ImGui::SliderInt("TileState", &brushState, TILE_NONE, TILE_SIZE-1);
+	////TileColor
+	//ImGui::ColorEdit4("TileColor", (float*)&brushColor, ImGuiColorEditFlags_PickerHueWheel);
+
+	//if (INPUT->KeyPress(VK_LBUTTON))
+	//{
+	//	Int2 Idx;
+	//	//?
+	//	if (asrMap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), Idx))
+	//	{
+	//		asrMap->SetTile(Idx, brushFrame, brushImgIdx, brushState,brushColor);
+	//	}
+	//}

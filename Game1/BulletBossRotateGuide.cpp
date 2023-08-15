@@ -8,7 +8,7 @@ BulletBossRotateGuide::BulletBossRotateGuide(wstring _wstr,
 {
     bulletLifeTime = 15.0f;
     backUpBulletLifeTime = bulletLifeTime;
-    damagePoint = 5;
+    damagePoint = 1;
 	rotateTime = 5.0f;
 	backUpRotateTime = rotateTime * 2.0f;
 	stopTime = 2.0f;

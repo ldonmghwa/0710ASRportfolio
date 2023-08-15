@@ -1,5 +1,6 @@
 #pragma once
-#define TILENONEINT2 Int2(7, 14) 
+//#define TILENONEINT2 Int2(7, 14) 
+#define TILENONEINT2 Int2(2, 9) 
 #define TILESANDINT2 Int2(7, 1)
 #define TILEWALLPTINT2 Int2(0, 15)
 #define TILEWALLPTLDINT2 Int2(0, 19)
@@ -116,8 +117,8 @@ typedef struct BSPTree {
 				value.room.wallPoint[2][0].y = value.room.vertex[0].y + RANDOM->Int(3, 4);
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 2;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 2));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.middlePoint.x, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 2, value.room.vertex[0].y + 2));
 				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
 			}
 			//작은방일때
@@ -136,8 +137,9 @@ typedef struct BSPTree {
 				value.room.wallPoint[2][0].y = value.room.vertex[0].y + 3;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 1;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.middlePoint.x, value.room.vertex[1].y - 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
 			}
 		}
 		//세로 > 가로
@@ -159,9 +161,9 @@ typedef struct BSPTree {
 				value.room.wallPoint[2][0].y = value.room.vertex[1].y - 6;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 4;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[0].y + 2));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 2, value.room.middlePoint.y));
 				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[1].y - 2));
 			}
 			else {
 				value.room.wallPoint[0][0].x = value.room.vertex[0].x + RANDOM->Int(2, 3);
@@ -178,8 +180,9 @@ typedef struct BSPTree {
 				value.room.wallPoint[2][0].y = value.room.vertex[1].y - 5;
 				value.room.wallPoint[2][1].y = value.room.wallPoint[2][0].y + 3;
 
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.vertex[1].y - 2));
-				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 2, value.room.vertex[0].y + 2));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[0].x + 1, value.room.middlePoint.y));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[0].y + 1));
+				value.room.monsterSpawn.push_back(Int2(value.room.vertex[1].x - 1, value.room.vertex[1].y - 1));
 			}
 			
 		}
@@ -196,7 +199,6 @@ typedef struct BSPTPointer {
 class ASRMap
 {
 private:
-	Int2 maxMapTilePos;
 	Int2 minMapTilePos;
 
 	ObRect* crossX;
@@ -209,10 +211,8 @@ private:
 	vector<BSPT*> realMapVector;
 	vector<class Tile*> way;
 
-	int depth;
 	int keyCount;
 	int tileDegreeOfFall;
-	int bossRoomIdx;
 	int tileImgIdx;
 
 	//ObIso*		isoMap;
@@ -223,13 +223,18 @@ private:
 	int			brushState;
 	Color		brushColor;
 
+
 	bool isWH;
 private:
 	void DivideTree(Int2 maxPoint, Int2 minPoint, int Depth);
 	void DeleteTree();
 	void SearchAroundWay(Int2 tempTilePos);
-	
-
+public:
+	Int2 maxMapTilePos;
+	int depth;
+	int bossRoomIdx;
+	int stepIdx;
+	int count;
 public:
 	ASRMap();
 	~ASRMap();
@@ -238,7 +243,19 @@ public:
 	void Update();
 	void Render();
 
+	void ResizeTileXY(){
+		asrMap->ResizeTile(Int2(maxMapTilePos.x + 1, maxMapTilePos.y + 1));
+		asrMap->SetWorldPos(Vector2(-maxMapTilePos.x * asrMap->scale.x * 0.5f, -maxMapTilePos.y * asrMap->scale.y * 0.5f));
+		asrMap->CreateTileCost();
+		if (bspTree) {
+			delete bspTree;
+			bspTree = nullptr;
+		}
+		bspTree = new BSPT(maxMapTilePos, minMapTilePos, keyCount, depth);
+		rootTree = bspTree;
+	}
 	void AutoRenderMap();
+	void StepRederMap();
 	void VectorShow();
 	void MappingBspTree();
 };

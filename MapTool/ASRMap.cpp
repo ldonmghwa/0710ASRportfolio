@@ -39,8 +39,9 @@ ASRMap::~ASRMap()
 void ASRMap::Init()
 {
 	keyCount = 0;
-	isWH = true;
-	depth = 4;
+	isWH = RANDOM->Int(0, 99) < 50 ? true : false;
+	depth = 2;
+	count = 0;
 	tileDegreeOfFall = 1;
 	asrMap->scale.x = 5.0f;
 	asrMap->scale.y = 5.0f;
@@ -55,11 +56,12 @@ void ASRMap::Init()
 	};
 	bossRoomIdx -= 1;
 	tileImgIdx = 0;
+	brushImgIdx = 2;
 }
 
 void ASRMap::Update()
 {
-	ImGui::Text("cam pos: %f, %f", CAM->position.x, CAM->position.y);
+	//ImGui::Text("cam pos: %f, %f", CAM->position.x, CAM->position.y);
 	if (ImGui::Button("Cross line visible")) {
 		crossX->isVisible = not crossX->isVisible;
 		crossY->isVisible = not crossY->isVisible;
@@ -67,131 +69,7 @@ void ASRMap::Update()
 	if (ImGui::Button("save")) {
 		asrMap->Save();
 	}
-	if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 1000))
-	{
-		asrMap->ResizeTile(tileSize);
-	}
-	//TileScale
-	//ImGui::SliderFloat2("TileScale", (float*)&asrMap->scale, 1.0f, 200.0f);
-	if (ImGui::InputFloat("TileScale", (float*)&asrMap->scale.x, 1.0f, 200.0f))
-	{
-		asrMap->scale.y = asrMap->scale.x;
-	}
-	//TilePos
-	Vector2 pos = asrMap->GetWorldPos();
-	if (ImGui::SliderFloat2("TilePos", (float*)&pos, -1000.0f, 1000.0f))
-	{
-		asrMap->SetWorldPos(pos);
-	}
 
-
-	if (GUI->FileImGui("Save", "Save Map",
-		".txt", "../Contents/TileMap"))
-	{
-		string path = ImGuiFileDialog::Instance()->GetFilePathName();
-		Utility::Replace(&path, "\\", "/");
-		size_t tok = path.find_last_of("/") + 1;
-		path = path.substr(tok, path.length() - tok);
-		asrMap->file = path;
-		asrMap->Save();
-	}
-	ImGui::SameLine();
-
-	if (GUI->FileImGui("Load", "Load Map", ".txt", "../Contents/TileMap"))
-	{
-		string path = ImGuiFileDialog::Instance()->GetFilePathName();
-		Utility::Replace(&path, "\\", "/");
-		size_t tok = path.find_last_of("/") + 1;
-		path = path.substr(tok, path.length() - tok);
-		asrMap->file = path;
-		asrMap->Load();
-		tileSize = asrMap->GetTileSize();
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		string str = "Texture" + to_string(i);
-		if (GUI->FileImGui(str.c_str(), str.c_str(),
-			".jpg,.png,.bmp,.dds,.tga", "../Contents/Images"))
-		{
-			string path = ImGuiFileDialog::Instance()->GetFilePathName();
-			Utility::Replace(&path, "\\", "/");
-			size_t tok = path.find_last_of("/") + 1;
-			path = path.substr(tok, path.length() - tok);
-			SafeDelete(asrMap->tileImages[i]);
-			wstring wImgFile = L"";
-			wImgFile.assign(path.begin(), path.end());
-			asrMap->tileImages[i] = new ObImage(wImgFile);
-			break;
-		}
-		if (i < 3)
-		{
-			ImGui::SameLine();
-		}
-	}
-
-	//"감바스";
-	//L"감바스";
-	//ImgIdx
-	if (ImGui::InputInt("ImgIdx", &brushImgIdx))
-	{
-		brushImgIdx = Utility::Saturate(brushImgIdx, 0, 3);
-
-		if (not asrMap->tileImages[brushImgIdx])
-		{
-			brushImgIdx = 0;
-		}
-	}
-	//maxFrame
-	ImGui::InputInt2("maxFrame", (int*)&asrMap->tileImages[brushImgIdx]->maxFrame);
-
-	Int2 MF = asrMap->tileImages[brushImgIdx]->maxFrame;
-	ImVec2 size;
-	size.x = 300.0f / (float)MF.x;
-	size.y = 300.0f / (float)MF.y;
-	ImVec2 LT, RB;
-	int index = 0;
-	for (UINT i = 0; i < MF.y; i++)
-	{
-		for (UINT j = 0; j < MF.x; j++)
-		{
-			if (j != 0)
-			{
-				//같은줄에 배치
-				ImGui::SameLine();
-			}
-			//텍스쳐 좌표
-			LT.x = 1.0f / MF.x * j;
-			LT.y = 1.0f / MF.y * i;
-			RB.x = 1.0f / MF.x * (j + 1);
-			RB.y = 1.0f / MF.y * (i + 1);
-
-			ImGui::PushID(index);
-			if (ImGui::ImageButton((void*)asrMap->tileImages[brushImgIdx]->GetSRV()
-				, size, LT, RB))
-			{
-				brushFrame.x = j;
-				brushFrame.y = i;
-			}
-			index++;
-			ImGui::PopID();
-		}
-	}
-
-	//TileState
-	ImGui::SliderInt("TileState", &brushState, TILE_NONE, TILE_SIZE-1);
-	//TileColor
-	ImGui::ColorEdit4("TileColor", (float*)&brushColor, ImGuiColorEditFlags_PickerHueWheel);
-
-	if (INPUT->KeyPress(VK_LBUTTON))
-	{
-		Int2 Idx;
-		//?
-		if (asrMap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), Idx))
-		{
-			asrMap->SetTile(Idx, brushFrame, brushImgIdx, brushState,brushColor);
-		}
-	}
 	asrMap->Update();
 	crossX->Update();
 	crossY->Update();
@@ -214,9 +92,192 @@ void ASRMap::AutoRenderMap()
 	realMapVector.clear();
 	realMapVector.reserve(pow(2, depth - 1));
 	bspTreeVector.push_back(bspTree);
-	DivideTree(maxMapTilePos, minMapTilePos, bspTree->depth);
+	DivideTree(maxMapTilePos, minMapTilePos, depth);
 	VectorShow();
 	MappingBspTree();
+}
+
+void ASRMap::StepRederMap()
+{
+	if (count == 1) {
+		system("cls");
+		isWH = RANDOM->Int(0, 99) < 50 ? true : false;
+		bspTree = rootTree;
+		bspTreeVector.clear();
+		bspTreeVector.reserve(pow(2, depth));
+		realMapVector.clear();
+		realMapVector.reserve(pow(2, depth - 1));
+		bspTreeVector.push_back(bspTree);
+		DivideTree(maxMapTilePos, minMapTilePos, depth);
+	}
+	if (stepIdx == 0) {
+		auto bspit = bspTreeVector.begin();
+		//전체 배경 타일 매핑
+		for (int i = (*bspit)->value.rrVertex[0].y; i < (*bspit)->value.rrVertex[3].y + 1; i++) {
+			for (int j = (*bspit)->value.rrVertex[0].x; j < (*bspit)->value.rrVertex[3].x + 1; j++) {
+				asrMap->SetTile(0, Int2(j, i), TILENONEINT2, brushImgIdx, TILE_NONE, Color(0.5f, 0.5f, 0.5f, 0.5f));
+			}
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 1) {
+		//방 타일 매핑
+		for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+			//세로 y값
+			for (int i = (*it)->value.room.vertex[0].y + 1; i < (*it)->value.room.vertex[1].y; i++) {
+				//가로 x값
+				for (int j = (*it)->value.room.vertex[0].x; j < (*it)->value.room.vertex[1].x; j++) {
+					asrMap->SetTile(0, Int2(j, i), TILESANDINT2, brushImgIdx, TILE_SAND, Color(0.5f, 0.5f, 0.5f, 0.5f));
+				}
+			}
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 2) {
+		//방 사이의 길 매핑
+		for (int i = 0; i + 1 < realMapVector.size(); i++) {
+			Int2 startPos = realMapVector[i]->value.room.middlePoint;
+			Int2 destPos = realMapVector[i + 1]->value.room.middlePoint;
+			asrMap->PathFinding(startPos, destPos, way);
+			cout << "- " << i << "~" << i + 1 << " way: ";
+			for (int j = 0; j + 1 < way.size(); j++) {
+				Int2 tempTilePos;
+				cout << "[" << way[j]->Pos.x << ", " << way[j]->Pos.y << "] ";
+				asrMap->WorldPosToTileIdx(way[j]->Pos, tempTilePos);
+				asrMap->SetTile(0, tempTilePos, TILESANDINT2, brushImgIdx, TILE_SAND, Color(0.5f, 0.5f, 0.5f, 0.5f));
+				SearchAroundWay(tempTilePos);
+			}
+			cout << endl << endl;
+		}
+		asrMap->UpdateSetTile();
+		
+	}
+	else if (stepIdx == 3) {
+		//방안의 장애물 매핑
+		for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+			for (int k = 0; k < 3; k++) {
+				for (int i = (*it)->value.room.wallPoint[k][0].y; i < (*it)->value.room.wallPoint[k][1].y; i++) {
+					for (int j = (*it)->value.room.wallPoint[k][0].x; j < (*it)->value.room.wallPoint[k][1].x; j++) {
+						asrMap->SetTile(0, Int2(j, i), TILEOBSTPTRINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+					}
+				}
+			}
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 4) {
+		//길 주변 벽 매핑
+		for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+			//세로 y값
+			for (int i = (*it)->value.room.vertex[0].y - 1; i < (*it)->value.room.vertex[1].y + 1; i++) {
+				//가로 x값
+				for (int j = (*it)->value.room.vertex[0].x - 1; j < (*it)->value.room.vertex[1].x + 1; j++) {
+					if (i == (*it)->value.room.vertex[0].y - 1) {
+						if (asrMap->GetTileState(Int2(j, i)) == TILE_NONE) {
+
+							if (j == (*it)->value.room.vertex[0].x - 1) {
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTBTLINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							}
+							else if (j == (*it)->value.room.vertex[1].x) {
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTBTRINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							}
+							else asrMap->SetTile(0, Int2(j, i), TILEWALLPTBTINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+						}
+					}
+					else if (i == (*it)->value.room.vertex[0].y
+						or j == (*it)->value.room.vertex[0].x - 1
+						or i == (*it)->value.room.vertex[1].y
+						or j == (*it)->value.room.vertex[1].x)
+					{
+						if (asrMap->GetTileState(Int2(j, i)) == TILE_NONE) {
+							asrMap->SetTile(0, Int2(j, i), TILEWALLPTINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							if (i == (*it)->value.room.vertex[0].y and j == (*it)->value.room.vertex[0].x - 1)
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTLDINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							if (i == (*it)->value.room.vertex[0].y and j == (*it)->value.room.vertex[1].x)
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTRDINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							if (i == (*it)->value.room.vertex[1].y and j == (*it)->value.room.vertex[0].x - 1)
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTLUINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+							if (i == (*it)->value.room.vertex[1].y and j == (*it)->value.room.vertex[1].x)
+								asrMap->SetTile(0, Int2(j, i), TILEWALLPTRUINT2, brushImgIdx, TILE_WALL, Color(0.5f, 0.5f, 0.5f, 0.5f));
+
+						}
+					}
+				}
+			}
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 5) {
+		for (int k = 0; k < realMapVector.size(); k++) {
+			if (k != bossRoomIdx) {
+				for (int i = realMapVector[k]->value.room.vertex[0].y - 1;
+					i < realMapVector[k]->value.room.vertex[1].y + 1; i++) {
+					for (int j = realMapVector[k]->value.room.vertex[0].x - 1;
+						j < realMapVector[k]->value.room.vertex[1].x + 1; j++) {
+						for (auto it2 = realMapVector[k]->value.room.monsterSpawn.begin();
+							it2 != realMapVector[k]->value.room.monsterSpawn.end(); it2++) {
+							if ((*it2).x == j and (*it2).y == i) {
+								asrMap->SetTile(
+									0,
+									Int2(j, i),
+									TILESANDINT2,
+									brushImgIdx,
+									TILE_MSPAWN,
+									Color(1.0f, 0.0f, 0.0f, 0.5f));
+							}
+						}
+					}
+				}
+			}
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 6) {
+		//상자 매핑
+		for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
+			if (RANDOM->Int(0, 99) < 100)
+				asrMap->SetTile(0,
+					Int2((*it)->value.room.middlePoint.x, (*it)->value.room.middlePoint.y),
+					TILECHESTINT2,
+					brushImgIdx,
+					TILE_TRAP,
+					Color(0.5f, 0.5f, 0.5f, 0.5f));
+		}
+		asrMap->UpdateSetTile();
+	}
+	else if (stepIdx == 7) {
+		//보스 스폰위치 매핑
+		asrMap->SetTile(
+			0,
+			Int2(realMapVector[bossRoomIdx]->value.room.middlePoint.x - 1,
+				realMapVector[bossRoomIdx]->value.room.vertex[1].y - 6),
+			TILESANDINT2,
+			brushImgIdx,
+			TILE_MBSPAWN,
+			Color(0.0f, 1.0f, 0.0f, 0.5f)
+		);
+		//플레이어 버튼 스폰위치 매핑
+		asrMap->SetTile(
+			0,
+			Int2(realMapVector[bossRoomIdx]->value.room.middlePoint.x - 1,
+				realMapVector[bossRoomIdx]->value.room.vertex[0].y + 2),
+			TILESANDINT2,
+			brushImgIdx,
+			TILE_PSPAWNB,
+			Color(0.0f, 1.0f, 1.0f, 0.5f)
+		);
+		//플레이어 스폰위치 매핑
+		asrMap->SetTile(
+			0,
+			Int2(realMapVector[0]->value.room.middlePoint.x - 1,
+				realMapVector[0]->value.room.middlePoint.y - 1),
+			TILESANDINT2,
+			brushImgIdx,
+			TILE_PSPAWN,
+			Color(0.0f, 0.0f, 1.0f, 0.5f)
+		);
+		asrMap->UpdateSetTile();
+	}
 }
 
 void ASRMap::VectorShow()
@@ -273,7 +334,7 @@ void ASRMap::MappingBspTree()
 			}
 		}
 		//상자 위치 매핑
-		if (RANDOM->Int(0, 99) < 60)
+		if (RANDOM->Int(0, 99) < 100)
 			asrMap->SetTile(0,
 				Int2((*it)->value.room.middlePoint.x, (*it)->value.room.middlePoint.y),
 				TILECHESTINT2,
@@ -351,28 +412,6 @@ void ASRMap::MappingBspTree()
 			}
 		}
 	}
-
-	//몬스터 스폰위치 매핑
-	//for (auto it = realMapVector.begin(); it != realMapVector.end(); it++) {
-	//	//세로 y값
-	//	for (int i = (*it)->value.room.vertex[0].y - 1; i < (*it)->value.room.vertex[1].y + 1; i++) {
-	//		//가로 x값
-	//		for (int j = (*it)->value.room.vertex[0].x - 1; j < (*it)->value.room.vertex[1].x + 1; j++) {
-	//			for (auto it2 = (*it)->value.room.monsterSpawn.begin();
-	//				it2 != (*it)->value.room.monsterSpawn.end(); it2++) {
-	//				if ((*it2).x == j and (*it2).y == i) {
-	//					asrMap->SetTile(
-	//						0, 
-	//						Int2(j, i), 
-	//						Int2(5, 3), 
-	//						brushImgIdx, 
-	//						TILE_MSPAWN, 
-	//						Color(1.0f, 0.0f, 0.0f, 0.5f));
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 	
 	//보스 스폰위치 매핑
 	asrMap->SetTile(

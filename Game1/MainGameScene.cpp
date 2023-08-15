@@ -12,23 +12,25 @@ MainGameScene::MainGameScene()
 	map->scale.x = 50.0f;
 	map->scale.y = 50.0f;
 	map->CreateTileCost();
-
+	correctionValue = Vector2(map->scale.x * map->GetTileSize().x, map->scale.y * map->GetTileSize().y);
+	cout << "correctionValue: " << correctionValue.x << ", " << correctionValue.y << endl;
 	gui = new GameGUI();
 	plConvict = new Player("Convict");
 	boss = new Boss("Agonizer");
 	Int2 tileIdx;
+	Int2 tileIdx2;
 	int chestIdx = 0;
 	int minionCount = 0;
-	for (int i = 0; i < 101; i++) {
-		for (int j = 0; j < 101; j++) {
+	for (int i = 0; i < map->GetTileSize().y; i++) {
+		for (int j = 0; j < map->GetTileSize().x; j++) {
 			tileIdx.x = j;
 			tileIdx.y = i;
 			if (map->GetTileState(tileIdx) == TILE_TRAP) {
 				chestVector.push_back(new ASRChest());
 				chestVector[chestIdx]->SetWorldPos(
 					Vector2(
-						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+						map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+						map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
 					)
 				);
 				chestIdx++;
@@ -36,36 +38,44 @@ MainGameScene::MainGameScene()
 			if (map->GetTileState(tileIdx) == TILE_PSPAWN) {
 				plConvict->SetSpawnPos(
 					Vector2(
-						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+						map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+						map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
 					)
 				);
+				plConvict->GetCol()->Update();
+			}
+			
+			/*if (map->GetTileState(tileIdx) == TILE_MSPAWN) {
+				minionVector.push_back(new Monster("Minion" + to_string(minionCount), false));
+				minionVector[minionVector.size() - 1]->SetSpawnPos(
+					Vector2(
+						map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+						map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
+					)
+				);
+				minionCount++;
+			}*/
+			if (map->GetTileState(tileIdx) == TILE_PSPAWNB) {
+				plConvict->bossRoomPos =
+					Vector2(
+						map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+						map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
+					);
 				plConvict->GetCol()->Update();
 			}
 			if (map->GetTileState(tileIdx) == TILE_MBSPAWN) {
 				boss->SetSpawnPos(
 					Vector2(
-						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+						map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+						map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
 					)
 				);
 				boss->spawnPos = Vector2(
-					map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-					map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
+					map->TilePosToWorldMiddlePos(tileIdx).x - correctionValue.x,
+					map->TilePosToWorldMiddlePos(tileIdx).y - correctionValue.y
 				);
 				boss->isSetSpawning = true;
 				boss->GetCol()->Update();
-			}
-			if (map->GetTileState(tileIdx) == TILE_MSPAWN) {
-				minionVector.push_back(new Monster("Minion" + to_string(minionCount), false));
-				minionVector[minionVector.size() - 1]->SetSpawnPos(
-					Vector2(
-						map->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2,
-						map->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2
-					)
-				);
-				minionCount++;
-				//minionVector[minionVector.size() - 1]->Update();
 			}
 		}
 	}
@@ -100,7 +110,8 @@ void MainGameScene::Init()
 	}
 	boss->Init();
 	gui->Init(plConvict->GetCurrentBulletNum());
-	map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
+	//map->SetWorldPos(Vector2(-1250.0f * 2, -1250.0f * 2));
+	map->SetWorldPos(-correctionValue);
 	plConvict->SetGui(gui);
 	plConvict->chestKeyNum = chestVector.size();
 }
@@ -122,7 +133,6 @@ void MainGameScene::Update()
 		}
 	}*/
 	
-
 	map->Update();
 	gui->Update();
 	for (auto it = minionVector.begin(); it != minionVector.end(); it++) {

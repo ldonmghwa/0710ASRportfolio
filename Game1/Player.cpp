@@ -3,6 +3,7 @@
 Player::Player(string _name)
     : Character(_name)
 {
+    col2 = new ObRect();
     resizeValue = 3.0f;
     playerType = PLType::PLCONVICT;
     charImg[(int)CRState::IDLE] = new ObImage(L"Char_Convict_idle.png");
@@ -57,7 +58,8 @@ Player::Player(string _name)
 
      col->pivot = OFFSET_B;
     col->isFilled = false;
-
+    col2->scale.x = 1.0f;
+    col2->scale.y = 1.0f;
 
     dirFrame[0] = 1;
     dirFrame[1] = 1;
@@ -195,10 +197,14 @@ void Player::Init()
     isBBTime = false;
     isGlitStart = false;
     isGlit = false;
+    isHittingOn = false;
+    isLightening = true;
 
+    rollTime = 0.5f;
+    backUpRollTime = rollTime;
     speed = 300.0f;
     backUpSpeed = speed;
-    rollWeight = 0.0f;
+    rollWeight = 1.0f;
     backUpRollWeight = rollWeight;
     blankBulletTime = 3.0f;
     backUpBlankBulletTime = blankBulletTime;
@@ -206,29 +212,17 @@ void Player::Init()
     backUpGlitTime = glitTime;
     glitingTime = 0.1f;
     backUpGlitingTime = glitingTime;
-    rollWeightScale = 0.005f;
+    bloodingTime = 0.1f;
+    backUpBloodingTime = bloodingTime;
+    rollWeightScale = 0.5f;
     float rollDistanceVector = 300.0f;
     rollDistance = Vector2(rollDistanceVector, rollDistanceVector);
     rollDistance.Normalize();
-
-
-
-    Int2 tileIdx;
-    for (int i = 0; i < 101; i++) {
-        for (int j = 0; j < 101; j++) {
-            tileIdx.x = j;
-            tileIdx.y = i;
-            if (tileMap->GetTileState(tileIdx) == TILE_PSPAWNB) {
-                bossRoomPos.x = tileMap->TilePosToWorldMiddlePos(tileIdx).x - 1250.0f * 2;
-                bossRoomPos.y = tileMap->TilePosToWorldMiddlePos(tileIdx).y - 1250.0f * 2;
-                
-            }
-        }
-    }
 }
 
 void Player::Control()
 {
+    //if (!isControl) return;
     //계속 누를때
     controlDir = Vector2();
     if (INPUT->KeyPress('W'))
@@ -248,31 +242,135 @@ void Player::Control()
         controlDir.x = 1.0f;
     }
     dir2 = controlDir;
-    controlDir.Normalize();
-
-    col->MoveWorldPos(controlDir * DELTA * speed);
+    controlDir.Normalize();col->MoveWorldPos(controlDir * DELTA * speed);
     
 }
 
+//void Player::Control1()
+//{
+//    cout << "1: " << plIdx.x << ", " << plIdx.y << endl;
+//    cout << "2: " << lastPlIdx.x << ", " << lastPlIdx.y << endl;
+//    if (plIdx.y - lastPlIdx.y > 0) {
+//        isControl = false;
+//        controlDir.y = 0;
+//        
+//        if (INPUT->KeyDown('S')) {
+//            isControl = true;
+//            controlDir.y = -1;
+//        }
+//        if (INPUT->KeyPress('A')) {
+//            controlDir.x = -1;
+//        }
+//        else if (INPUT->KeyPress('D')) {
+//            controlDir.x = 1;
+//        }
+//        if (plIdx.x - lastPlIdx.x > 0) {
+//            controlDir.x = 1;
+//        }
+//        else if (plIdx.x - lastPlIdx.x < 0) {
+//            controlDir.x = -1;
+//        }
+//        controlDir.Normalize();
+//    }
+//    if (plIdx.y - lastPlIdx.y > 0) {
+//        isControl = false;
+//        controlDir.y = 0;
+//        if (INPUT->KeyDown('W')) {
+//            isControl = true;
+//            controlDir.y = 1;
+//        }
+//        if (INPUT->KeyDown('A')) {
+//            isControl = true;
+//            controlDir.x = -1;
+//        }
+//        else if (INPUT->KeyDown('D')) {
+//            isControl = true;
+//            controlDir.x = 1;
+//        }
+//        if (plIdx.x - lastPlIdx.x > 0) {
+//            controlDir.x = 1;
+//        }
+//        else if (plIdx.x - lastPlIdx.x < 0) {
+//            controlDir.x = -1;
+//        }
+//        controlDir.Normalize();
+//    }
+//    if (plIdx.x - lastPlIdx.x > 0) {
+//        isControl = false;
+//        controlDir.x = 0;
+//        if (INPUT->KeyDown('A')) {
+//            isControl = true;
+//            controlDir.x = -1;
+//        }
+//        if (INPUT->KeyDown('W')) {
+//            controlDir.y = 1;
+//        }
+//        else if (INPUT->KeyDown('S')) {
+//            controlDir.y = -1;
+//        }
+//        if (plIdx.y - lastPlIdx.y > 0) {
+//            controlDir.y = 1;
+//        }
+//        else if (plIdx.y - lastPlIdx.y < 0) {
+//            controlDir.y = -1;
+//        }
+//        controlDir.Normalize();
+//    }
+//    if (plIdx.x - lastPlIdx.x < 0) {
+//        isControl = false;
+//        controlDir.x = 0;
+//        if (INPUT->KeyDown('D')) {
+//            controlDir.x = 1;
+//        }
+//        if (INPUT->KeyDown('W')) {
+//            controlDir.y = 1;
+//        }
+//        else if (INPUT->KeyDown('S')){
+//            controlDir.y = -1;
+//        }
+//        if (plIdx.y - lastPlIdx.y > 0) {
+//            controlDir.y = 1;
+//        }
+//        else if (plIdx.y - lastPlIdx.y < 0) {
+//            controlDir.y = -1;
+//        }
+//        controlDir.Normalize();
+//    }
+//    ImGui::Text("%d, %d", controlDir.x, controlDir.y);
+//    if (state == CRState::WALK or state == CRState::WALKWP or state == CRState::ROLL) {
+//        col->MoveWorldPos(controlDir * speed * DELTA);
+//    }
+//}
+
 void Player::Update()
 {
+    //tileMap->WorldPosToTileIdx(GetFoot() , lastPlIdx);
     lastPos = col->GetWorldPos();
-    
     CAM->position = col->GetWorldPos();
     for (auto it = gunVector.begin(); it != gunVector.end(); it++) (*it)->Update();
     Character::Update();
     plgui->IncreaseMoneyBar(money);
     plgui->IncreaseBoxKeyBar(chestKeyNum);
+    if (tileMap->WorldPosToTileIdx(GetFoot(), plIdx)) {
+        if (tileMap->GetTileState(plIdx) == TILE_WALL) {
+            GoBack();
+        }
+    }
+    if (isHittingOn) {
+        bloodingTime -= DELTA;
+        LIGHT->radius = 900.0f;
+        LIGHT->outColor = Color(1.0f, 0.0f, 0.0f, 0.1f);
+        LIGHT->select = true;
+        if (bloodingTime < 0) {
+            bloodingTime = backUpBloodingTime;
+            isHittingOn = false;
+            LIGHT->select = false;
+            LIGHT->outColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
+        }
+    }
     if (isGlitStart) {
         isInvincible = true;
         Character::Glit();
-    }
-    if (!isInvincible && speed != 1500.0f) {
-        if (tileMap->WorldPosToTileIdx(GetFoot(), plIdx)) {
-            if (tileMap->GetTileState(plIdx) == TILE_WALL) {
-                GoBack();
-            }
-        }
     }
     if (gunVector[selectWPNum]->GetIsCylinderEmpty() 
         and gunVector[selectWPNum]->isReloading) {
@@ -367,7 +465,7 @@ void Player::Update()
                 if (selectWPNum != '1' - '0' - 1) {
                     gunVector[selectWPNum]->isVisible = false;
                     selectWPNum = '1' - '0' - 1;
-                    gunVector[selectWPNum]->isVisible = true; 
+                    gunVector[selectWPNum]->isVisible = true;
                 }
                 else {
                     gunVector[selectWPNum]->isVisible = false;
@@ -412,7 +510,6 @@ void Player::Update()
             backUpDashPoint = col->GetWorldPos();
             state = CRState::ROLL;
             charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-            rollTime = 0.0f;
         }
         if (INPUT->KeyDown('1')) {
             selectWPNum = '1' - '0' - 1;
@@ -454,7 +551,6 @@ void Player::Update()
             gunVector[selectWPNum]->isVisible = false;
             state = CRState::ROLL;
             charImg[(int)CRState::ROLL]->ChangeAnim(ANIMSTATE::ONCE, 0.05f);
-            rollTime = 0.0f;
         }
         if (INPUT->KeyDown(VK_LBUTTON)) {
             if (gunVector[selectWPNum]->GetGunType() == GunType::BASIC) {
@@ -510,16 +606,15 @@ void Player::Update()
     }
     else if (state == CRState::ROLL)
     {
-        rollTime += DELTA;
+        //rollTime -= DELTA;
         //rollWeight += DELTA * rollWeightScale;
-        /*col->SetWorldPos(Vector2::Lerp(col->GetWorldPos()
-            , backUpDashPoint + rollDistance * controlDir, rollWeight));*/
-        col->MoveWorldPos(500.0f * controlDir * DELTA);
         LookTarget(col->GetWorldPos() + controlDir);
-        if (charImg[(int)CRState::ROLL]->isAniStop())
+        col->MoveWorldPos(500.0f * controlDir * DELTA);
+        if (charImg[(int)state]->isAniStop())
         {
+            //rollTime = backUpRollTime;
             isInvincible = false;
-            rollWeight = backUpRollWeight;
+            //rollWeight = backUpRollWeight;
             speed = backUpSpeed;
             if (isCarryWP) {
                 gunVector[selectWPNum]->isVisible = true;
@@ -537,11 +632,15 @@ void Player::Update()
         //charImg[(int)CRState::DEATH]->Update();
         if (INPUT->KeyDown('F')) {
             healPoint = 6;
-            state = CRState::IDLE;        
+            for (int i = 0; i < healPoint; i++) {
+                plgui->IncreaseHPBar();
+            }
+            state = CRState::IDLE;
             charImg[(int)CRState::DEATH]->ChangeAnim(ANIMSTATE::STOP, 0.1f);
             charImg[(int)CRState::IDLE]->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
         }
     }
+    
 }
 
 void Player::Render()
@@ -611,6 +710,7 @@ void Player::GoBack()
 
 void Player::TakeDamage(int _damagePoint)
 {
+    isHittingOn = true;
     Character::TakeDamage(_damagePoint);
     plgui->ReduceHPBar();
 }

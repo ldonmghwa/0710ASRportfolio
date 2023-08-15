@@ -9,6 +9,7 @@ private:
 	int timeOutCount;
 	float guidedBulletPower;
 	float mazeBulletPower;
+	float mazeBulletLifeTime;
 	float rotateYPosIncrementValue;
 	float rotateXPos;
 	float backUpRotateCount;
@@ -36,5 +37,8 @@ public:
 	void MazeBullet();
 	void GuideBullet();
 	void RotateGuideBullet();
+	float GetMazeBulletLifeTime() {
+		return mazeBulletLifeTime;
+	}
 };
 

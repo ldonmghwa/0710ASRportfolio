@@ -11,7 +11,7 @@ GunBoss::GunBoss(wstring _wstr,
 	curBulletNum = bulletNum;
 	bulletPower = 500.0f;
 	guidedBulletPower = 100.0f;
-	mazeBulletPower = 150.0f;
+	mazeBulletPower = 180.0f;
 	reloadTime = 5.0f;
 	backUpReloadTime = reloadTime;
 	reloadPerSec = (reloadTime - 0.1f) / bulletNum;
@@ -58,11 +58,24 @@ GunBoss::GunBoss(wstring _wstr,
 	mazeBulletPos.push_back("111111000011111111111111111111");
 	mazeBulletPos.push_back("111111000011111111111111111111");
 	mazeBulletPos.push_back("111111000011111111111111111111");
+	mazeBulletPos.push_back("111111000011111111111111111111");
+	mazeBulletPos.push_back("111111000011111111111111111111");
+	mazeBulletPos.push_back("111111000011111111111111111111");
+	mazeBulletPos.push_back("111111000011111111111111111111");
+	mazeBulletPos.push_back("111111000000000000000001111111");
+	mazeBulletPos.push_back("111111000000000000000001111111");
+	mazeBulletPos.push_back("111111000000000000000001111111");
+	mazeBulletPos.push_back("111111000000000000000001111111");
+	mazeBulletPos.push_back("111111000000000000000001111111");
+	mazeBulletPos.push_back("111111111111111100001111111111");
+	mazeBulletPos.push_back("111111111111111100001111111111");
+	mazeBulletPos.push_back("111111111111111100001111111111");
+	mazeBulletPos.push_back("111111111111111100001111111111");
 
 
 	for (int i = 0; i < (int)BossScene::SIZE; i++)
 		shootScene[i] = false;
-
+	mazeBulletLifeTime = 0.416f * mazeBulletPos.size();
 	shotSDKey = "BossGunShot";
 	mazeSoundKey = "MazeShot";
 	rotateSoundKey = "RotateShot";
@@ -233,7 +246,7 @@ void GunBoss::MazeBullet()
 			mazeBullet.back()->GetCol()->SetWorldPos(
 				Vector2(
 					col->GetWorldPos().x - size * mazeBullet.back()->GetCol()->scale.x + j * mazeBullet.back()->GetCol()->scale.x,
-					col->GetWorldPos().y + i * mazeBullet.back()->GetCol()->scale.y
+					col->GetWorldPos().y - i * mazeBullet.back()->GetCol()->scale.y + 1800.0f
 				)
 			);
 			if (mazeBulletPos[i][j] == '0') {
@@ -245,6 +258,7 @@ void GunBoss::MazeBullet()
 			mazeBullet.back()->Fire();
 		}
 	}
+	mazeBulletLifeTime = mazeBullet.back()->GetBulletLifeTime();
 	SOUND->Play(mazeSoundKey);
 }
 

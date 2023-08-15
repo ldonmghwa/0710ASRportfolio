@@ -9,7 +9,6 @@ protected:
 	ObImage*			charImg[(int)CRState::SIZE];
 
 	string				charName;
-	Vector2				lastPos;
 	Vector2				controlDir;
 	Vector2				dir2;
 
@@ -25,6 +24,8 @@ protected:
 	float				resizeValue;
 public:
 	ObTileMap*			tileMap;
+	Vector2				lastPos;
+	Vector2				bossRoomPos;
 	wstring				file_name;
 	bool				isDeath;
 	bool				isInvincible;

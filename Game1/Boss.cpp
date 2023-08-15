@@ -67,8 +67,8 @@ void Boss::Init()
         target,
         GunType::BOSS);
     Character::Init();
-    gun->shootScene[(int)BossScene::ROTATEGUIDE] = true;
-    gun->shootSceneIdx = (int)BossScene::ROTATEGUIDE;
+    gun->shootScene[(int)BossScene::BASIC] = true;
+    gun->shootSceneIdx = (int)BossScene::BASIC;
     isRotateChange = true;
     isSetSpawning = true;
     healPoint = 50;
@@ -113,6 +113,7 @@ void Boss::Update()
     }
     if (state == CRState::IDLE)
     {
+        mazeBulletLifeTime = gun->GetMazeBulletLifeTime();
         LookTarget(target[0]->GetCol()->GetWorldPos());
         if ((col->GetWorldPos() - target[0]->GetCol()->GetWorldPos()).Length() < detectionRange) {
             basicShootingInterval = backUpBasicShootingInterval;
@@ -175,8 +176,8 @@ void Boss::Update()
             mazeBulletLifeTime -= DELTA;
             this->col->SetWorldPos(spawnPos);
             if (isSetSpawning) {
-                target[0]->GetCol()->SetWorldPosX(spawnPos.x + 100.0f);
-                target[0]->GetCol()->SetWorldPosY(spawnPos.y - 750.0f);
+                target[0]->GetCol()->SetWorldPosX(target[0]->bossRoomPos.x);
+                target[0]->GetCol()->SetWorldPosY(target[0]->bossRoomPos.y);
                 gun->MazeBullet();
                 isSetSpawning = false;
             }

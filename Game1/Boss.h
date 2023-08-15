@@ -29,7 +29,8 @@ private:
 	Vector2 dest;
 	Vector2 source;
 public:
-	Vector2 spawnPos; 
+	Vector2 spawnPos;
+	Vector2 targetSpawnPos;
 	bool isSetSpawning;
 public:
 	Boss(string _name);
@@ -41,5 +42,9 @@ public:
 
 	void TargetSearch();
 	void LookTarget(Vector2 target);
+	void SetmazeBulletLifeTime(float _time) {
+		mazeBulletLifeTime = _time;
+		backUpMazeBulletLifeTime = mazeBulletLifeTime;
+	}
 };
 

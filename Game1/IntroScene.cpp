@@ -6,6 +6,12 @@ IntroScene::IntroScene()
 	titleImage = new ObImage(L"Intro_10x14.png");
 	titleImage->scale.x = titleImage->imageSize.x / 10.0f * 2.5f;
 	titleImage->scale.y = titleImage->imageSize.y / 14.0f * 2.2f;
+
+	//titleImage->scale.x = titleImage->imageSize.x / 10.0f * 2.5f;
+	//titleImage->scale.y = titleImage->imageSize.y / 14.0f * 2.2f;
+
+	titleImage->scale.x = titleImage->imageSize.x * app.GetWidth() / titleImage->imageSize.x;
+	titleImage->scale.y = titleImage->imageSize.y * app.GetHeight() / titleImage->imageSize.y;
 	titleImage->maxFrame.x = 10;
 	titleImage->maxFrame.y = 14;
 	titleImage->ChangeAnim(ANIMSTATE::LOOP, 0.1f, true);
@@ -48,7 +54,7 @@ IntroScene::~IntroScene()
 
 void IntroScene::Init()
 {
-	titleImage->SetWorldPos(Vector2(0.0f, 100.0f));
+	titleImage->SetWorldPos(Vector2(0.0f, 0.0f));
 	playButtonScale = 0.0f;
 	endButtonScale = 0.0f;
 }

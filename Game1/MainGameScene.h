@@ -9,7 +9,7 @@ private:
 	class Boss*	boss;
 	vector<class Monster*> minionVector;
 	float fadeout = 0.0f;
-
+	Vector2 correctionValue;
 	string introSDkey;
 
 public:

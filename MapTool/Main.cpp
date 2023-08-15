@@ -33,8 +33,7 @@ void Main::Release()
 
 void Main::Update()
 {
-	ImGui::Text("FPS : %d", (int)TIMER->GetFramePerSecond());
-
+	//ImGui::Text("FPS : %d", (int)TIMER->GetFramePerSecond());
 	if (INPUT->KeyPress('W'))
 	{
 		CAM->position += UP * 300.0f * DELTA;
@@ -51,9 +50,31 @@ void Main::Update()
 	{
 		CAM->position += RIGHT * 300.0f * DELTA;
 	}
-
+	if (ImGui::InputInt("TileSizeX", (int*)&asrMap->maxMapTilePos.x, 1, 1000))
+	{
+		asrMap->ResizeTileXY();
+	}
+	if (ImGui::InputInt("TileSizeY", (int*)&asrMap->maxMapTilePos.y, 1, 1000))
+	{
+		asrMap->ResizeTileXY();
+	}
+	if (ImGui::InputInt("Depth", &asrMap->depth))
+	{
+		asrMap->bossRoomIdx = 1;
+		asrMap->depth = Utility::Saturate(asrMap->depth, 2, 5);
+		for (int i = 0; i < asrMap->depth - 1; i++) {
+			asrMap->bossRoomIdx *= 2;
+		};
+		asrMap->bossRoomIdx -= 1;
+	}
 	if (ImGui::Button("map auto")) {
 		asrMap->AutoRenderMap();
+	}
+	if (ImGui::Button("step")) {
+		asrMap->count++;
+		if (asrMap->stepIdx == 8) asrMap->stepIdx = 0;
+		asrMap->StepRederMap();
+		asrMap->stepIdx++;
 	}
 	asrMap->Update();
 	////TileSize

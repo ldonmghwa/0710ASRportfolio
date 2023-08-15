@@ -143,12 +143,17 @@ void GameGUI::ReduceBBBar()
 
 void GameGUI::IncreaseHPBar()
 {
-	if (hpBar[curHPIdx]->hpBarState == HPBarState::ZERO
-		or hpBar[curHPIdx]->hpBarState == HPBarState::HALF) {
+	if (hpBar[curHPIdx]->hpBarState == HPBarState::ZERO) {
+		hpBar[curHPIdx]->hpBarState += 1;
+	}
+	else if (hpBar[curHPIdx]->hpBarState == HPBarState::HALF) {
 		hpBar[curHPIdx]->hpBarState += 1;
 		curHPIdx++;
 	}
-	if (curHPIdx >= curMaxHPBar) curHPIdx--;
+	if (curHPIdx >= curMaxHPBar) {
+		curHPIdx--;
+		cout << curHPIdx << endl;
+	}
 }
 
 void GameGUI::IncreaseBBBar()

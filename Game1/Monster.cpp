@@ -71,9 +71,9 @@ void Monster::Init()
         GunType::MINION);
     Character::Init();
     healPoint = 3;
-    speed = 50.0f;
-    attackRange = 400.0f;
-    detectionRange = 500.0f; 
+    speed = 150.0f;
+    attackRange = 600.0f;
+    detectionRange = 600.0f; 
     shootingInterval = 2.0f;
     backUpShootingInterval = shootingInterval;
     source = col->GetWorldPos();

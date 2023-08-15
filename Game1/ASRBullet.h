@@ -36,6 +36,9 @@ public:
 		backUpBulletLifeTime = _lifeTime;
 	}
 	bool GetIsFire() { return isFire; }
+	float GetBulletLifeTime() {
+		return backUpBulletLifeTime;
+	}
 	bool GetDeathImgAniStop() { return deathImg->isAniStop(); }
 	bool IsBulletReach();
 	void IsBulletReach(ObTileMap* _tileMap);
